@@ -1,0 +1,38 @@
+LEVELS = {
+    1: {
+        'Top': [
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            ],
+
+        'Bottom': [
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXX",        
+        ]
+
+    }
+}
