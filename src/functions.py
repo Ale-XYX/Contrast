@@ -1,4 +1,5 @@
 import pygame
+import random
 import levels
 import public
 import sprites
@@ -12,17 +13,13 @@ def generate_level():
         for _i, c in enumerate(l):
             if c == 'P':
                 player = sprites.Player(
-                    ((_i * 20), (i * 20)), public.all_sprites)
+                    (_i * 20, i * 20), public.all_sprites)
 
-    for i, l in enumerate(levels.LEVELS[public.level]['Bottom']):
-        for _i, c in enumerate(l):
-            if c == 'P':
-                player = sprites.Player(
-                    ((_i * 20), (i * 20) + 264), public.all_sprites)
+    return player
 
 
 def clamp(x, low, high):
-    if   x < low:
+    if x < low:
         return low
     elif x > high:
         return high

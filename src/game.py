@@ -5,7 +5,7 @@ import functions
 
 
 def main():
-    functions.generate_level()
+    player = functions.generate_level()
     splitter = sprites.Splitter()
 
     while True:
@@ -14,31 +14,28 @@ def main():
                 return 1
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
-                    for sprite in public.all_sprites:
-                        if sprite.type == 'Player':
-                            if sprite.on_ground:
-                                sprite.vel.y = -3
-                                sprite.on_ground = False
+                    if player.on_ground:
+                        player.vel.y = -3
+                        player.on_ground = False
 
         # Logic
         key = pygame.key.get_pressed()
         if key[pygame.K_d]:
-            for sprite in public.all_sprites:
-                if sprite.type == 'Player':
-                    sprite.vel.x += 0.1
-                    break
+            player.vel.x += 0.1
+            player.anim_type = 1
+            player.direction = 'Right'
 
-        if key[pygame.K_a]:
-            for sprite in public.all_sprites:
-                if sprite.type == 'Player':
-                    sprite.vel.x -= 0.1
-                    break
+        elif key[pygame.K_a]:
+            player.vel.x -= 0.1
+            player.anim_type = 1
+            player.direction = 'Left'
 
-        for sprite in public.all_sprites:
-            if sprite.type == 'Player':
-                sprite.vel.x = functions.clamp(sprite.vel.x, -10.0, 10.0)
-                sprite.pos.x += sprite.vel.x
-                sprite.vel.x *= 0.95
+        else:
+            player.anim_type = 0
+
+        player.vel.x = functions.clamp(player.vel.x, -10.0, 10.0)
+        player.pos.x += player.vel.x
+        player.vel.x *= 0.90
 
         public.all_sprites.update()
 
