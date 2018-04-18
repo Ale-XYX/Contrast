@@ -4,6 +4,8 @@ import random
 import public
 import dictionaries
 
+# Player: 
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, *groups):
@@ -33,30 +35,44 @@ class Player(pygame.sprite.Sprite):
 
         collided = pygame.sprite.spritecollide(self, public.blocks, False)
         for block in collided:
-            if self.vel.x > 0:
-                self.rect.right = block.rect.left
-                self.anim_type = 0
+            if block.color[0] != public.background[0] or block.color[0] == public.GREY[0]:
+                if self.vel.x > 0:
+                    self.rect.right = block.rect.left
+                    self.anim_type = 0
 
-            elif self.vel.x < 0:
-                self.rect.left = block.rect.right
-                self.anim_type = 0
+                elif self.vel.x < 0:
+                    self.rect.left = block.rect.right
+                    self.anim_type = 0
 
-            self.pos.x = self.rect.x
+                self.pos.x = self.rect.x
+
+                if block.type == 'Switch':
+                    if not block.is_on:
+                        block.is_on
 
         self.pos.y += self.vel.y
         self.rect.y = self.pos.y
 
         collided = pygame.sprite.spritecollide(self, public.blocks, False)
         for block in collided:
-            if self.vel.y > 0:
-                self.rect.bottom = block.rect.top
-                self.vel.y = 0
-                self.on_ground = True
+            if block.color[0] != public.background[0] or block.color[0] == public.GREY[0]:
+                if self.vel.y > 0:
+                    self.rect.bottom = block.rect.top
+                    self.vel.y = 0
+                    self.on_ground = True
 
-            elif self.vel.y < 0:
-                self.rect.top = block.rect.bottom
-                self.vel.y = 0
-                self.on_ground = True
+                elif self.vel.y < 0:
+                    self.rect.top = block.rect.bottom
+                    self.vel.y = 0
+                    self.on_ground = True
+
+                if block.type == 'Switch':
+                    if not block.is_on:
+                        block.is_on = True
+                        if public.background[0] == 0:
+                            public.background = (255, 255, 255)
+                        elif public.background[0] == 255:
+                            public.background = (0, 0, 0)
 
             self.pos.y = self.rect.y
 
@@ -88,12 +104,15 @@ class Player(pygame.sprite.Sprite):
         self.image = dictionaries.animations[self.anim_type]
 
     def draw(self):
-        image = self.image[self.anim_index]
+        if public.background[0] == 255:
+            inv = pygame.PixelArray(self.image[self.anim_index]).extract((0, 0, 0), 0.07).surface.convert_alpha()
+        else:
+            inv = self.image[self.anim_index]
 
         if self.direction == 'Left':
-            image = pygame.transform.flip(image, True, False)
+            inv = pygame.transform.flip(inv, True, False)
 
-        public.screen.blit(image, self.rect)
+        public.screen.blit(inv, self.rect)
 
 
 class Block(pygame.sprite.Sprite):
@@ -104,6 +123,7 @@ class Block(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
 
         self.type = 'Block'
+        self.order = 0
         self.color = color
 
         self.image.fill(self.color)
@@ -120,10 +140,10 @@ class Splitter(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = 480
 
-        self.type = 'Splitter'
+        self.type = 'Block'
+        self.color = public.GREY
 
-        self.image.fill(public.GREY)
+        self.image.fill(self.color)
 
     def draw(self):
         public.screen.blit(self.image, self.rect)
-   

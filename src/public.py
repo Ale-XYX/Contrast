@@ -19,4 +19,6 @@ blocks = pygame.sprite.Group()
 screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 
+background = (0, 0, 0)
+
 level = 1

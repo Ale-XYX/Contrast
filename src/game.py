@@ -35,15 +35,21 @@ def main():
 
         player.vel.x = functions.clamp(player.vel.x, -10.0, 10.0)
         player.pos.x += player.vel.x
-        player.vel.x *= 0.90
+        player.vel.x *= 0.93
 
         public.all_sprites.update()
 
+        sorted_sprites = sorted(
+            public.all_sprites.sprites(), key=lambda x: x.type)
+
         # Draw
-        public.screen.fill(public.BLACK)
+        public.screen.fill(public.background)
 
         for sprite in public.all_sprites:
-            sprite.draw()
+            if sprite.type != 'Player':
+                sprite.draw()
+
+        player.draw()
 
         pygame.display.flip()
         public.clock.tick(public.FPS)

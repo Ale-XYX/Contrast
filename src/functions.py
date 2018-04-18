@@ -11,7 +11,16 @@ def generate_level():
 
     for i, l in enumerate(levels.LEVELS[public.level]['Top']):
         for _i, c in enumerate(l):
-            if c == 'P':
+            if c == 'A':
+                block = sprites.Block(
+                    (_i * 20, i * 20), public.WHITE)
+            elif c == 'B':
+                block = sprites.Block(
+                    (_i * 20, i * 20), public.BLACK)
+            elif c == 'B':
+                block = sprites.Block(
+                    (_i * 20, i * 20), public.GREY)
+            elif c == 'G':
                 player = sprites.Player(
                     (_i * 20, i * 20), public.all_sprites)
 

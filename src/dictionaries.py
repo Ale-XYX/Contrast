@@ -43,5 +43,19 @@ animations = {
             os.path.join(os.path.dirname(__file__), 'res', 'pfall_2.png')),
         pygame.image.load(
             os.path.join(os.path.dirname(__file__), 'res', 'pfall_3.png')),
+    ],
+    5: [
+        pygame.image.load(
+            os.path.join(
+                os.path.dirname(__file__), 'res', 'sdeactivated.png')),       
+        pygame.image.load(
+            os.path.join(
+                os.path.dirname(__file__), 'res', 'sactivated_0.png')),
+        pygame.image.load(
+            os.path.join(
+                os.path.dirname(__file__), 'res', 'sactivated_1.png')),
+        pygame.image.load(
+            os.path.join(
+                os.path.dirname(__file__), 'res', 'sactivated_2.png')),
     ]
 }
