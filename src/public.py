@@ -11,7 +11,7 @@ SWIDTH = 800
 SHEIGHT = 483
 GRAVITY = 0.1
 FPS = 60
-FONTS = {'Plain': pygame.font.Font(os.path.join(os.path.dirname(__file__), 'res', 'vgasys.fon'), 30)}
+FONTS = {'Plain': pygame.font.Font(os.path.join(os.path.dirname(__file__), 'res', 'vgasys.fon'), 30), 'BigBoi': pygame.font.Font(os.path.join(os.path.dirname(__file__), 'res', 'vgasys.fon'), 50)}
 
 # Classes
 all_sprites = pygame.sprite.Group()

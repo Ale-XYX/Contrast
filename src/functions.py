@@ -8,7 +8,7 @@ import dictionaries
 
 def generate_clouds():
     for i in range(15):
-        generated_int = random.randint(0, 2)
+        generated_int = random.randint(0, 1)
         cloud = sprites.Cloud(
             (random.randint(0, public.SWIDTH),
                 random.randint(0, public.SHEIGHT)), generated_int)
@@ -18,9 +18,15 @@ def update_clouds():
     public.clouds.update()
 
     if len(public.clouds.sprites()) < 20:
-        generated_int = random.randint(0, 2)
-        cloud = sprites.Cloud(
-            (public.SWIDTH + 10, random.randint(0, public.SHEIGHT)), generated_int) 
+        generated_int = random.randint(0, 1)
+
+        if public.background[0] == 255:
+            cloud = sprites.Cloud(
+                (-10, random.randint(0, public.SHEIGHT)), generated_int)
+
+        elif public.background[0] == 0:
+            cloud = sprites.Cloud(
+                (public.SWIDTH + 10, random.randint(0, public.SHEIGHT)), generated_int)
 
 
 def generate_level():

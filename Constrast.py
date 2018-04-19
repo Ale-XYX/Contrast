@@ -11,5 +11,5 @@ if __name__ == '__main__':
     import game
 
     pygame.init()
-    game.main()
+    game.title()
     pygame.quit()

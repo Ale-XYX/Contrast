@@ -4,7 +4,12 @@ import pygame.gfxdraw
 import random
 import public
 import dictionaries
-
+clouds = [
+    pygame.image.load(
+        os.path.join(os.path.dirname(__file__), 'res', 'cloud0.png')),
+    pygame.image.load(
+        os.path.join(os.path.dirname(__file__), 'res', 'cloud1.png'))
+]
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, *groups):
@@ -24,8 +29,9 @@ class Player(pygame.sprite.Sprite):
         self.anim_type = 0
         self.anim_index = 0
         self.anim_ticks = 0
-        self.anim_cap = [75, 10, 25, 25, 100]
+        self.anim_cap = [75, 10, 25, 25]
         self.collided = None
+        self.jump = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), 'res', 'jump.wav'))
 
         self.direction = 'Right'
 
@@ -95,6 +101,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.left = 1
                 self.vel.x = 0
                 self.anim_type = 0
+
             self.pos.x = self.rect.left
 
         self.vel.y += public.GRAVITY
@@ -112,18 +119,18 @@ class Player(pygame.sprite.Sprite):
                 self.anim_ticks = 0
 
         if not self.on_ground:
-            if self.vel.y > 0:
-                self.anim_type = 2
-            elif self.vel.y < 0:
+            if self.vel.y < 0:
                 self.anim_type = 3
+            elif self.vel.y > 0:
+                self.anim_type = 2
 
-        self.image = dictionaries.animations[self.anim_type]
+        if public.background[0] == 255:
+            self.image = dictionaries.inverted_animations[self.anim_type]
+        else:
+            self.image = dictionaries.animations[self.anim_type]
 
     def draw(self):
-        if public.background[0] == 255:
-            inv = pygame.PixelArray(self.image[self.anim_index]).extract((0, 0, 0, 255), 0.07).surface
-        else:
-            inv = self.image[self.anim_index]
+        inv = self.image[self.anim_index]
 
         if self.direction == 'Left':
             inv = pygame.transform.flip(inv, True, False)
@@ -188,6 +195,8 @@ class Title(pygame.sprite.Sprite):
         self.type = 'Title'
 
     def update(self):
+        if self.alpha == 255:
+            self.kill()
         if self.time > 0:
             self.time -= self.dt
         elif self.time <= 0:
@@ -205,28 +214,42 @@ class Title(pygame.sprite.Sprite):
         public.screen.blit(self.text, self.rect)
         public.screen.blit(self.image, self.rect)
 
+
 vels = {0: 0.2, 1: 0.5, 2: 0.9}
+
 
 class Cloud(pygame.sprite.Sprite):
     def __init__(self, pos, type):
         super().__init__(public.clouds)
 
-        self.image = pygame.Surface((vels[type] * 40, vels[type] * 40))
+        self.image = pygame.transform.flip(clouds[type], True, False)
         self.rect = self.image.get_rect(center=pos)
 
         self.vel = vels[type]
+        self.cap = vels[type]
+        self.type = type
         self.pos = pygame.math.Vector2(pos)
-
-        self.image.fill((100, 100, 100))
 
     def update(self):
         self.pos.x-= self.vel
         self.rect.center = self.pos
 
-        if self.pos.x < -20:
+        if self.pos.x < -20 or self.pos.x > 810:
             self.kill()
 
+        if public.background[0] == 255 and self.vel != -self.cap:
+            self.vel -= 0.1
+
+        elif public.background[0] == 0 and self.vel != self.cap:
+            self.vel += 0.1
+
     def draw(self):
+        if public.background[0] == 255 and self.vel != -self.cap:
+            self.image = clouds[self.type]
+
+        elif public.background[0] == 0 and self.vel != self.cap:
+            self.image = pygame.transform.flip(clouds[self.type], True, False)
+
         public.screen.blit(self.image, self.rect)
 
 
@@ -243,6 +266,28 @@ class Exit(pygame.sprite.Sprite):
             self.color = public.GREY
 
         self.image.fill(self.color)
+
+    def draw(self):
+        public.screen.blit(self.image, self.rect)
+
+
+class Button(pygame.sprite.Sprite):
+    def __init__(self, surf, psurf, rect, prect, *groups):
+        super().__init__(*groups)
+        self.image = surf
+        self.rect = rect
+        self.normal = [surf, rect]
+        self.pressed = [psurf, prect]
+        self.type = 5
+
+    def update(self):
+        pos = pygame.mouse.get_pos()
+
+        if self.rect.collidepoint(pos):
+            self.image, self.rect = self.pressed
+
+        else:
+            self.image, self.rect = self.normal
 
     def draw(self):
         public.screen.blit(self.image, self.rect)
