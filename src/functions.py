@@ -6,10 +6,30 @@ import sprites
 import dictionaries
 
 
+def generate_clouds():
+    for i in range(15):
+        generated_int = random.randint(0, 2)
+        cloud = sprites.Cloud(
+            (random.randint(0, public.SWIDTH),
+                random.randint(0, public.SHEIGHT)), generated_int)
+
+
+def update_clouds():
+    public.clouds.update()
+
+    if len(public.clouds.sprites()) < 20:
+        generated_int = random.randint(0, 2)
+        cloud = sprites.Cloud(
+            (public.SWIDTH + 10, random.randint(0, public.SHEIGHT)), generated_int) 
+
+
 def generate_level():
     public.all_sprites.empty()
+    public.title = sprites.Title(levels.LEVELS[public.level][0])
+    public.background = levels.LEVELS[public.level][1]
+    public.padding = levels.LEVELS[public.level][2]
 
-    for i, l in enumerate(levels.LEVELS[public.level]['Top']):
+    for i, l in enumerate(levels.LEVELS[public.level][3]):
         for _i, c in enumerate(l):
             if c == 'A':
                 block = sprites.Block(
@@ -17,14 +37,13 @@ def generate_level():
             elif c == 'B':
                 block = sprites.Block(
                     (_i * 20, i * 20), public.BLACK)
-            elif c == 'B':
+
+            elif c == 'C':
                 block = sprites.Block(
                     (_i * 20, i * 20), public.GREY)
-            elif c == 'G':
-                player = sprites.Player(
-                    (_i * 20, i * 20), public.all_sprites)
 
-    return player
+            elif c == 'G':
+                public.spawn = (_i * 20, i * 20)
 
 
 def clamp(x, low, high):
