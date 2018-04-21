@@ -10,7 +10,7 @@ WHITE = (255, 255, 255)
 SWIDTH = 800
 SHEIGHT = 483
 FPS = 60
-FONTS = {'Plain': pygame.font.Font(os.path.join(os.path.dirname(__file__), 'res', 'vgasys.fon'), 30), 'BigBoi': pygame.font.Font(os.path.join(os.path.dirname(__file__), 'res', 'vgasys.fon'), 50)}
+FONTS = {'Plain': pygame.font.Font(os.path.join(os.path.dirname(__file__), 'res', 'vgasys.ttf'), 15), 'BigBoi': pygame.font.Font(os.path.join(os.path.dirname(__file__), 'res', 'vgasys.ttf'), 20)}
 
 # Classes
 all_sprites = pygame.sprite.Group()
@@ -23,7 +23,7 @@ screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 
 background = (0, 0, 0)
-level = 13
+level = 1
 spawn = (0, 0)
 padding = True
 title = 'Congrats!, You found my unnessisary placeholder!'
