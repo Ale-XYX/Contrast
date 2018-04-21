@@ -23,7 +23,7 @@ screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 
 background = (0, 0, 0)
-level = 1
+level = 13
 spawn = (0, 0)
 padding = True
 title = 'Congrats!, You found my unnessisary placeholder!'

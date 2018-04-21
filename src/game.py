@@ -119,7 +119,6 @@ def main():
             strack.stop()
             wtrack.play(-1)
             v = False
-        
         if public.won:
             if a != 255:
                 a += 1
