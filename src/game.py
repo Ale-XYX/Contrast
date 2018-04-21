@@ -1,4 +1,5 @@
 import os
+import sys
 import pygame
 import public
 import sprites
@@ -30,7 +31,6 @@ def title():
                         credits = False
                     elif not credits:
                         credits = True
-                    print(credits)
 
         public.screen.fill(public.BLACK)
 
@@ -45,32 +45,37 @@ def title():
 
 
 def main():
-    entrance = functions.generate_level()
-    player = sprites.Player(public.spawn, public.all_sprites)
-    splitter = sprites.Splitter()
+    functions.generate_level(True)
     flip = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), 'res', 'switch.wav'))
     denied = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), 'res', 'disallowed.wav'))
     dt = public.clock.tick(60) / 1000
     cooldown = 0
+    breakables = []
+    pad = pygame.image.load(os.path.join(os.path.dirname(__file__), 'res', 'padding.png'))
 
-    pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), 'res', 'soundtrack.wav')).play(-1)
+    strack = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), 'res', 'soundtrack.wav'))
+    wtrack = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), 'res', 'wtrack.wav'))
+    strack.play(-1)
+    v = True
+    a = 0
+    s = pygame.Surface((800, 483), pygame.SRCALPHA)
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return 1
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    if player.on_ground:
-                        player.jump.play()
-                        player.vel.y = -3
-                        player.on_ground = False
+                if event.key == pygame.K_w and not public.player.died and not public.won:
+                    if public.player.on_ground:
+                        public.player.jump.play()
+                        public.player.vel.y = -3
+                        public.player.on_ground = False
 
-                elif event.key == pygame.K_e and cooldown <= 0:
+                elif event.key == pygame.K_SPACE and cooldown <= 0 and not public.player.died and not public.won:
                     inside = False
 
                     for sprite in public.blocks:
-                        if sprite.rect.collidepoint(player.rect.center):
+                        if sprite.rect.collidepoint(public.player.rect.center):
                             inside = True
 
                     if not inside:
@@ -79,32 +84,48 @@ def main():
                             public.background = (255, 255, 255)
                         elif public.background[0] == 255:
                             public.background = (0, 0, 0)
-                        cooldown = 2
+                        cooldown = 1
                     else:
                         denied.play()
                         cooldown = 1
 
         # Logic
         key = pygame.key.get_pressed()
-        if key[pygame.K_d]:
-            player.vel.x += 0.1
-            player.anim_type = 1
-            player.direction = 'Right'
 
-        elif key[pygame.K_a]:
-            player.vel.x -= 0.1
-            player.anim_type = 1
-            player.direction = 'Left'
+        if key[pygame.K_d] and not public.player.died and not public.won:
+            public.player.vel.x += 0.1
+            public.player.anim_type = 1
+            public.player.direction = 'Right'
 
-        else:
-            player.anim_type = 0
+        elif key[pygame.K_a] and not public.player.died and not public.won:
+            public.player.vel.x -= 0.1
+            public.player.anim_type = 1
+            public.player.direction = 'Left'
 
-        player.vel.x = functions.clamp(player.vel.x, -10.0, 10.0)
-        player.pos.x += player.vel.x
-        player.vel.x *= 0.93
+        elif public.player.anim_type != 4 and public.player.anim_type != 5:
+            public.player.anim_type = 0
+
+        public.player.vel.x = functions.clamp(public.player.vel.x, -10.0, 10.0)
+        public.player.pos.x += public.player.vel.x
+        public.player.vel.x *= 0.93
 
         if cooldown >= 0:
             cooldown = cooldown - dt
+
+        if len(public.player.groups()) == 0:
+            public.player = sprites.Player(public.spawn, public.all_sprites)
+
+        if public.level == 14 and v:
+            strack.stop()
+            wtrack.play(-1)
+            v = False
+        
+        if public.won:
+            if a != 255:
+                a += 1
+            elif a == 255:
+                end()
+                return 1
 
         public.all_sprites.update()
         functions.update_clouds()
@@ -112,14 +133,56 @@ def main():
         # Draw
         public.screen.fill(public.background)
 
+        for sprite in public.breakables:
+            sprite.draw()
+
         for sprite in public.clouds:
             sprite.draw()
 
         for sprite in public.all_sprites:
-            if sprite.type != 'Player':
+            if sprite.type == 'Breakable':
+                public.breakables.append(sprite)
+
+            if sprite.type != 'Player' or sprite.type != 'Title':
                 sprite.draw()
 
-        player.draw()
+        public.player.draw()
+
+        for sprite in public.text:
+            sprite.draw()
+
+        if public.padding:
+            public.screen.blit(pad, (0, 0))
+
+        s.fill((0, 0, 0, a))
+        public.screen.blit(s, (0, 0))
+
 
         pygame.display.flip()
         public.clock.tick(public.FPS)
+
+
+def end():
+    a = 0
+    txt = public.FONTS['BigBoi'].render('A Game By TEAM-ABSTRACTANDROID', False, (a, a, a))
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+
+        if a != 255:
+            a += 5
+        txt = public.FONTS['BigBoi'].render('A Game By TEAM-ABSTRACTANDROID', False, (a, a, a))
+
+        public.screen.fill(public.BLACK)
+
+        public.screen.blit(txt, ((public.SWIDTH / 2) - txt.get_width() // 2, ((public.SHEIGHT / 2) - txt.get_height() // 2)))
+        pygame.display.flip()
+        public.clock.tick(60)
