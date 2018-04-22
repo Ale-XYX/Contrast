@@ -21,3 +21,6 @@ Work your way through 15 puzzling levels, using the mechanics and obstacles to o
 ![S2](https://cdn.discordapp.com/attachments/336104478644240394/437380683539677184/Screenshot_96.png)
 
 ![S3](https://cdn.discordapp.com/attachments/336104478644240394/437380877836615690/Screenshot_98.png)
+
+`Main Programmer`: Pygasm
+`Artist`: Smeaton
