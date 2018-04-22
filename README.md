@@ -12,7 +12,7 @@ For example, a White Block in a black background would be interactable, but a bl
 
 This is all to collect the elusive *RGB Sphere*, the only color in the melancholy world.
 
-![RGB Sphere](https://cdn.discordapp.com/attachments/336104478644240394/437378160594780160/Jumpo7.gif)
+![RGB Sphere](https://cdn.discordapp.com/attachments/425630860679708683/436943774220812290/unsucky.gif)
 
 Work your way through 15 puzzling levels, using the mechanics and obstacles to obtain the RGB sphere and bring color to this world.
 
