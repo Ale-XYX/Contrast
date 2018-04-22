@@ -145,7 +145,6 @@ def main():
             if sprite.type != 'Player' or sprite.type != 'Title':
                 sprite.draw()
 
-        print(public.player.pos)
         if public.level == 9 and public.player.pos.x > 19 and public.player.pos.x < 21 and public.player.pos.y > 339 and public.player.pos.y < 341:
             public.level = 0
             functions.generate_level(True)
