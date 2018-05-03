@@ -33,15 +33,14 @@ def title():
         public.screen.fill(public.BLACK)
 
         if not in_credits:
-            public.screen.blit(dictionaries.MEDIA['logo'],
-                ((public.SWIDTH / 2) - dictionaries.MEDIA['logo'].get_width() // 2, ((public.SHEIGHT / 2) - dictionaries.MEDIA['logo'].get_height() // 2)))
-
-            public.screen.blit(info_text, (
-                (public.SWIDTH / 2) - info_text.get_width() // 2, 290))
+            public.screen.blit(dictionaries.MEDIA['logo'], functions.center(
+                dictionaries.MEDIA['logo']))
+            public.screen.blit(info_text,
+                               (functions.center(info_text)[0], 290))
 
         elif in_credits:
-            public.screen.blit(dictionaries.MEDIA['credits'],
-                ((public.SWIDTH / 2) - dictionaries.MEDIA['credits'].get_width() // 2, ((public.SHEIGHT / 2) - dictionaries.MEDIA['credits'].get_height() // 2)))
+            public.screen.blit(dictionaries.MEDIA['credits'], functions.center(
+                dictionaries.MEDIA['credits']))
 
         pygame.display.flip()
         public.clock.tick(60)
@@ -64,16 +63,19 @@ def game():
                 return 0
 
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w and public.player.on_ground and not public.player.died and not public.player.won:
+                if event.key == pygame.K_w and public.player.on_ground and \
+                        not public.player.died and not public.player.won:
                     dictionaries.MEDIA['jump'].play()
                     public.player.vel.y = -3
                     public.player.on_ground = False
 
-                elif event.key == pygame.K_SPACE and cooldown <= 0 and not public.player.died and not public.player.won:
+                elif event.key == pygame.K_SPACE and cooldown <= 0 and \
+                        not public.player.died and not public.player.won:
                     inside = False
 
                     for sprite in public.blocks:
-                        if sprite.rect.collidepoint(public.player.rect.center):
+                        print(sprite.rect.colliderect(public.player.rect))
+                        if sprite.rect.colliderect(public.player.rect):
                             inside = True
 
                     if not inside:
@@ -87,22 +89,20 @@ def game():
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_d] and not public.player.died and not public.player.won:
+        if keys[pygame.K_d] and not public.player.died and \
+                not public.player.won:
             public.player.vel.x += 0.1
             public.player.direction = 'R'
             public.player.accelerating = True
 
-        elif keys[pygame.K_a] and not public.player.died and not public.player.won:
+        elif keys[pygame.K_a] and not public.player.died and \
+                not public.player.won:
             public.player.vel.x -= 0.1
             public.player.direction = 'L'
             public.player.accelerating = True
 
         else:
             public.player.accelerating = False
-
-        public.player.vel.x = functions.clamp(public.player.vel.x, -10.0, 10.0)
-        public.player.pos.x += public.player.vel.x
-        public.player.vel.x *= 0.93
 
         if cooldown > 0:
             cooldown -= dt
@@ -153,8 +153,7 @@ def end():
 
         public.screen.fill(public.BLACK)
 
-        public.screen.blit(info_text,
-            ((public.SWIDTH / 2) - info_text.get_width() // 2, ((public.SHEIGHT / 2) - info_text.get_height() // 2)))
+        public.screen.blit(info_text, functions.center(info_text))
 
         pygame.display.flip()
         public.clock.tick(60)

@@ -63,6 +63,12 @@ def clamp(x, low, high):
     return low if x < low else high if x > high else x
 
 
+def center(surface):
+    return ((
+        public.SWIDTH / 2) - surface.get_width() // 2, (
+        public.SHEIGHT / 2) - surface.get_height() // 2)
+
+
 def ppc(surface, color_black, color_white):
     for x in range(surface.get_width()):
         for y in range(surface.get_height()):
