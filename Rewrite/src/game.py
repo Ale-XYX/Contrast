@@ -4,11 +4,11 @@ import sprites
 import functions
 import dictionaries
 
-pygame.display.set_caption('Contrast')
-pygame.display.set_icon(dictionaries.MEDIA['icon'])
-
 
 def title():
+    pygame.display.set_caption('Contrast')
+    pygame.display.set_icon(dictionaries.MEDIA['icon'])
+
     info_text = public.FONT_LG.render(
         'ENTER TO BEGIN; ? FOR CREDITS', False, public.WHITE)
     in_credits = False

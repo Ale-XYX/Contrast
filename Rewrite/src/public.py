@@ -4,7 +4,6 @@ import platform
 from os.path import join, dirname
 
 pygame.init()
-
 BLACK = (0, 0, 0)
 GREY = (192, 192, 192)
 WHITE = (255, 255, 255)
@@ -25,7 +24,7 @@ blocks = pygame.sprite.Group()
 screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 
-level = 2
+level = 4
 spawn = (0, 0)
 bg_type = 0
 wrapping = True
