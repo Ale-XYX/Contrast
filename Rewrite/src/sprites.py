@@ -38,11 +38,11 @@ class Ox(pygame.sprite.Sprite):
         self.collided = pygame.sprite.spritecollide(self, public.blocks, False)
         for block in self.collided:
             if block.color != public.bg_type:
-                if self.vel.x > 0.03:
+                if self.vel.x > 0.05:
                     self.rect.right = block.rect.left if block.type not in \
                         ['Exit', 'Jumpad', 'RGBSphere'] else self.rect.right
 
-                elif self.vel.x < 0.03:
+                elif self.vel.x < 0.05:
                     self.rect.left = block.rect.right if block.type not in \
                         ['Exit', 'Jumpad', 'RGBSphere'] else self.rect.left
 
@@ -165,8 +165,6 @@ class Ox(pygame.sprite.Sprite):
             self.pos.x = self.rect.left
 
         self.vel.y += public.GRAVITY
-        self.on_ground = False if self.vel.y < -0.4 or \
-            self.vel.y > 0.4 else True
 
         public.player.vel.x = functions.clamp(public.player.vel.x, -10.0, 10.0)
         public.player.pos.x += public.player.vel.x

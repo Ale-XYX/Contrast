@@ -74,7 +74,6 @@ def game():
                     inside = False
 
                     for sprite in public.blocks:
-                        print(sprite.rect.colliderect(public.player.rect))
                         if sprite.rect.colliderect(public.player.rect):
                             inside = True
 
