@@ -68,6 +68,7 @@ def game():
                     dictionaries.MEDIA['jump'].play()
                     public.player.vel.y = -3
                     public.player.on_ground = False
+                    public.player.jumping = True
 
                 elif event.key == pygame.K_SPACE and cooldown <= 0 and \
                         not public.player.died and not public.player.won:

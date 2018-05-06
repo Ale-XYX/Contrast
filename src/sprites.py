@@ -5,6 +5,7 @@ import dictionaries
 import functions
 
 
+# TODO: Add ground ticks attribute that determines ticks since touching ground, if larger than 4 that means person can jump
 class Ox(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__(public.all_sprites)
@@ -23,6 +24,7 @@ class Ox(pygame.sprite.Sprite):
         self.collided = None
         self.on_ground = True
         self.direction = 'R'
+        self.jumping = False
         self.super_jump = False
         self.accelerating = False
 
@@ -102,6 +104,8 @@ class Ox(pygame.sprite.Sprite):
                     ['Jumpad', 'Exit'] else False
                 self.super_jump = False if block.type not in \
                     ['Jumpad', 'Exit'] else True
+                self.jumping = False if block.type not in \
+                    ['Jumpad', 'Exit'] else False
                 self.vel.y = 0 if block.type not in \
                     ['Exit', 'Jumpad', 'RGBSphere'] else self.vel.y
 
@@ -165,10 +169,13 @@ class Ox(pygame.sprite.Sprite):
             self.pos.x = self.rect.left
 
         self.vel.y += public.GRAVITY
+        self.on_ground = (
+            False if self.vel.y < -0.5 or self.vel.y > 0.5 else True
+            ) if not self.jumping else self.on_ground
 
         public.player.vel.x = functions.clamp(public.player.vel.x, -10.0, 10.0)
         public.player.pos.x += public.player.vel.x
-        public.player.vel.x *= 0.93
+        public.player.vel.x *= 0.925
 
         self.anim_ticks += 1
 
