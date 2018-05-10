@@ -24,7 +24,7 @@ blocks = pygame.sprite.Group()
 screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 
-level = 3
+level = 5
 spawn = (0, 0)
 bg_type = 0
 wrapping = True
