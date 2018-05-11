@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-
 import sys
-import platform
 import subprocess
 
 sys.path.insert(0, 'src')
@@ -11,11 +9,9 @@ try:
     import pygame
 
 except ModuleNotFoundError:
-    if game.public.OS == 'Windows':
-        subprocess.call(['py', '-m', 'pip', 'install', 'pygame'])
-
-    elif game.public.OS in ['Darwin', 'Linux']:
-        subprocess.call(['sudo', 'py', '-m', 'pip', 'install', 'pygame'])
+    command = ['sudo'] if game.public.OS in ['Darwin', 'Linux'] else []
+    command.extend(['py', '-m', 'pip', 'install', 'pygame'])
+    subprocess.call(command)
 
     import pygame
 

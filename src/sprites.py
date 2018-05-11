@@ -167,6 +167,25 @@ class Ox(pygame.sprite.Sprite):
 
             self.pos.x = self.rect.left
 
+        if public.wrapping:
+            if self.rect.right >= public.SWIDTH:
+                self.rect.left = 1
+
+            elif self.rect.right <= 0:
+                self.rect.right = public.SWIDTH - 1
+
+        elif not public.wrapping:
+            if self.rect.right >= public.SWIDTH:
+                self.rect.right = public.SWIDTH
+
+            elif self.rect.left <= 0:
+                self.rect.left = 0
+
+            self.vel.x = 0 if self.rect.right >= public.SWIDTH or \
+                self.rect.left <= 0 else self.vel.x
+            self.accelerating = False if self.rect.right >= public.SWIDTH or \
+                self.rect.left <= 0 else self.accelerating
+
         self.vel.y += public.GRAVITY
         self.on_ground = (
             False if self.vel.y < -0.5 or self.vel.y > 0.5 else True
