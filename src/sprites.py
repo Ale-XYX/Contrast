@@ -78,7 +78,6 @@ class Ox(pygame.sprite.Sprite):
 
                 elif block.type == 'Jumpad' and not self.died and not \
                         self.super_jump:
-                    dictionaries.MEDIA['jumpad'].play()
                     self.vel.y = -4.5
                     self.on_ground = False
                     self.super_jump = True
