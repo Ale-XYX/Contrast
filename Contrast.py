@@ -14,11 +14,8 @@ except ModuleNotFoundError:
     if game.public.OS == 'Windows':
         subprocess.call(['py', '-m', 'pip', 'install', 'pygame'])
 
-    elif game.public.OS == 'Darwin':
+    elif game.public.OS in ['Darwin', 'Linux']:
         subprocess.call(['sudo', 'py', '-m', 'pip', 'install', 'pygame'])
-
-    elif game.public.OS == 'Linux':
-        subprocess.call(['sudo', 'py', '-m', 'pip', 'install', '--user', 'pygame'])
 
     import pygame
 

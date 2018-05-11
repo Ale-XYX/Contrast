@@ -1,0 +1,26 @@
+0: EggBag!
+1: To Begin
+2: Futher Practice
+3: Risky Manuver
+4: Pillars
+
+5: An Unintended solution
+6: Altitude
+7: In Range (New Level)
+8: Panic! (Redone, w/Wrapping)
+9: Traps (Booby Traps redone)
+
+10: U-Turn (Buffed Slightly)
+11: Cliffstrider (Buffed slightly)
+12: Time and space (Buffed somewhat)
+13: [Open, challenge level] !
+14: Inversion (New Level)
+15: Compartments (Updated)
+
+16: Geometry (New Level)
+17: Tunnel travel
+18: [Open, challenge level] !
+19: [Open, challenge level] !
+20: Absolution (Buffed)
+21: The end (Redone?)
+

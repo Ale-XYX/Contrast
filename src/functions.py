@@ -40,15 +40,15 @@ def generate_level(show_title):
                 pit = sprites.Pit((_i * 20, i * 20), color, 'D')
 
             elif col in 'KLM':
-                color = 255 if col == 'L' else 0 if col == 'K' else 192
+                color = 255 if col == 'K' else 0 if col == 'L' else 192
                 exit = sprites.Exit((_i * 20, i * 20), color)
 
             elif col in 'NOP':
-                color = 255 if col == 'O' else 0 if col == 'N' else 192
+                color = 255 if col == 'N' else 0 if col == 'O' else 192
                 breakable = sprites.Breakable((_i * 20, i * 20), color)
 
             elif col in 'QRS':
-                color = 255 if col == 'R' else 0 if col == 'Q' else 192
+                color = 255 if col == 'Q' else 0 if col == 'R' else 192
                 breakable = sprites.Jumpad((_i * 20, i * 20), color)
 
             elif col == 'J':

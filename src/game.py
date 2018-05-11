@@ -52,7 +52,6 @@ def game():
     functions.generate_clouds()
 
     dt = public.clock.tick(public.FPS) / 1000
-    cooldown = 0
     cover_alpha = 0
     cover_surf = pygame.Surface((public.SWIDTH, public.SHEIGHT))
     cover_surf.set_alpha(cover_alpha)
@@ -63,29 +62,11 @@ def game():
                 return 0
 
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w and public.player.on_ground and \
-                        not public.player.died and not public.player.won:
-                    dictionaries.MEDIA['jump'].play()
-                    public.player.vel.y = -3
-                    public.player.on_ground = False
-                    public.player.jumping = True
+                if event.key == pygame.K_w:
+                    public.player.jump()
 
-                elif event.key == pygame.K_SPACE and cooldown <= 0 and \
-                        not public.player.died and not public.player.won:
-                    inside = False
-
-                    for sprite in public.blocks:
-                        if sprite.rect.colliderect(public.player.rect):
-                            inside = True
-
-                    if not inside:
-                        dictionaries.MEDIA['flip'].play()
-                        public.bg_type = 0 if public.bg_type == 255 else 255
-                        cooldown = 1
-
-                    else:
-                        dictionaries.MEDIA['denied'].play()
-                        cooldown = 1
+                elif event.key == pygame.K_SPACE:
+                    public.player.flip()
 
         keys = pygame.key.get_pressed()
 
@@ -103,9 +84,6 @@ def game():
 
         else:
             public.player.accelerating = False
-
-        if cooldown > 0:
-            cooldown -= dt
 
         if public.player.won and cover_alpha != 255:
             cover_alpha += 1
@@ -125,7 +103,8 @@ def game():
         for sprite in sorted_sprites:
             sprite.draw()
 
-        if public.wrapping: public.screen.blit(dictionaries.MEDIA['wrap_gradient'], (0, 0))
+        public.screen.blit(dictionaries.MEDIA['wrap_gradient'], (0, 0)) \
+            if public.wrapping else 0
         public.screen.blit(cover_surf, (0, 0))
 
         pygame.display.flip()

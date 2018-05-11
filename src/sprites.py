@@ -25,8 +25,10 @@ class Ox(pygame.sprite.Sprite):
         self.on_ground = True
         self.direction = 'R'
         self.jumping = False
+        self.flip_cooldown = 0
         self.super_jump = False
         self.accelerating = False
+        self.dt = public.clock.tick(public.FPS) / 1000
 
         self.anim_index = 0
         self.anim_type = 0
@@ -100,11 +102,9 @@ class Ox(pygame.sprite.Sprite):
                     self.rect.top = block.rect.bottom if block.type not in \
                         ['Exit', 'Jumpad', 'RGBSphere'] else self.rect.top
 
+                self.super_jump = False if block.type != 'Exit' else True
+                self.jumping = False if block.type != 'Exit' else False
                 self.on_ground = True if block.type not in \
-                    ['Jumpad', 'Exit'] else False
-                self.super_jump = False if block.type not in \
-                    ['Jumpad', 'Exit'] else True
-                self.jumping = False if block.type not in \
                     ['Jumpad', 'Exit'] else False
                 self.vel.y = 0 if block.type not in \
                     ['Exit', 'Jumpad', 'RGBSphere'] else self.vel.y
@@ -204,6 +204,8 @@ class Ox(pygame.sprite.Sprite):
         self.image = dictionaries.ANIMS[self.anim_type]
         self.invert = dictionaries.I_ANIMS[self.anim_type]
 
+        self.flip_cooldown -= self.dt if self.flip_cooldown > 0 else 0
+
     def draw(self):
         prep_surf = self.image[self.anim_index] if public.bg_type == 0 else \
             self.invert[self.anim_index]
@@ -211,6 +213,30 @@ class Ox(pygame.sprite.Sprite):
             if self.direction == 'L' else prep_surf
 
         public.screen.blit(prep_surf, self.rect)
+
+    def jump(self):
+        if self.on_ground and not self.died and not self.won:
+            self.vel.y = -3
+            self.jumping = True
+            self.on_ground = False
+            dictionaries.MEDIA['jump'].play()
+
+    def flip(self):
+        if self.flip_cooldown <= 0 and not self.died and not self.won:
+            inside = False
+
+            for sprite in public.blocks:
+                if sprite.rect.colliderect(self.rect):
+                    inside = True
+
+            if not inside:
+                dictionaries.MEDIA['flip'].play()
+                public.bg_type = 0 if public.bg_type == 255 else 255
+
+            else:
+                dictionaries.MEDIA['denied'].play()
+
+            self.flip_cooldown = 1
 
 
 class Block(pygame.sprite.Sprite):
