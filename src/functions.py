@@ -83,3 +83,46 @@ def ppc(surface, color_black, color_white):
             surface.set_at((x, y), (r, g, b, a))
 
     return surface
+
+
+def block_check(block, list_index):
+    arr = ['Exit', 'Jumpad', 'RGBSphere']
+
+    if block.type not in arr[0:list_index]:
+        return True
+
+    return False
+
+def anim_check(obj):
+    to_return = 0
+
+    if obj.accelerating:
+        to_return = 1
+
+    if not obj.on_ground:
+        if obj.vel.y < 0:
+            to_return = 2
+
+        elif obj.vel.y > 0:
+            to_return = 3
+
+    if obj.vel.y > 1 or obj.super_jump:
+        to_return = 3
+
+    if obj.died:
+        to_return = 4
+
+    if obj.won:
+        to_return = 5
+
+    return to_return
+
+
+def image_return(color, index):
+    if color == 0:
+        return dictionaries.ANIMS[index]
+
+    elif color == 255:
+        return dictionaries.I_ANIMS[index]
+
+    return dictionaries.G_ANIMS[index]

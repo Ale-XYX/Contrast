@@ -5,7 +5,6 @@ import dictionaries
 import functions
 
 
-# TODO: Add ground ticks attribute that determines ticks since touching ground, if larger than 4 that means person can jump
 class Ox(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__(public.all_sprites)
@@ -28,7 +27,6 @@ class Ox(pygame.sprite.Sprite):
         self.flip_cooldown = 0
         self.super_jump = False
         self.accelerating = False
-        self.dt = public.clock.tick(public.FPS) / 1000
 
         self.anim_index = 0
         self.anim_type = 0
@@ -36,22 +34,25 @@ class Ox(pygame.sprite.Sprite):
         self.anim_caps = [75, 10, 25, 25, 13, 20]
 
     def update(self):
+
+        # -- Position Management --
+
         self.pos.x += self.vel.x
         self.rect.x = self.pos.x
 
         self.collided = pygame.sprite.spritecollide(self, public.blocks, False)
         for block in self.collided:
+
             if block.color != public.bg_type:
-                if self.vel.x > 0.05:
-                    self.rect.right = block.rect.left if block.type not in \
-                        ['Exit', 'Jumpad', 'RGBSphere'] else self.rect.right
 
-                elif self.vel.x < 0.05:
-                    self.rect.left = block.rect.right if block.type not in \
-                        ['Exit', 'Jumpad', 'RGBSphere'] else self.rect.left
+                if self.vel.x > 0.05 and functions.block_check(block, 2):
+                    self.rect.right = block.rect.left
 
-                self.accelerating = False if block.type not in \
-                    ['Exit', 'Jumpad'] else True
+                elif self.vel.x < 0.05 and functions.block_check(block, 2):
+                        self.rect.left = block.rect.right
+
+                if functions.block_check(block, 1):
+                    self.accelerating = False
 
                 self.pos.x = self.rect.x
 
@@ -76,8 +77,8 @@ class Ox(pygame.sprite.Sprite):
                     dictionaries.MEDIA['crumble'].play()
                     block.broken = True
 
-                elif block.type == 'Jumpad' and not self.died and not \
-                        self.super_jump:
+                elif block.type == 'Jumpad' and not (
+                        self.died and self.super_jump):
                     self.vel.y = -4.5
                     self.on_ground = False
                     self.super_jump = True
@@ -93,20 +94,19 @@ class Ox(pygame.sprite.Sprite):
         self.collided = pygame.sprite.spritecollide(self, public.blocks, False)
         for block in self.collided:
             if block.color != public.bg_type:
-                if self.vel.y > 0:
-                    self.rect.bottom = block.rect.top if block.type not in \
-                        ['Exit', 'Jumpad', 'RGBSphere'] else self.rect.bottom
+                if self.vel.y > 0 and functions.block_check(block, 2):
+                    self.rect.bottom = block.rect.top
+                    self.on_ground = True
+                    self.vel.y = 0
 
-                elif self.vel.y < 0:
-                    self.rect.top = block.rect.bottom if block.type not in \
-                        ['Exit', 'Jumpad', 'RGBSphere'] else self.rect.top
+                elif self.vel.y < 0 and functions.block_check(block, 2):
+                    self.rect.top = block.rect.bottom
+                    self.on_ground = True
+                    self.vel.y = 0
 
-                self.super_jump = False if block.type != 'Exit' else True
-                self.jumping = False if block.type != 'Exit' else False
-                self.on_ground = True if block.type not in \
-                    ['Jumpad', 'Exit'] else False
-                self.vel.y = 0 if block.type not in \
-                    ['Exit', 'Jumpad', 'RGBSphere'] else self.vel.y
+                if functions.block_check(block, 1):
+                    self.super_jump = False
+                    self.jumping = False
 
                 self.pos.y = self.rect.y
 
@@ -131,8 +131,8 @@ class Ox(pygame.sprite.Sprite):
                     dictionaries.MEDIA['crumble'].play()
                     block.broken = True
 
-                elif block.type == 'Jumpad' and not self.died and not \
-                        self.super_jump:
+                elif block.type == 'Jumpad' and not (
+                        self.died and self.super_jump):
                     dictionaries.MEDIA['jumpad'].play()
                     self.vel.y = -4.5
                     self.on_ground = False
@@ -142,30 +142,6 @@ class Ox(pygame.sprite.Sprite):
                     dictionaries.MEDIA['collect'].play()
                     block.rect.y -= 10
                     self.won = True
-
-        if self.rect.right >= public.SWIDTH:
-            if public.wrapping:
-                self.rect.left = 1
-
-            elif not public.wrapping:
-                self.rect.right = public.SWIDTH
-                self.vel.x = 0
-                self.anim_type = 0
-                self.accelerating = False
-
-            self.pos.x = self.rect.left
-
-        elif self.rect.left <= 0:
-            if public.wrapping:
-                self.rect.right = public.SWIDTH - 1
-
-            elif not public.wrapping:
-                self.rect.left = 1
-                self.vel.x = 0
-                self.anim_type = 0
-                self.accelerating = False
-
-            self.pos.x = self.rect.left
 
         if public.wrapping:
             if self.rect.right >= public.SWIDTH:
@@ -177,23 +153,21 @@ class Ox(pygame.sprite.Sprite):
         elif not public.wrapping:
             if self.rect.right >= public.SWIDTH:
                 self.rect.right = public.SWIDTH
+                self.accelerating = False
 
             elif self.rect.left <= 0:
                 self.rect.left = 0
-
-            self.vel.x = 0 if self.rect.right >= public.SWIDTH or \
-                self.rect.left <= 0 else self.vel.x
-            self.accelerating = False if self.rect.right >= public.SWIDTH or \
-                self.rect.left <= 0 else self.accelerating
+                self.accelerating = False
 
         self.vel.y += public.GRAVITY
-        self.on_ground = (
-            False if self.vel.y < -0.5 or self.vel.y > 0.5 else True
-            ) if not self.jumping else self.on_ground
+        if self.vel.y < -0.5 or self.vel.y > 0.5 and not self.jumping:
+            self.on_ground = False
 
         public.player.vel.x = functions.clamp(public.player.vel.x, -10.0, 10.0)
         public.player.pos.x += public.player.vel.x
         public.player.vel.x *= 0.925
+
+        # -- Animation --
 
         self.anim_ticks += 1
 
@@ -205,16 +179,7 @@ class Ox(pygame.sprite.Sprite):
             if self.anim_ticks > self.anim_caps[self.anim_type]:
                 self.anim_ticks = 0
 
-        self.anim_type = 1 if self.accelerating else 0
-
-        self.anim_type = (
-            2 if self.vel.y < 0 else 3 if self.vel.y > 0 else self.anim_type) \
-            if not self.on_ground else self.anim_type
-        self.anim_type = 3 if self.vel.y > 1 or self.super_jump else \
-            self.anim_type
-
-        self.anim_type = 4 if self.died else self.anim_type
-        self.anim_type = 5 if self.won else self.anim_type
+        self.anim_type = functions.anim_check(self)
 
         if self.died and self.anim_index == 3:
             functions.generate_level(False)
@@ -222,7 +187,8 @@ class Ox(pygame.sprite.Sprite):
         self.image = dictionaries.ANIMS[self.anim_type]
         self.invert = dictionaries.I_ANIMS[self.anim_type]
 
-        self.flip_cooldown -= self.dt if self.flip_cooldown > 0 else 0
+        if self.flip_cooldown > 0:
+            self.flip_cooldown -= public.dt
 
     def draw(self):
         prep_surf = self.image[self.anim_index] if public.bg_type == 0 else \
@@ -283,11 +249,7 @@ class Pit(pygame.sprite.Sprite):
     def __init__(self, pos, color, direction):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = dictionaries.I_ANIMS[7] if color == 255 else \
-            dictionaries.ANIMS[7] if color == 0 else dictionaries.G_ANIMS[7]
-        self.image = [
-            pygame.transform.flip(image, False, True) for image in self.image
-            ] if direction == 'D' else self.image
+        self.image = functions.image_return(color, 7)
         self.transparent = pygame.Surface(self.image[0].get_size())
 
         self.rect = self.image[0].get_rect(topleft=pos)
@@ -301,6 +263,10 @@ class Pit(pygame.sprite.Sprite):
         self.anim_ticks = 0
 
         self.transparent.set_alpha(0)
+
+        if direction == 'D':
+            self.image = \
+                [pygame.transform.flip(image, 0, 1) for image in self.image]
 
     def update(self):
         self.anim_ticks += 1

@@ -42,6 +42,8 @@ def title():
             public.screen.blit(dictionaries.MEDIA['credits'], functions.center(
                 dictionaries.MEDIA['credits']))
 
+        public.screen.blit(dictionaries.MEDIA['blocksystem1'], (0, 0))
+
         pygame.display.flip()
         public.clock.tick(60)
 
