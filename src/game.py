@@ -42,7 +42,6 @@ def title():
             public.screen.blit(dictionaries.MEDIA['credits'], functions.center(
                 dictionaries.MEDIA['credits']))
 
-        public.screen.blit(dictionaries.MEDIA['blocksystem1'], (0, 0))
 
         pygame.display.flip()
         public.clock.tick(60)
@@ -105,8 +104,9 @@ def game():
         for sprite in sorted_sprites:
             sprite.draw()
 
-        public.screen.blit(dictionaries.MEDIA['wrap_gradient'], (0, 0)) \
-            if public.wrapping else 0
+        if public.wrapping:
+            public.screen.blit(dictionaries.MEDIA['wrap_gradient'], (0, 0))
+
         public.screen.blit(cover_surf, (0, 0))
 
         pygame.display.flip()

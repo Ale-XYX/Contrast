@@ -67,7 +67,7 @@ class Ox(pygame.sprite.Sprite):
                     functions.generate_level(True)
                     dictionaries.MEDIA['finish'].play()
 
-                    if public.level == 14:
+                    if public.level == 21:
                         dictionaries.MEDIA['greetings'].stop()
                         dictionaries.MEDIA['deathly'].play(-1)
 
@@ -121,7 +121,7 @@ class Ox(pygame.sprite.Sprite):
                     functions.generate_level(True)
                     dictionaries.MEDIA['finish'].play()
 
-                    if public.level == 14:
+                    if public.level == 21:
                         dictionaries.MEDIA['greetings'].stop()
                         dictionaries.MEDIA['deathly'].play(-1)
 
@@ -146,18 +146,22 @@ class Ox(pygame.sprite.Sprite):
         if public.wrapping:
             if self.rect.right >= public.SWIDTH:
                 self.rect.left = 1
+                self.pos.x = self.rect.left
 
             elif self.rect.right <= 0:
                 self.rect.right = public.SWIDTH - 1
+                self.pos.x = self.rect.left
 
         elif not public.wrapping:
             if self.rect.right >= public.SWIDTH:
                 self.rect.right = public.SWIDTH
                 self.accelerating = False
+                self.pos.x = self.rect.left
 
             elif self.rect.left <= 0:
                 self.rect.left = 0
                 self.accelerating = False
+                self.pos.x = self.rect.left
 
         self.vel.y += public.GRAVITY
         if self.vel.y < -0.5 or self.vel.y > 0.5 and not self.jumping:
@@ -191,10 +195,12 @@ class Ox(pygame.sprite.Sprite):
             self.flip_cooldown -= public.dt
 
     def draw(self):
-        prep_surf = self.image[self.anim_index] if public.bg_type == 0 else \
-            self.invert[self.anim_index]
-        prep_surf = pygame.transform.flip(prep_surf, True, False) \
-            if self.direction == 'L' else prep_surf
+        prep_surf = self.image[self.anim_index]
+        if public.bg_type == 255:
+            prep_surf = self.invert[self.anim_index]
+
+        if self.direction == 'L':
+            prep_surf = pygame.transform.flip(prep_surf, 1, 0)
 
         public.screen.blit(prep_surf, self.rect)
 
@@ -239,8 +245,9 @@ class Block(pygame.sprite.Sprite):
         self.transparent.set_alpha(0)
 
     def draw(self):
-        prep_surf = self.transparent if public.bg_type == self.color else \
-            self.image
+        prep_surf = self.image
+        if public.bg_type == self.color:
+            prep_surf = self.transparent
 
         public.screen.blit(prep_surf, self.rect)
 
@@ -276,8 +283,9 @@ class Pit(pygame.sprite.Sprite):
             self.anim_index = (self.anim_index + 1) % 4
 
     def draw(self):
-        prep_surf = self.transparent if public.bg_type == self.color else \
-            self.image[self.anim_index]
+        prep_surf = self.image[self.anim_index]
+        if public.bg_type == self.color:
+            prep_surf = self.transparent
 
         public.screen.blit(prep_surf, self.rect)
 
@@ -286,8 +294,7 @@ class Exit(pygame.sprite.Sprite):
     def __init__(self, pos, color):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = dictionaries.I_ANIMS[6] if color == 255 else \
-            dictionaries.ANIMS[6] if color == 0 else dictionaries.G_ANIMS[6]
+        self.image = functions.image_return(color, 6)
         self.rect = self.image[0].get_rect(topleft=pos)
         self.transparent = surf = pygame.Surface(self.image[0].get_size())
 
@@ -308,8 +315,9 @@ class Exit(pygame.sprite.Sprite):
             self.anim_index = (self.anim_index + 1) % 4
 
     def draw(self):
-        prep_surf = self.transparent if public.bg_type == self.color else \
-            self.image[self.anim_index]
+        prep_surf = self.image[self.anim_index]
+        if public.bg_type == self.color:
+            prep_surf = self.transparent
 
         public.screen.blit(prep_surf, self.rect)
 
@@ -346,8 +354,9 @@ class Breakable(pygame.sprite.Sprite):
         self.image.set_alpha(self.alpha)
 
     def draw(self):
-        prep_surf = self.transparent if public.bg_type == self.color else \
-            self.image
+        prep_surf = self.image
+        if public.bg_type == self.color:
+            prep_surf = self.transparent
 
         public.screen.blit(prep_surf, self.rect)
 
@@ -356,8 +365,7 @@ class Jumpad(pygame.sprite.Sprite):
     def __init__(self, pos, color):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = dictionaries.I_ANIMS[8] if color == 255 else \
-            dictionaries.ANIMS[8] if color == 0 else dictionaries.G_ANIMS[8]
+        self.image = functions.image_return(color, 8)
         self.transparent = pygame.Surface((20, 10))
         self.rect = self.image[0].get_rect(topleft=pos)
         self.rect.y += 10
@@ -379,8 +387,9 @@ class Jumpad(pygame.sprite.Sprite):
             self.anim_index = (self.anim_index + 1) % 4
 
     def draw(self):
-        prep_surf = self.transparent if public.bg_type == self.color else \
-            self.image[self.anim_index]
+        prep_surf = self.image[self.anim_index]
+        if public.bg_type == self.color:
+            prep_surf = self.transparent
 
         public.screen.blit(prep_surf, self.rect)
 
@@ -444,13 +453,13 @@ class Title(pygame.sprite.Sprite):
     def __init__(self, text):
         super().__init__(public.all_sprites)
 
-        self.image = public.FONT_SM.render(text, False, (255, 255, 255))
+        self.image = public.FONT_SM.render(text, False, [public.bg_type] * 3)
         self.rect = self.image.get_rect(topleft=(10, 10))
 
         self.dt = public.clock.tick(public.FPS) / 1000
         self.timer = 1
-        self.alpha = 255
         self.layer = 4
+        self.alpha = 255
         self.text = text
         self.type = 'Title'
 
@@ -464,8 +473,14 @@ class Title(pygame.sprite.Sprite):
             if self.alpha == 0:
                 self.kill()
 
-        self.image = public.FONT_SM.render(
-            self.text, False, [0 if public.bg_type == 255 else 255] * 3)
+        if public.bg_type == 255:
+            color = 0
+
+        else:
+            color = 255
+
+        self.image = public.FONT_SM.render(self.text, False, [color] * 3)
+
         self.image.set_alpha(self.alpha)
 
     def draw(self):

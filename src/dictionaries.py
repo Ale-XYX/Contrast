@@ -42,6 +42,7 @@ class Spritesheet():
 
 
 # Sprites
+block_ss = Spritesheet(MEDIA['block_ss'])
 player_ss = Spritesheet(MEDIA['player_ss'])
 obstacles_ss = Spritesheet(MEDIA['obstacles_ss'])
 
@@ -64,8 +65,16 @@ ANIMS = {
 
     8: obstacles_ss.load_strip([0, 30, 20, 10], 4),
 
-    9: Spritesheet(MEDIA['rgbsphere_ss']).load_strip([0, 0, 10, 10], 24)
+    9: Spritesheet(MEDIA['rgbsphere_ss']).load_strip([0, 0, 10, 10], 24),
+
 }
+
+a = block_ss.load_strip([0, 0, 20, 20], 4)
+a.extend(block_ss.load_strip([0, 20, 20, 20], 4))
+a.extend(block_ss.load_strip([0, 40, 20, 20], 4))
+a.extend(block_ss.load_strip([0, 60, 20, 20], 4))
+
+ANIMS.update({10: a})
 
 I_ANIMS = {}
 G_ANIMS = {}
@@ -176,11 +185,11 @@ LEVELS = {
             "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
             "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
             "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXXXXXXXXXCCCCCCAXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXIXXAXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXAXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXFFXXXXXXHXXXXXADDXXXXXXXXXXXXX",
-            "XXXXXXXXXXBBBBBXXXCCCCCCCAAAAXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXCCCCAXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXXXIAXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXXXXXAXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXFFXXXXXXHXXXADDDXXXXXXXXXXXXXX",
+            "XXXXXXXXXXBBBBBXXXCCCCCAAAAAXXXXXXXXXXXXX",
             "XXXXXXXXXXXXXXXXXXCXXXXXXXXXXXXXXXFFXXXX",
             "XXKXXXXXXXXXXXXXXXCXXXXXXXXXXXBBBBBBXXXX",
             "AAAAAXXXXXXXXXXXXXCXJXXXXXXXXXXXXXXXXXXX",

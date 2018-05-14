@@ -12,9 +12,12 @@ OS = platform.system()
 GRAVITY = 0.1
 SHEIGHT = 483
 SWIDTH = 800
-FPS = 60 
+FPS = 60
 
-fargs = ['vgawin.fon', 30, 50] if OS == 'Windows' else ['vgattf.ttf', 15, 20]
+fargs = ['vgattf.tff', 15, 20]
+if OS == 'Windows':
+    fargs = ['vgawin.fon', 30, 50]
+
 FONT_SM = pygame.font.Font(join(dirname(__file__), 'res', fargs[0]), fargs[1])
 FONT_LG = pygame.font.Font(join(dirname(__file__), 'res', fargs[0]), fargs[2])
 
@@ -25,7 +28,7 @@ screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 dt = clock.tick(FPS)
 
-level = 1
+level = 5
 spawn = (0, 0)
 bg_type = 0
 wrapping = True
