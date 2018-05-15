@@ -73,6 +73,10 @@ def game():
 
         if keys[pygame.K_d] and not public.player.died and \
                 not public.player.won:
+
+            if public.player.vel.x < 0.04:
+                public.player.pos.x += 1
+
             public.player.vel.x += 0.1
             public.player.direction = 'R'
             public.player.accelerating = True
@@ -85,6 +89,7 @@ def game():
 
         else:
             public.player.accelerating = False
+
 
         if public.player.won and cover_alpha != 255:
             cover_alpha += 1

@@ -45,10 +45,10 @@ class Ox(pygame.sprite.Sprite):
 
             if block.color != public.bg_type:
 
-                if self.vel.x > 0.10 and functions.block_check(block, 2):
+                if self.vel.x > 0 and functions.block_check(block, 2):
                     self.rect.right = block.rect.left
 
-                elif self.vel.x < 0.10 and functions.block_check(block, 2):
+                elif self.vel.x < 0 and functions.block_check(block, 2):
                         self.rect.left = block.rect.right
 
                 if functions.block_check(block, 1):
