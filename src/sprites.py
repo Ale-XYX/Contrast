@@ -45,10 +45,10 @@ class Ox(pygame.sprite.Sprite):
 
             if block.color != public.bg_type:
 
-                if self.vel.x > 0.05 and functions.block_check(block, 2):
+                if self.vel.x > 0.10 and functions.block_check(block, 2):
                     self.rect.right = block.rect.left
 
-                elif self.vel.x < 0.05 and functions.block_check(block, 2):
+                elif self.vel.x < 0.10 and functions.block_check(block, 2):
                         self.rect.left = block.rect.right
 
                 if functions.block_check(block, 1):
@@ -495,7 +495,7 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(0, 480))
 
         self.layer = 3
-        self.type = 'Block'
+        self.type = 'Platform'
         self.color = 192
 
         self.image.fill([self.color] * 3)

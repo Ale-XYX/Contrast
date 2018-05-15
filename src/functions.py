@@ -60,6 +60,10 @@ def generate_level(show_title):
             elif col == '.':
                 sphere = sprites.RGBSphere((_i * 20, i * 20), 192)
 
+    for sprite in public.blocks:
+        if sprite.type == 'Block':
+            sprite.image = block_return(sprite, sprite.color)
+
 
 def clamp(x, low, high):
     if x < low:
@@ -139,77 +143,99 @@ def image_return(color, index):
 
 
 def block_return(obj, color):
-    # Corners are ordered as LEFTUP, RIGHTUP, RIGHTDOWN, LEFTDOWN
-    corners = [0, 0, 0, 0]
+    corners = {
+        'LEFTUP': 1,
+        'RIGHTUP': 1,
+        'RIGHTDOWN': 1,
+        'LEFTDOWN': 1,
+    }
     x = obj.rect.center[0]
     y = obj.rect.center[1]
 
+    LEFT = -11
+    UP = -11
+
+    RIGHT = 11
+    DOWN = 11
+
     # LEFTUP
-    pos = (x - 20, y - 20)
+    pos = (x + LEFT, y + UP)
 
     for sprite in public.all_sprites:
-        if sprite.type != 'Cloud' and sprite.rect.collidepoint(pos):
-            corners[0] = 1
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+            corners['LEFTUP'] = 0
             break
 
     # UP
-    pos = (x, y - 20)
+    pos = (x, y + UP)
 
     for sprite in public.all_sprites:
-        if sprite.type != 'Cloud' and sprite.rect.collidepoint(pos):
-            corners[0], corners[1] = 1, 1
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+            corners['LEFTUP'] = 0
+            corners['RIGHTUP'] = 0
             break
 
     # RIGHTUP
-    pos = (x + 20, y - 20)
+    pos = (x + RIGHT, y + UP)
 
     for sprite in public.all_sprites:
-        if sprite.type != 'Cloud' and sprite.rect.collidepoint(pos):
-            corners[1] = 1
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+            corners['RIGHTUP'] = 0
             break
 
     # RIGHT
-    pos = (x + 20, y)
+    pos = (x + RIGHT, y)
 
     for sprite in public.all_sprites:
-        if sprite.type != 'Cloud' and sprite.rect.collidepoint(pos):
-            corners[1], corners[2] = 1, 1
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+            corners['RIGHTUP'] = 0
+            corners['RIGHTDOWN'] = 0
             break
 
-    # DOWNRIGHT
-    pos = (x + 20, y + 20)
+    # RIGHTDOWN
+    pos = (x + RIGHT, y + DOWN)
 
     for sprite in public.all_sprites:
-        if sprite.type == 'Block' and sprite.rect.collidepoint(pos):
-            corners[2] = 1
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+            corners['RIGHTDOWN'] = 0
             break
 
     # DOWN
-    pos = (x, y + 20)
+    pos = (x, y + DOWN)
 
     for sprite in public.all_sprites:
-        if sprite.type != 'Cloud' and sprite.rect.collidepoint(pos):
-            corners[2], corners[3] = 1, 1
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+            corners['LEFTDOWN'] = 0
+            corners['RIGHTDOWN'] = 0
             break
 
-    # DOWNLEFT
-    pos = (x - 20, y + 20)
+    # LEFTDOWN
+    pos = (x + LEFT, y + DOWN)
 
     for sprite in public.all_sprites:
-        if sprite.type != 'Cloud' and sprite.rect.collidepoint(pos):
-            corners[3] = 1
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+            corners['LEFTDOWN'] = 0
             break
 
     # LEFT
-    pos = (x - 20, y)
+    pos = (x + LEFT, y)
 
     for sprite in public.all_sprites:
-        if sprite.type != 'Cloud' and sprite.rect.collidepoint(pos):
-            corners[3], corners[0] = 1, 1
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+            corners['LEFTUP'] = 0
+            corners['LEFTDOWN'] = 0
             break
 
-    binary = int(''.join(map(str, corners)), 2)
-    
+    binary = int(''.join(map(str, list(corners.values()))), 2)
+
     if color == 0:
         return dictionaries.ANIMS[10][binary]
 
@@ -218,6 +244,7 @@ def block_return(obj, color):
 
     else:
         return dictionaries.G_ANIMS[10][binary]
+
 
 def color_return(options, value):
     to_return = list(options)
