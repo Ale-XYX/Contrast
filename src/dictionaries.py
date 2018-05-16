@@ -61,9 +61,9 @@ ANIMS = {
 
     6: obstacles_ss.load_strip([0, 0, 20, 20], 4),
 
-    7: obstacles_ss.load_strip([0, 18, 20, 10], 4),
+    7: obstacles_ss.load_strip([0, 20, 20, 10], 4),
 
-    8: obstacles_ss.load_strip([0, 28, 20, 10], 4),
+    8: obstacles_ss.load_strip([0, 30, 20, 10], 4),
 
     9: Spritesheet(MEDIA['rgbsphere_ss']).load_strip([0, 0, 10, 10], 24),
 

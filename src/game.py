@@ -90,7 +90,6 @@ def game():
         else:
             public.player.accelerating = False
 
-
         if public.player.won and cover_alpha != 255:
             cover_alpha += 1
             cover_surf.set_alpha(cover_alpha)
@@ -120,9 +119,9 @@ def game():
 
 def end():
     text_alpha = 0
-    info_text = public.FONT_LG.render(
+    credits_text = public.FONT_LG.render(
         'A GAME BY TEAM-ABSTRACTANDROID', False, public.WHITE)
-    info_text.set_alpha(text_alpha)
+    credits_text.set_alpha(text_alpha)
 
     while True:
         for event in pygame.event.get():
@@ -135,11 +134,11 @@ def end():
 
         if text_alpha != 255:
             text_alpha += 5
-            info_text.set_alpha(text_alpha)
+            credits_text.set_alpha(text_alpha)
 
         public.screen.fill(public.BLACK)
 
-        public.screen.blit(info_text, functions.center(info_text))
+        public.screen.blit(credits_text, functions.center(info_text))
 
         pygame.display.flip()
         public.clock.tick(60)

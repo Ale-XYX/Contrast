@@ -56,7 +56,7 @@ class Ox(pygame.sprite.Sprite):
 
                 self.pos.x = self.rect.x
 
-                if block.type == 'Pit' and not self.died:
+                if block.type == 'Pit' and not self.died and False:
                     self.died = True
                     self.anim_ticks = 0
                     self.anim_index = 0
@@ -110,7 +110,7 @@ class Ox(pygame.sprite.Sprite):
 
                 self.pos.y = self.rect.y
 
-                if block.type == 'Pit' and not self.died:
+                if block.type == 'Pit' and not self.died and False:
                     self.died = True
                     self.anim_ticks = 0
                     self.anim_index = 0
@@ -257,10 +257,15 @@ class Pit(pygame.sprite.Sprite):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = functions.image_return(color, 7)
-        self.transparent = pygame.Surface(self.image[0].get_size())
 
+        self.transparent = pygame.Surface(self.image[0].get_size())
         self.rect = self.image[0].get_rect(topleft=pos)
-        self.rect.y = self.rect.y + 10 if direction == 'U' else self.rect.y
+
+        # self.temp_rect = pygame.Rect(self.rect.left, self.rect.top, 20, 10)
+        # self.temp_rect.height -= 2
+        # self.temp_rect.bottom = self.rect.bottom
+
+        # self.rect = self.rect.clip(self.temp_rect)
 
         self.type = 'Pit'
         self.color = color
@@ -271,7 +276,11 @@ class Pit(pygame.sprite.Sprite):
 
         self.transparent.set_alpha(0)
 
-        if direction == 'D':
+        if direction == 'U':
+            self.rect.y += 10
+            self.anotherect.y += 10
+
+        elif direction == 'D':
             self.image = \
                 [pygame.transform.flip(image, 0, 1) for image in self.image]
 
@@ -287,8 +296,8 @@ class Pit(pygame.sprite.Sprite):
         if public.bg_type == self.color:
             prep_surf = self.transparent
 
+        pygame.draw.rect(public.screen, (192, 0, 0), self.anotherect)
         public.screen.blit(prep_surf, self.rect)
-
 
 class Exit(pygame.sprite.Sprite):
     def __init__(self, pos, color):

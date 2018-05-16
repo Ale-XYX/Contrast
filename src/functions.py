@@ -108,28 +108,28 @@ def block_check(block, list_index):
 
 
 def anim_check(obj):
-    to_return = 0
+    prep_anim = 0
 
     if obj.accelerating:
-        to_return = 1
+        prep_anim = 1
 
     if not obj.on_ground:
         if obj.vel.y < 0:
-            to_return = 2
+            prep_anim = 2
 
         elif obj.vel.y > 0:
-            to_return = 3
+            prep_anim = 3
 
     if obj.vel.y > 1 or obj.super_jump:
-        to_return = 3
+        prep_anim = 3
 
     if obj.died:
-        to_return = 4
+        prep_anim = 4
 
     if obj.won:
-        to_return = 5
+        prep_anim = 5
 
-    return to_return
+    return prep_anim
 
 
 def image_return(color, index):
@@ -234,7 +234,7 @@ def block_return(obj, color):
             corners['LEFTDOWN'] = 0
             break
 
-    binary = int(''.join(map(str, list(corners.values()))), 2)
+    binary = int(''.join(map(str, corners.values())), 2)
 
     if color == 0:
         return dictionaries.ANIMS[10][binary]
@@ -242,17 +242,16 @@ def block_return(obj, color):
     elif color == 255:
         return dictionaries.I_ANIMS[10][binary]
 
-    else:
-        return dictionaries.G_ANIMS[10][binary]
+    return dictionaries.G_ANIMS[10][binary]
 
 
 def color_return(options, value):
-    to_return = list(options)
+    prep_color = list(options)
 
-    if to_return[0] == value:
+    if prep_color[0] == value:
         return 255
 
-    elif to_return[1] == value:
+    elif prep_color[1] == value:
         return 0
 
     return 192

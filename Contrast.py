@@ -10,9 +10,11 @@ try:
     import pygame
 
 except ModuleNotFoundError:
-    command = ['sudo'] if game.public.OS in ['Darwin', 'Linux'] else []
-    command.extend(['py', '-m', 'pip', 'install', 'pygame'])
-    subprocess.call(command)
+    if game.public.OS == 'Windows':
+        subprocess.call(['py', '-m', 'pip', 'install', 'pygame'])
+
+    else:
+        print('Unsupported OS to install pygame, please install manually')
 
     import pygame
 
