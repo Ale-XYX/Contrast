@@ -14,7 +14,7 @@ except ModuleNotFoundError:
         subprocess.call(['py', '-m', 'pip', 'install', 'pygame'])
 
     else:
-        print('Unsupported OS to install pygame, please install manually')
+        print('Unsupported OS to install pygame, please install manually.')
 
     import pygame
 

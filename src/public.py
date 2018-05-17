@@ -12,7 +12,7 @@ OS = platform.system()
 GRAVITY = 0.1
 SHEIGHT = 483
 SWIDTH = 800
-FPS = 10
+FPS = 60
 
 fargs = ['vgattf.tff', 15, 20]
 
@@ -29,7 +29,7 @@ screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 dt = clock.tick(FPS) / 1000
 
-level = 4
+level = 7
 spawn = (0, 0)
 bg_type = 0
 wrapping = True

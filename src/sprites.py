@@ -56,7 +56,7 @@ class Ox(pygame.sprite.Sprite):
 
                 self.pos.x = self.rect.x
 
-                if block.type == 'Pit' and not self.died and False:
+                if block.type == 'Pit' and not self.died:
                     self.died = True
                     self.anim_ticks = 0
                     self.anim_index = 0
@@ -110,7 +110,7 @@ class Ox(pygame.sprite.Sprite):
 
                 self.pos.y = self.rect.y
 
-                if block.type == 'Pit' and not self.died and False:
+                if block.type == 'Pit' and not self.died:
                     self.died = True
                     self.anim_ticks = 0
                     self.anim_index = 0
@@ -261,12 +261,6 @@ class Pit(pygame.sprite.Sprite):
         self.transparent = pygame.Surface(self.image[0].get_size())
         self.rect = self.image[0].get_rect(topleft=pos)
 
-        # self.temp_rect = pygame.Rect(self.rect.left, self.rect.top, 20, 10)
-        # self.temp_rect.height -= 2
-        # self.temp_rect.bottom = self.rect.bottom
-
-        # self.rect = self.rect.clip(self.temp_rect)
-
         self.type = 'Pit'
         self.color = color
         self.layer = 3
@@ -278,7 +272,6 @@ class Pit(pygame.sprite.Sprite):
 
         if direction == 'U':
             self.rect.y += 10
-            self.anotherect.y += 10
 
         elif direction == 'D':
             self.image = \
@@ -296,8 +289,8 @@ class Pit(pygame.sprite.Sprite):
         if public.bg_type == self.color:
             prep_surf = self.transparent
 
-        pygame.draw.rect(public.screen, (192, 0, 0), self.anotherect)
         public.screen.blit(prep_surf, self.rect)
+
 
 class Exit(pygame.sprite.Sprite):
     def __init__(self, pos, color):
@@ -335,7 +328,7 @@ class Breakable(pygame.sprite.Sprite):
     def __init__(self, pos, color):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = pygame.Surface((20, 10))
+        self.image = pygame.Surface((20, 20))
         self.transparent = self.image.copy()
         self.rect = self.image.get_rect(topleft=pos)
 
@@ -407,7 +400,7 @@ class RGBSphere(pygame.sprite.Sprite):
     def __init__(self, pos, color):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = dictionaries.ANIMS[9]
+        self.image = dictionaries.ANIMS[11]
         self.rect = self.image[0].get_rect(topleft=pos)
         self.rect.x += 5
         self.rect.y += 5
@@ -439,20 +432,38 @@ class Cloud(pygame.sprite.Sprite):
 
         self.pos = pygame.math.Vector2(pos)
         self.vel = [0.2, 0.5][cloud_type]
+        self.cap = [0.2, 0.5][cloud_type]
         self.layer = cloud_type
         self.type = 'Cloud'
 
+        if public.bg_type == 255:
+            self.vel = -self.vel
+
     def update(self):
-        self.pos.x -= self.vel
+        self.pos.x += self.vel
         self.rect.center = self.pos
 
-        if self.pos.x < -20 or self.pos.x > public.SWIDTH + 10:
+        if public.bg_type == 255 and self.vel != -self.cap:
+            self.vel -= 0.1
+
+        elif public.bg_type == 0 and self.vel != self.cap:
+            self.vel += 0.1
+
+        if self.pos.x < -10:
+            generated_int = random.randint(0, 1)
+            generated_height = random.randint(0, public.SHEIGHT)
+
+            cloud = Cloud((810, generated_height), generated_int)
+
             self.kill()
 
+        elif self.pos.x > public.SWIDTH + 10:
             generated_int = random.randint(0, 1)
-            cloud = Cloud(
-                (public.SWIDTH + 10,
-                    random.randint(0, public.SHEIGHT)), generated_int)
+            generated_height = random.randint(0, public.SHEIGHT)
+
+            cloud = Cloud((-10, generated_height), generated_int)
+
+            self.kill()
 
     def draw(self):
         public.screen.blit(self.image, self.rect)

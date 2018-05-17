@@ -2,6 +2,7 @@ import pygame
 import random
 import public
 import sprites
+import pygame.gfxdraw
 import dictionaries
 
 
@@ -63,6 +64,8 @@ def generate_level(show_title):
     for sprite in public.blocks:
         if sprite.type == 'Block':
             sprite.image = block_return(sprite, sprite.color)
+        elif sprite.type == 'Breakable':
+            sprite.image = breakable_return(sprite, sprite.color)
 
 
 def clamp(x, low, high):
@@ -164,8 +167,17 @@ def block_return(obj, color):
     for sprite in public.all_sprites:
         if sprite.type not in ['Cloud', 'Exit'] and \
                 sprite.rect.collidepoint(pos):
+
             corners['LEFTUP'] = 0
             break
+
+    if pos[0] < 0:
+        corners['LEFTUP'] = 0
+        corners['LEFTDOWN'] = 0
+
+    if pos[1] > public.SHEIGHT:
+        corners['LEFTUP'] = 0
+        corners['RIGHTUP'] = 0
 
     # UP
     pos = (x, y + UP)
@@ -173,9 +185,14 @@ def block_return(obj, color):
     for sprite in public.all_sprites:
         if sprite.type not in ['Cloud', 'Exit'] and \
                 sprite.rect.collidepoint(pos):
+
             corners['LEFTUP'] = 0
             corners['RIGHTUP'] = 0
             break
+
+    if pos[1] > public.SHEIGHT:
+        corners['LEFTUP'] = 0
+        corners['RIGHTUP'] = 0
 
     # RIGHTUP
     pos = (x + RIGHT, y + UP)
@@ -183,8 +200,17 @@ def block_return(obj, color):
     for sprite in public.all_sprites:
         if sprite.type not in ['Cloud', 'Exit'] and \
                 sprite.rect.collidepoint(pos):
+
             corners['RIGHTUP'] = 0
             break
+
+    if pos[0] > public.SWIDTH:
+        corners['RIGHTUP'] = 0
+        corners['RIGHTDOWN'] = 0
+
+    if pos[1] > public.SHEIGHT:
+        corners['LEFTUP'] = 0
+        corners['RIGHTUP'] = 0
 
     # RIGHT
     pos = (x + RIGHT, y)
@@ -192,9 +218,15 @@ def block_return(obj, color):
     for sprite in public.all_sprites:
         if sprite.type not in ['Cloud', 'Exit'] and \
                 sprite.rect.collidepoint(pos):
+
             corners['RIGHTUP'] = 0
             corners['RIGHTDOWN'] = 0
+
             break
+
+    if pos[0] > public.SWIDTH:
+        corners['RIGHTUP'] = 0
+        corners['RIGHTDOWN'] = 0
 
     # RIGHTDOWN
     pos = (x + RIGHT, y + DOWN)
@@ -202,8 +234,17 @@ def block_return(obj, color):
     for sprite in public.all_sprites:
         if sprite.type not in ['Cloud', 'Exit'] and \
                 sprite.rect.collidepoint(pos):
+
             corners['RIGHTDOWN'] = 0
             break
+
+    if pos[0] > public.SWIDTH:
+        corners['RIGHTUP'] = 0
+        corners['RIGHTDOWN'] = 0
+
+    if pos[1] < 0:
+        corners['LEFTDOWN'] = 0
+        corners['RIGHTDOWN'] = 0
 
     # DOWN
     pos = (x, y + DOWN)
@@ -211,9 +252,14 @@ def block_return(obj, color):
     for sprite in public.all_sprites:
         if sprite.type not in ['Cloud', 'Exit'] and \
                 sprite.rect.collidepoint(pos):
+
             corners['LEFTDOWN'] = 0
             corners['RIGHTDOWN'] = 0
             break
+
+    if pos[1] < 0:
+        corners['LEFTDOWN'] = 0
+        corners['RIGHTDOWN'] = 0
 
     # LEFTDOWN
     pos = (x + LEFT, y + DOWN)
@@ -221,8 +267,17 @@ def block_return(obj, color):
     for sprite in public.all_sprites:
         if sprite.type not in ['Cloud', 'Exit'] and \
                 sprite.rect.collidepoint(pos):
+
             corners['LEFTDOWN'] = 0
             break
+
+    if pos[0] < 0:
+        corners['LEFTUP'] = 0
+        corners['LEFTDOWN'] = 0
+
+    if pos[1] < 0:
+        corners['LEFTDOWN'] = 0
+        corners['RIGHTDOWN'] = 0
 
     # LEFT
     pos = (x + LEFT, y)
@@ -230,9 +285,14 @@ def block_return(obj, color):
     for sprite in public.all_sprites:
         if sprite.type not in ['Cloud', 'Exit'] and \
                 sprite.rect.collidepoint(pos):
+
             corners['LEFTUP'] = 0
             corners['LEFTDOWN'] = 0
             break
+
+    if pos[0] < 0:
+        corners['LEFTUP'] = 0
+        corners['LEFTDOWN'] = 0
 
     binary = int(''.join(map(str, corners.values())), 2)
 
@@ -243,6 +303,53 @@ def block_return(obj, color):
         return dictionaries.I_ANIMS[10][binary]
 
     return dictionaries.G_ANIMS[10][binary]
+
+
+def breakable_return(obj, color):
+    sides = {'LEFT': 1, 'RIGHT': 1}
+
+    LEFT = -11
+    RIGHT = 11
+    x = obj.rect.center[0]
+    y = obj.rect.center[1]
+
+    # LEFT
+
+    pos = (x + LEFT, y)
+
+    for sprite in public.all_sprites:
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+
+            sides['LEFT'] = 0
+            break
+
+    if pos[0] < 0:
+        sides['LEFT'] = 0
+
+    # RIGHT
+
+    pos = (x + RIGHT, y)
+
+    for sprite in public.all_sprites:
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+
+            sides['RIGHT'] = 0
+            break
+
+    if pos[0] > public.SWIDTH:
+        sides['RIGHT'] = 0
+
+    binary = int(''.join(map(str, sides.values())), 2)
+
+    if color == 0:
+        return dictionaries.ANIMS[9][binary]
+
+    elif color == 255:
+        return dictionaries.I_ANIMS[9][binary]
+
+    return dictionaries.G_ANIMS[9][binary]
 
 
 def color_return(options, value):

@@ -44,7 +44,7 @@ def title():
 
 
         pygame.display.flip()
-        public.clock.tick(60)
+        public.clock.tick(public.FPS)
 
 
 def game():
@@ -114,7 +114,7 @@ def game():
         public.screen.blit(cover_surf, (0, 0))
 
         pygame.display.flip()
-        public.clock.tick(60)
+        public.clock.tick(public.FPS)
 
 
 def end():
@@ -141,4 +141,4 @@ def end():
         public.screen.blit(credits_text, functions.center(info_text))
 
         pygame.display.flip()
-        public.clock.tick(60)
+        public.clock.tick(public.FPS)
