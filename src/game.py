@@ -83,6 +83,7 @@ def game():
 
         elif keys[pygame.K_a] and not public.player.died and \
                 not public.player.won:
+
             public.player.vel.x -= 0.1
             public.player.direction = 'L'
             public.player.accelerating = True

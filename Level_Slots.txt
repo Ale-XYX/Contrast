@@ -14,13 +14,14 @@
 11: Cliffstrider (Buffed slightly)
 12: Time and space (Buffed somewhat)
 13: [Open, challenge level] !
-14: Inversion (New Level)
-15: Compartments (Updated)
-
+14: Compartments (Updated
+)
+15: Inversion (New Level)
 16: Geometry (New Level)
 17: Tunnel travel
 18: [Open, challenge level] !
 19: [Open, challenge level] !
+
 20: Absolution (Buffed)
 21: The end (Redone?)
 

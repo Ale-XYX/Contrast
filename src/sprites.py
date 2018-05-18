@@ -257,13 +257,13 @@ class Pit(pygame.sprite.Sprite):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = functions.image_return(color, 7)
-
         self.transparent = pygame.Surface(self.image[0].get_size())
         self.rect = self.image[0].get_rect(topleft=pos)
 
         self.type = 'Pit'
         self.color = color
         self.layer = 3
+        self.direction = direction
 
         self.anim_index = 0
         self.anim_ticks = 0
