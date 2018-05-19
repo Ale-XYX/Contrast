@@ -428,6 +428,7 @@ class Cloud(pygame.sprite.Sprite):
         super().__init__(public.all_sprites)
 
         self.image = dictionaries.MEDIA['cloud_' + str(cloud_type)]
+        self.flipped = pygame.transform.flip(self.image, 1, 0)
         self.rect = self.image.get_rect(center=pos)
 
         self.pos = pygame.math.Vector2(pos)
@@ -466,7 +467,12 @@ class Cloud(pygame.sprite.Sprite):
             self.kill()
 
     def draw(self):
-        public.screen.blit(self.image, self.rect)
+        prep_surf = self.image
+
+        if public.bg_type == 255:
+            prep_surf = self.flipped
+
+        public.screen.blit(prep_surf, self.rect)
 
 
 class Title(pygame.sprite.Sprite):
