@@ -5,7 +5,6 @@ import pygame
 import public
 import functions
 
-# Media
 MEDIA = {}
 images = glob.glob(os.path.join(os.path.dirname(__file__), 'res', '*.png'))
 audio = glob.glob(os.path.join(os.path.dirname(__file__), 'res', '*.ogg'))
@@ -41,7 +40,6 @@ class Spritesheet():
         return self.images_at(tups)
 
 
-# Sprites
 block_ss = Spritesheet(MEDIA['block_ss'])
 player_ss = Spritesheet(MEDIA['player_ss'])
 obstacles_ss = Spritesheet(MEDIA['obstacles_ss'])
@@ -67,6 +65,8 @@ ANIMS = {
 
     9: obstacles_ss.load_strip([0, 40, 20, 10], 4),
 
+    10: obstacles_ss.load_strip([0, 50, 20, 10], 4),
+
     11: Spritesheet(MEDIA['rgbsphere_ss']).load_strip([0, 0, 10, 10], 24),
 
 }
@@ -76,7 +76,7 @@ a.extend(block_ss.load_strip([0, 20, 20, 20], 4))
 a.extend(block_ss.load_strip([0, 40, 20, 20], 4))
 a.extend(block_ss.load_strip([0, 60, 20, 20], 4))
 
-ANIMS.update({10: a})
+ANIMS.update({11: a})
 
 I_ANIMS = {}
 G_ANIMS = {}
@@ -89,7 +89,7 @@ for key in ANIMS.keys():
         I_ANIMS[key].append(functions.ppc(image.copy(), 255, 0))
         G_ANIMS[key].append(functions.ppc(image.copy(), 192, 192))
 
-# Levels
+
 LEVELS = {
     0: ['EggBag!', 0, False, [
             "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -296,11 +296,11 @@ LEVELS = {
             'XXXXXXXXXHXXXXXBXXXXXXXXXXXXXXXXXXXXXXXX',
             'XXXXXXXXXCXXXXXBXXXXXXXXXXXXXXXXXXXXXXXX',
             'XXXXXXXXXCXXRXXBXXXXXXXXXXXXXXXXXXXXXXXX',
-            'XXXXXXXXXCBBBBBBXXXXXXDDDDDDXXXXXXXAAAXX',
-            'XXXXXXXXXCXXXXXXXXXXXXAAAAAAXXXXXXXAXXXX',
-            'XXXXXXXXXCXXXXXXXXXXXXFXXXXHXXXXXXXAXXXX',
-            'XXXXXXXXXCXXQXXHXXXXXXBXXXXCXXXXXXXAXXXQ',
-            'XXXXXXXXXCAAAAACXXFFFHBFXXFCXXXXXXXAAAAA',
+            'XXXXXXXXXCBBBBBBXXXXXDDDDDDDXXXXXXXAAAXX',
+            'XXXXXXXXXCXXXXXXXXXXXAAAAAAAXXXXXXXAXXXX',
+            'XXXXXXXXXCXXXXXXXXXXXHXXXXXHXXXXXXXAXXXX',
+            'XXXXXXXXXCXXQXXHXXXXXCXXXXXCXXXXXXXAXXXQ',
+            'XXXXXXXXXCAAAAACXXFFFCFXXXFCXXXXXXXAAAAA',
             'XXXXKXXXXXXXXXXCBBBBBCBBBBBCFXXXXXXAXXXX',
             'XXXXXXXXXXXXXXXCXXXXXAXXXXXCBBBBXXXAXJXX',
             'XXXXXXXXXXXXXXXCXXXXXAXXXXXCXXXXXXXACCCC',

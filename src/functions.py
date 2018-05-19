@@ -297,12 +297,12 @@ def block_return(obj, color):
     binary = int(''.join(map(str, corners.values())), 2)
 
     if color == 0:
-        return dictionaries.ANIMS[10][binary]
+        return dictionaries.ANIMS[11][binary]
 
     elif color == 255:
-        return dictionaries.I_ANIMS[10][binary]
+        return dictionaries.I_ANIMS[11][binary]
 
-    return dictionaries.G_ANIMS[10][binary]
+    return dictionaries.G_ANIMS[11][binary]
 
 
 def breakable_return(obj, color):
@@ -344,12 +344,12 @@ def breakable_return(obj, color):
     binary = int(''.join(map(str, sides.values())), 2)
 
     if color == 0:
-        return dictionaries.ANIMS[9][binary]
+        return dictionaries.ANIMS[10][binary]
 
     elif color == 255:
-        return dictionaries.I_ANIMS[9][binary]
+        return dictionaries.I_ANIMS[10][binary]
 
-    return dictionaries.G_ANIMS[9][binary]
+    return dictionaries.G_ANIMS[10][binary]
 
 
 def color_return(options, value):

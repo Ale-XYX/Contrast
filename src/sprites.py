@@ -367,7 +367,7 @@ class Jumpad(pygame.sprite.Sprite):
     def __init__(self, pos, color):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = functions.image_return(color, 8)
+        self.image = functions.image_return(color, 9)
         self.transparent = pygame.Surface((20, 10))
         self.rect = self.image[0].get_rect(topleft=pos)
         self.rect.y += 10
