@@ -24,6 +24,7 @@ class Ox(pygame.sprite.Sprite):
         self.on_ground = True
         self.direction = 'R'
         self.jumping = False
+        self.flipped = False
         self.flip_cooldown = 0
         self.super_jump = False
         self.accelerating = False
@@ -164,6 +165,7 @@ class Ox(pygame.sprite.Sprite):
                 self.pos.x = self.rect.left
 
         self.vel.y += public.GRAVITY
+
         if self.vel.y < -0.5 or self.vel.y > 0.5 and not self.jumping:
             self.on_ground = False
 
@@ -234,6 +236,7 @@ class Block(pygame.sprite.Sprite):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = pygame.Surface((20, 20))
+        self.overlay = None
         self.transparent = self.image.copy()
         self.rect = self.image.get_rect(topleft=pos)
 
@@ -246,10 +249,14 @@ class Block(pygame.sprite.Sprite):
 
     def draw(self):
         prep_surf = self.image
+        prep_overlay = self.overlay
+
         if public.bg_type == self.color:
             prep_surf = self.transparent
+            prep_overlay = self.transparent
 
         public.screen.blit(prep_surf, self.rect)
+        public.screen.blit(prep_overlay, self.rect)
 
 
 class Pit(pygame.sprite.Sprite):
@@ -328,7 +335,8 @@ class Breakable(pygame.sprite.Sprite):
     def __init__(self, pos, color):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = pygame.Surface((20, 20))
+        self.image = pygame.Surface((20, 10))
+        self.overlay = None
         self.transparent = self.image.copy()
         self.rect = self.image.get_rect(topleft=pos)
 
@@ -357,17 +365,21 @@ class Breakable(pygame.sprite.Sprite):
 
     def draw(self):
         prep_surf = self.image
+        prep_overlay = self.overlay
+
         if public.bg_type == self.color:
             prep_surf = self.transparent
+            prep_overlay = self.transparent
 
         public.screen.blit(prep_surf, self.rect)
+        public.screen.blit(prep_overlay, (self.rect.left, self.rect.top - 10))
 
 
 class Jumpad(pygame.sprite.Sprite):
     def __init__(self, pos, color):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = functions.image_return(color, 9)
+        self.image = functions.image_return(color, 8)
         self.transparent = pygame.Surface((20, 10))
         self.rect = self.image[0].get_rect(topleft=pos)
         self.rect.y += 10

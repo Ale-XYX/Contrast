@@ -29,7 +29,7 @@ screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 dt = clock.tick(FPS) / 1000
 
-level = 7
+level = 1
 spawn = (0, 0)
 bg_type = 0
 wrapping = True

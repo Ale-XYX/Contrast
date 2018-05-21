@@ -52,7 +52,7 @@ def generate_level(show_title):
 
             elif col in 'QRS':
                 color = color_return('QRS', col)
-                breakable = sprites.Jumpad((_i * 20, i * 20), color)
+                jumpad = sprites.Jumpad((_i * 20, i * 20), color)
 
             elif col == 'J':
                 public.spawn = (_i * 20, i * 20)
@@ -63,9 +63,10 @@ def generate_level(show_title):
 
     for sprite in public.blocks:
         if sprite.type == 'Block':
-            sprite.image = block_return(sprite, sprite.color)
+            sprite.overlay = block_return(sprite, sprite.color)
+
         elif sprite.type == 'Breakable':
-            sprite.image = breakable_return(sprite, sprite.color)
+            sprite.overlay = breakable_return(sprite, sprite.color)
 
 
 def clamp(x, low, high):
@@ -297,12 +298,12 @@ def block_return(obj, color):
     binary = int(''.join(map(str, corners.values())), 2)
 
     if color == 0:
-        return dictionaries.ANIMS[11][binary]
+        return dictionaries.ANIMS[10][binary]
 
     elif color == 255:
-        return dictionaries.I_ANIMS[11][binary]
+        return dictionaries.I_ANIMS[10][binary]
 
-    return dictionaries.G_ANIMS[11][binary]
+    return dictionaries.G_ANIMS[10][binary]
 
 
 def breakable_return(obj, color):
@@ -341,7 +342,7 @@ def breakable_return(obj, color):
     if pos[0] > public.SWIDTH:
         sides['RIGHT'] = 0
 
-    binary = int(''.join(map(str, sides.values())), 2)
+    binary = int(''.join(map(str, sides.values()))[::-1], 2)
 
     if color == 0:
         return dictionaries.ANIMS[10][binary]

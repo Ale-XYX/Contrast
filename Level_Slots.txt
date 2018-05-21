@@ -18,8 +18,8 @@
 
 15: Inversion (New Level)
 16: Geometry (New Level)
-18: Tunnel travel
-17: In Range (New Level)
+18: Tunnel travel (Tweaked)
+17: [Open, Challenge level] !
 19: [Open, challenge level] !
 
 20: Absolution (Buffed)
