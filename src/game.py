@@ -42,7 +42,6 @@ def title():
             public.screen.blit(dictionaries.MEDIA['credits'], functions.center(
                 dictionaries.MEDIA['credits']))
 
-
         pygame.display.flip()
         public.clock.tick(public.FPS)
 

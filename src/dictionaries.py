@@ -63,9 +63,11 @@ ANIMS = {
 
     8: obstacles_ss.load_strip([0, 30, 20, 10], 4),
 
-    9: obstacles_ss.load_strip([0, 40, 20, 20], 4),
+    9: obstacles_ss.load_strip([0, 40, 20, 10], 4),
 
-    11: Spritesheet(MEDIA['rgbsphere_ss']).load_strip([0, 0, 10, 10], 24),
+    10: obstacles_ss.load_strip([0, 50, 20, 10], 4),
+
+    12: Spritesheet(MEDIA['rgbsphere_ss']).load_strip([0, 0, 10, 10], 24),
 
 }
 
@@ -73,8 +75,9 @@ a = block_ss.load_strip([0, 0, 20, 20], 4)
 a.extend(block_ss.load_strip([0, 20, 20, 20], 4))
 a.extend(block_ss.load_strip([0, 40, 20, 20], 4))
 a.extend(block_ss.load_strip([0, 60, 20, 20], 4))
+a.extend(block_ss.load_strip([0, 70, 20, 10], 4))
 
-ANIMS.update({10: a})
+ANIMS.update({11: a})
 
 I_ANIMS = {}
 G_ANIMS = {}
@@ -88,7 +91,7 @@ for key in ANIMS.keys():
         G_ANIMS[key].append(functions.ppc(image.copy(), 192, 192))
 
 
-LEVELS = {
+PREV_LEVELS = {
     -1: ['Testing', 0, False, [
             "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
             "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -109,11 +112,11 @@ LEVELS = {
             "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
             "XXXXXXXXBBBBBXXXXXXXXXXXXXXXXXXXXXXXXXXX",
             "XXXXXXXXXXXXWXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-            "XXXXXXXXXXXXXXXBXXXXXXXXXXXBXXXXXXXXXXXX",
-            "XXXXXXXXXNNNNNNBXXXXXXXXXXXBXXXXXXXXKXXX",
-            "XXXJXQXXXXXXXXXBXXXXXXXXXXXBXXXXXXXXXXXX",
+            "XXXXXXXXXXXXAAAAAAAXXXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXUXAXXXXXXXXXXXXXXXXXXXXX",
+            "XXXXXXXXXXXXXXXXXXAXXXXXXXXBXXXXXXXXXXXX",
+            "XXXXXXXXXNNNXXXXXXAXXXXXXXXBXXXXXXXXKXXX",
+            "XXXJXQXXXXXXTXXXXXAXXXXXXXXBXXXXXXXXXXXX",
     ]],
 
     0: ['EggBag!', 0, False, [
@@ -315,7 +318,7 @@ LEVELS = {
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
             'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
             'XXXXXXXXXHXXXXXBXXXXXXXXXXXXXXXXXXXXXXXX',
@@ -335,23 +338,97 @@ LEVELS = {
     8: ['Panic!', 0, True, ['J']]
 }
 
+LEVELS = {
+    -1: ['Testing', 0, True, [
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '            AAAAAAAAAAVV                ',
+            '                P   4                   ',
+            '                                    D   ',
+            '   >         1                          '
+        ]],
+
+    0: ['Egg!', 0, [[
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '             AAAAA                      ',
+            '            A     A                     ',
+            '           A       A                    ',
+            '       AAAA         A                   ',
+            '       A            A  AA               ',
+            '       A            AAA A               ',
+            '        A     A         AAA             ',
+            '         A    A           A             ',
+            '          AA              A             ',
+            '            AA            A             ',
+            '           A             A              ',
+            '           AA          AA               ',
+            '            A         A                 ',
+            '            A        A                  ',
+            '            A       A                   ',
+            '   >         A AA AA                    ',
+            '             AA AA                      ']
+        ]]
+}
+
 # A: White Block
 # B: Black Block
 # C: Grey Block
-# D: White Pit Up
-# E: White Pit Down
-# F: Black Pit Up
-# G: Black Pit Down
-# H: Grey Pit Up
-# I: Grey Pit Down
-# J: Entrance
-# K: Exit White
-# L: Exit Black
-# M: Exit Grey
-# N: BreakableBlock White
-# O: BreakableBlock Black
-# P: BreakableBlock Grey
-# Q: JumPad White
-# R: JumPad Black
-# S: JumPad Grey
+
+# D: Exit White
+# E: Exit Black
+# F: Exit Grey
+
+# G: White Pit Up
+# H: Black Pit Up
+# I: Grey Pit Up
+# J: White Pit Down
+# K: Black Pit Down
+# L: Grey Pit Down
+
+# M: White Jumpad Up
+# N: Black Jumpad Up
+# O: Grey JumPad Up
+# P: White Jumpad Down
+# Q: Black Jumpad Down
+# R: Grey Jumpad Down
+
+# S: White Breakable Up
+# T: Black Breakable Up
+# U: Grey Breakable Up
+# V: White Breakable Down
+# W: Black Breakable Down
+# X: Grey Breakable Down
+
+# Y: Spawn
+
+# 1: Flipad Up White
+# 2: Flipad Up Black
+# 3: Flipad Up Grey
+# 4: Flipad Down White
+# 5: Flipad Down Black
+# 6: Flipad Down Grey
 # .: RGBSphere

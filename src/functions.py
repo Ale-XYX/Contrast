@@ -34,39 +34,62 @@ def generate_level(show_title):
                 color = color_return('ABC', col)
                 block = sprites.Block((_i * 20, i * 20), color)
 
-            elif col in 'DFH':
-                color = color_return('DFH', col)
-                pit = sprites.Pit((_i * 20, i * 20), color, 'U')
-
-            elif col in 'EGI':
-                color = color_return('EGI', col)
-                pit = sprites.Pit((_i * 20, i * 20), color, 'D')
-
-            elif col in 'KLM':
-                color = color_return('KLM', col)
+            elif col in 'DEF':
+                color = color_return('DEF', col)
                 exit = sprites.Exit((_i * 20, i * 20), color)
 
-            elif col in 'NOP':
-                color = color_return('NOP', col)
-                breakable = sprites.Breakable((_i * 20, i * 20), color)
+            elif col in 'GHI':
+                color = color_return('GHI', col)
+                pit = sprites.Pit((_i * 20, i * 20), color, 'U')
 
-            elif col in 'QRS':
-                color = color_return('QRS', col)
-                jumpad = sprites.Jumpad((_i * 20, i * 20), color)
+            elif col in 'JKL':
+                color = color_return('JKL', col)
+                pit = sprites.Pit((_i * 20, i * 20), color, 'D')
 
-            elif col == 'J':
+            elif col in 'MNO':
+                color = color_return('MNO', col)
+                jumpad = sprites.Jumpad((_i * 20, i * 20), color, 'U')
+
+            elif col in 'PQR':
+                color = color_return('PQR', col)
+                jumpad = sprites.Jumpad((_i * 20, i * 20), color, 'D')
+
+            elif col in 'STU':
+                color = color_return('STU', col)
+                breakable = sprites.Breakable((_i * 20, i * 20), color, 'U')
+
+            elif col in 'VWX':
+                color = color_return('VWX', col)
+                breakable = sprites.Breakable((_i * 20, i * 20), color, 'D')
+
+            elif col in '123':
+                color = color_return('123', col)
+                flipad = sprites.Flipad((_i * 20, i * 20), color, 'U')
+
+            elif col in '456':
+                color = color_return('456', col)
+                flipad = sprites.Flipad((_i * 20, i * 20), color, 'D')
+
+            elif col in '><':
                 public.spawn = (_i * 20, i * 20)
-                public.player = sprites.Ox(public.spawn)
+
+                if col == '>':
+                    public.player = sprites.Ox(public.spawn, 'R')
+
+                elif col == '<':
+                    public.player = sprites.Ox(public.spawn, 'L')
 
             elif col == '.':
                 sphere = sprites.RGBSphere((_i * 20, i * 20), 192)
 
     for sprite in public.blocks:
         if sprite.type == 'Block':
-            sprite.overlay = block_return(sprite, sprite.color)
+            sprite.image = block_return(sprite, sprite.color)
 
         elif sprite.type == 'Breakable':
-            sprite.overlay = breakable_return(sprite, sprite.color)
+            sprite.image = breakable_return(sprite, sprite.color).convert_alpha()
+            flip_check(sprite)
+            sprite.image.set_alpha(sprite.alpha)
 
 
 def clamp(x, low, high):
@@ -103,7 +126,7 @@ def ppc(surface, color_black, color_white):
 
 
 def block_check(block, list_index):
-    arr = ['Exit', 'Jumpad', 'RGBSphere']
+    arr = ['Exit', 'Jumpad', 'Flipad', 'RGBSphere']
 
     if block.type not in arr[0:list_index]:
         return True
@@ -298,12 +321,12 @@ def block_return(obj, color):
     binary = int(''.join(map(str, corners.values())), 2)
 
     if color == 0:
-        return dictionaries.ANIMS[10][binary]
+        return dictionaries.ANIMS[11][binary]
 
     elif color == 255:
-        return dictionaries.I_ANIMS[10][binary]
+        return dictionaries.I_ANIMS[11][binary]
 
-    return dictionaries.G_ANIMS[10][binary]
+    return dictionaries.G_ANIMS[11][binary]
 
 
 def breakable_return(obj, color):
@@ -342,15 +365,15 @@ def breakable_return(obj, color):
     if pos[0] > public.SWIDTH:
         sides['RIGHT'] = 0
 
-    binary = int(''.join(map(str, sides.values()))[::-1], 2)
+    binary = int(''.join(map(str, sides.values()))[::-1], 2) + 16
 
     if color == 0:
-        return dictionaries.ANIMS[10][binary]
+        return dictionaries.ANIMS[11][binary]
 
     elif color == 255:
-        return dictionaries.I_ANIMS[10][binary]
+        return dictionaries.I_ANIMS[11][binary]
 
-    return dictionaries.G_ANIMS[10][binary]
+    return dictionaries.G_ANIMS[11][binary]
 
 
 def color_return(options, value):
@@ -363,3 +386,16 @@ def color_return(options, value):
         return 0
 
     return 192
+
+
+def flip_check(obj):
+    if obj.direction == 'U':
+        obj.rect.y += 10
+
+    elif obj.direction == 'D':
+        if type(obj.image) is list:
+            obj.image = \
+                [pygame.transform.flip(image, 0, 1) for image in obj.image]
+
+        elif not type(obj.image) is list:
+            obj.image = pygame.transform.flip(obj.image, 0, 1)
