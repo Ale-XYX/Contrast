@@ -139,7 +139,7 @@ class Ox(pygame.sprite.Sprite):
                 if block.type == 'Pit' and not self.died:
                     self.died = True
                     self.anim_ticks = 0
-                    self.anim_index = 'Idle'
+                    self.anim_index = 0
                     dictionaries.MEDIA['died'].play()
 
                 elif block.type == 'Breakable':
@@ -176,7 +176,7 @@ class Ox(pygame.sprite.Sprite):
                     self.won = True
 
         if public.wrapping:
-            if self.rect.right >= public.SWIDTH:
+            if self.rect.right >= public.SWIDTH + 10:
                 self.rect.left = 1
                 self.pos.x = self.rect.left
 
@@ -195,7 +195,7 @@ class Ox(pygame.sprite.Sprite):
                 self.accelerating = False
                 self.pos.x = self.rect.left
 
-        if self.rect.top <= 0 and not self.died:
+        if self.rect.top <= -10 and not self.died:
             self.died = True
             dictionaries.MEDIA['died'].play()
 
@@ -259,6 +259,7 @@ class Ox(pygame.sprite.Sprite):
 
             self.jumping = True
             self.on_ground = False
+            self.anim_type = 'Jump'
             dictionaries.MEDIA['jump'].play()
 
     def flip(self):
@@ -339,7 +340,7 @@ class Pit(pygame.sprite.Sprite):
     def __init__(self, pos, color, direction):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = functions.image_return(color, 7)
+        self.image = functions.image_return(color, 'Pit')
         self.transparent = pygame.Surface(self.image[0].get_size())
         self.rect = self.image[0].get_rect(topleft=pos)
 
