@@ -87,9 +87,10 @@ def generate_level(show_title):
             sprite.image = block_return(sprite, sprite.color)
 
         elif sprite.type == 'Breakable':
-            sprite.image = breakable_return(sprite, sprite.color).convert_alpha()
-            flip_check(sprite)
-            sprite.image.set_alpha(sprite.alpha)
+            sprite.image = breakable_return(sprite, sprite.color)
+
+            if sprite.direction == 'D':
+                sprite.image = pygame.transform.flip(sprite.image, 0, 1)
 
 
 def clamp(x, low, high):
@@ -135,38 +136,46 @@ def block_check(block, list_index):
 
 
 def anim_check(obj):
-    prep_anim = 0
+    prep_anim = 'Idle'
 
     if obj.accelerating:
-        prep_anim = 1
+        prep_anim = 'Walk'
 
     if not obj.on_ground:
-        if obj.vel.y < 0:
-            prep_anim = 2
+        if obj.flipped:
+            if obj.vel.y > 0:
+                prep_anim = 'Jump'
 
-        elif obj.vel.y > 0:
-            prep_anim = 3
+            elif obj.vel.y < 0:
+                prep_anim = 'Fall'
+
+        elif not obj.flipped:
+            if obj.vel.y < 0:
+                prep_anim = 'Jump'
+
+            elif obj.vel.y > 0:
+                prep_anim = 'Fall'
 
     if obj.vel.y > 1 or obj.super_jump:
-        prep_anim = 3
+        prep_anim = 'Fall'
 
     if obj.died:
-        prep_anim = 4
+        prep_anim = 'Die'
 
     if obj.won:
-        prep_anim = 5
+        prep_anim = 'Win'
 
     return prep_anim
 
 
 def image_return(color, index):
     if color == 0:
-        return dictionaries.ANIMS[index]
+        return dictionaries.IMAGES[index]
 
     elif color == 255:
-        return dictionaries.I_ANIMS[index]
+        return dictionaries.I_IMAGES[index]
 
-    return dictionaries.G_ANIMS[index]
+    return dictionaries.G_IMAGES[index]
 
 
 def block_return(obj, color):
@@ -320,13 +329,7 @@ def block_return(obj, color):
 
     binary = int(''.join(map(str, corners.values())), 2)
 
-    if color == 0:
-        return dictionaries.ANIMS[11][binary]
-
-    elif color == 255:
-        return dictionaries.I_ANIMS[11][binary]
-
-    return dictionaries.G_ANIMS[11][binary]
+    return image_return(color, 'Block')[binary]
 
 
 def breakable_return(obj, color):
@@ -367,13 +370,7 @@ def breakable_return(obj, color):
 
     binary = int(''.join(map(str, sides.values()))[::-1], 2) + 16
 
-    if color == 0:
-        return dictionaries.ANIMS[11][binary]
-
-    elif color == 255:
-        return dictionaries.I_ANIMS[11][binary]
-
-    return dictionaries.G_ANIMS[11][binary]
+    return image_return(color, 'Block')[binary]
 
 
 def color_return(options, value):

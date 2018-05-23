@@ -43,52 +43,46 @@ class Spritesheet():
 block_ss = Spritesheet(MEDIA['block_ss'])
 player_ss = Spritesheet(MEDIA['player_ss'])
 obstacles_ss = Spritesheet(MEDIA['obstacles_ss'])
+rgbsphere_ss = Spritesheet(MEDIA['rgbsphere_ss'])
 
-ANIMS = {
-    0: player_ss.load_strip([0, 0, 20, 20], 4),
+IMAGES = {
+    'Idle': player_ss.load_strip([0, 0, 20, 20], 4),
 
-    1: player_ss.load_strip([0, 20, 20, 20], 4),
+    'Walk': player_ss.load_strip([0, 20, 20, 20], 4),
 
-    2: player_ss.load_strip([0, 40, 20, 20], 4),
+    'Jump': player_ss.load_strip([0, 40, 20, 20], 4),
 
-    3: player_ss.load_strip([0, 60, 20, 20], 4),
+    'Fall': player_ss.load_strip([0, 60, 20, 20], 4),
 
-    4: player_ss.load_strip([0, 80, 20, 20], 4),
+    'Die': player_ss.load_strip([0, 80, 20, 20], 4),
 
-    5: player_ss.load_strip([0, 100, 20, 20], 4),
+    'Win': player_ss.load_strip([0, 100, 20, 20], 4),
 
-    6: obstacles_ss.load_strip([0, 0, 20, 20], 4),
+    'Exit': obstacles_ss.load_strip([0, 0, 20, 20], 4),
 
-    7: obstacles_ss.load_strip([0, 20, 20, 10], 4),
+    'Pit': obstacles_ss.load_strip([0, 20, 20, 10], 4),
 
-    8: obstacles_ss.load_strip([0, 30, 20, 10], 4),
+    'Jumpad': obstacles_ss.load_strip([0, 30, 20, 10], 4),
 
-    9: obstacles_ss.load_strip([0, 40, 20, 10], 4),
+    'Flipad': obstacles_ss.load_strip([0, 40, 20, 10], 4),
 
-    10: obstacles_ss.load_strip([0, 50, 20, 10], 4),
+    'RGBSphere': rgbsphere_ss.load_strip([0, 0, 10, 10], 24),
 
-    12: Spritesheet(MEDIA['rgbsphere_ss']).load_strip([0, 0, 10, 10], 24),
-
+    'Block': sum([block_ss.load_strip([0, i * 20, 20, 20], 4) for i in range(4)], [])
 }
 
-a = block_ss.load_strip([0, 0, 20, 20], 4)
-a.extend(block_ss.load_strip([0, 20, 20, 20], 4))
-a.extend(block_ss.load_strip([0, 40, 20, 20], 4))
-a.extend(block_ss.load_strip([0, 60, 20, 20], 4))
-a.extend(block_ss.load_strip([0, 70, 20, 10], 4))
+IMAGES['Block'].extend(block_ss.load_strip([0, 50, 20, 10], 4))
 
-ANIMS.update({11: a})
+I_IMAGES = {}
+G_IMAGES = {}
 
-I_ANIMS = {}
-G_ANIMS = {}
+for key in IMAGES.keys():
+    I_IMAGES.update({key: []})
+    G_IMAGES.update({key: []})
 
-for key in ANIMS.keys():
-    I_ANIMS.update({key: []})
-    G_ANIMS.update({key: []})
-
-    for image in ANIMS[key]:
-        I_ANIMS[key].append(functions.ppc(image.copy(), 255, 0))
-        G_ANIMS[key].append(functions.ppc(image.copy(), 192, 192))
+    for image in IMAGES[key]:
+        I_IMAGES[key].append(functions.ppc(image.copy(), 255, 0))
+        G_IMAGES[key].append(functions.ppc(image.copy(), 192, 192))
 
 
 PREV_LEVELS = {
@@ -363,7 +357,7 @@ LEVELS = {
             '            AAAAAAAAAAVV                ',
             '                P   4                   ',
             '                                    D   ',
-            '   >         1                          '
+            '   >         1               UUU        '
         ]],
 
     0: ['Egg!', 0, [[

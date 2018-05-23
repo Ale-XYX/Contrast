@@ -42,6 +42,9 @@ def title():
             public.screen.blit(dictionaries.MEDIA['credits'], functions.center(
                 dictionaries.MEDIA['credits']))
 
+        for i in range(4):
+            public.screen.blit(dictionaries.G_IMAGES['Block'][16 + i], (i * 20, 0))
+
         pygame.display.flip()
         public.clock.tick(public.FPS)
 
