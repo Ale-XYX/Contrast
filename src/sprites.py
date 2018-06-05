@@ -340,7 +340,7 @@ class Pit(pygame.sprite.Sprite):
     def __init__(self, pos, color, direction):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = functions.image_return(color, 'Pit')
+        self.image = functions.image_return(color, 'Pit')[0]
         self.transparent = pygame.Surface(self.image[0].get_size())
         self.rect = self.image[0].get_rect(topleft=pos)
 
@@ -353,7 +353,9 @@ class Pit(pygame.sprite.Sprite):
         self.anim_ticks = 0
 
         self.transparent.set_alpha(0)
-        functions.flip_check(self)
+
+        if self.direction == 'U':
+            self.rect.y += 10
 
     def update(self):
         self.anim_ticks += 1

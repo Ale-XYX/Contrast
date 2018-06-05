@@ -86,6 +86,9 @@ def generate_level(show_title):
         if sprite.type == 'Block':
             sprite.image = block_return(sprite, sprite.color)
 
+        elif sprite.type == 'Pit':
+            pit_return(sprite, sprite.color)
+
         elif sprite.type == 'Breakable':
             sprite.image = breakable_return(sprite, sprite.color)
 
@@ -368,7 +371,6 @@ def breakable_return(obj, color):
     if pos[0] > public.SWIDTH:
         sides['RIGHT'] = 0
 
-<<<<<<< HEAD
     binary = int(''.join(map(str, sides.values())), 2)
 
     return image_return(color, 'Breakable')[binary]
@@ -410,11 +412,16 @@ def pit_return(obj, color):
         sides['RIGHT'] = 0
 
     binary = int(''.join(map(str, sides.values())), 2)
-=======
-    binary = int(''.join(map(str, sides.values()))[::-1], 2) + 16
->>>>>>> parent of f2879fb... Add Spike Decor; File Changes.
 
-    return image_return(color, 'Block')[binary]
+    obj.image = image_return(color, 'Pit')[binary]
+
+    if obj.direction == 'D':
+        if type(obj.image) is list:
+            obj.image = \
+                [pygame.transform.flip(image, 0, 1) for image in obj.image]
+
+        elif not type(obj.image) is list:
+            obj.image = pygame.transform.flip(obj.image, 0, 1)
 
 
 def color_return(options, value):
