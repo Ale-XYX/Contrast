@@ -86,6 +86,9 @@ def generate_level(show_title):
         if sprite.type == 'Block':
             sprite.image = block_return(sprite, sprite.color)
 
+        elif sprite.type == 'Pit':
+            pit_return(sprite, sprite.color)
+
         elif sprite.type == 'Breakable':
             sprite.image = breakable_return(sprite, sprite.color)
 
@@ -368,9 +371,57 @@ def breakable_return(obj, color):
     if pos[0] > public.SWIDTH:
         sides['RIGHT'] = 0
 
-    binary = int(''.join(map(str, sides.values()))[::-1], 2) + 16
+    binary = int(''.join(map(str, sides.values())), 2)
 
-    return image_return(color, 'Block')[binary]
+    return image_return(color, 'Breakable')[binary]
+
+
+def pit_return(obj, color):
+    sides = {'LEFT': 1, 'RIGHT': 1}
+
+    LEFT = -11
+    RIGHT = 11
+    x = obj.rect.center[0]
+    y = obj.rect.center[1]
+
+    # LEFT
+
+    pos = (x + LEFT, y)
+
+    for sprite in public.all_sprites:
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+
+            sides['LEFT'] = 0
+
+    if pos[0] < 0:
+        sides['LEFT'] = 0
+
+    # RIGHT
+
+    pos = (x + RIGHT, y)
+
+    for sprite in public.all_sprites:
+        if sprite.type not in ['Cloud', 'Exit'] and \
+                sprite.rect.collidepoint(pos):
+
+            sides['RIGHT'] = 0
+            break
+
+    if pos[0] > public.SWIDTH:
+        sides['RIGHT'] = 0
+
+    binary = int(''.join(map(str, sides.values())), 2)
+
+    obj.image = image_return(color, 'Pit')[binary]
+
+    if obj.direction == 'D':
+        if type(obj.image) is list:
+            obj.image = \
+                [pygame.transform.flip(image, 0, 1) for image in obj.image]
+
+        elif not type(obj.image) is list:
+            obj.image = pygame.transform.flip(obj.image, 0, 1)
 
 
 def color_return(options, value):

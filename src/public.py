@@ -14,7 +14,7 @@ SHEIGHT = 483
 SWIDTH = 800
 FPS = 60
 
-fargs = ['vgattf.tff', 15, 20]
+fargs = ['vgalinux.tff', 15, 20]
 
 if OS == 'Windows':
     fargs = ['vgawin.fon', 30, 50]
@@ -29,7 +29,7 @@ screen = pygame.display.set_mode((SWIDTH, SHEIGHT))
 clock = pygame.time.Clock()
 dt = clock.tick(FPS) / 1000
 
-level = 8
+level = 1
 spawn = (0, 0)
 bg_type = 0
 wrapping = True
