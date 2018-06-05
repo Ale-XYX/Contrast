@@ -391,7 +391,6 @@ def pit_return(obj, color):
                 sprite.rect.collidepoint(pos):
 
             sides['LEFT'] = 0
-            break
 
     if pos[0] < 0:
         sides['LEFT'] = 0
