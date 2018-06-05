@@ -60,25 +60,19 @@ IMAGES = {
 
     'Exit': obstacles_ss.load_strip([0, 0, 20, 20], 4),
 
-    'Pit': [
-            obstacles_ss.load_strip([0, 20, 20, 10], 4),
-            obstacles_ss.load_strip([0, 30, 20, 10], 4),
-            obstacles_ss.load_strip([0, 40, 20, 10], 4),
-            obstacles_ss.load_strip([0, 50, 20, 10], 4),
-        ],
+    'Pit': obstacles_ss.load_strip([0, 20, 20, 10], 4),
 
-    'Breakable': obstacles_ss.load_strip([0, 60, 20, 10], 4),
+    'Jumpad': obstacles_ss.load_strip([0, 30, 20, 10], 4),
 
-    'Jumpad': obstacles_ss.load_strip([0, 70, 20, 10], 4),
-
-    'Flipad': obstacles_ss.load_strip([0, 80, 20, 10], 4),
+    'Flipad': obstacles_ss.load_strip([0, 40, 20, 10], 4),
 
     'RGBSphere': rgbsphere_ss.load_strip([0, 0, 10, 10], 24),
 
     'Block': sum([block_ss.load_strip([0, i * 20, 20, 20], 4) for i in range(4)], [])
 }
 
-index = -1
+IMAGES['Block'].extend(block_ss.load_strip([0, 50, 20, 10], 4))
+
 I_IMAGES = {}
 G_IMAGES = {}
 
@@ -87,75 +81,62 @@ for key in IMAGES.keys():
     G_IMAGES.update({key: []})
 
     for image in IMAGES[key]:
-        if key == 'Pit':
-            I_IMAGES['Pit'].append([])
-            G_IMAGES['Pit'].append([])
-            index += 1
-
-            for element in image:
-                I_IMAGES['Pit'][index].append(
-                    functions.ppc(element.copy(), 255, 0))
-
-                G_IMAGES['Pit'][index].append(
-                    functions.ppc(element.copy(), 192, 192))
-
-        else:
-            I_IMAGES[key].append(functions.ppc(image.copy(), 255, 0))
-            G_IMAGES[key].append(functions.ppc(image.copy(), 192, 192))
+        I_IMAGES[key].append(functions.ppc(image.copy(), 255, 0))
+        G_IMAGES[key].append(functions.ppc(image.copy(), 192, 192))
 
 LEVELS = {
     -1: ['Testing', 0, True, [
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '      G GG GGG J JJ JJJ                 ',
-        '                                        ',
-        '   >  I II III L LL LLL                 '
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '            AAAAAAAAAAVV                ',
+            '                P   4                   ',
+            '                                    D   ',
+            '   >         1               UUU        '
     ]],
 
-    0: ['Congrats, You found Egg!', 0, True, [
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '                                        ',
-        '             AAAAA                      ',
-        '            A     A                     ',
-        '           A       A                    ',
-        '       AAAA         A                   ',
-        '       A            A  AA               ',
-        '       A            AAA A               ',
-        '        A     A         AAA             ',
-        '         A    A           A             ',
-        '          AA              A             ',
-        '            AA            A             ',
-        '           A             A              ',
-        '           AA          AA               ',
-        '            A         A                 ',
-        '            A        A                  ',
-        '            A       A                   ',
-        '   >         A AA AA              E     ',
-        '             AA AA                      '
+    0: ['Congrats, You found Egg!', 0, True, [[
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '                                        ',
+            '             AAAAA                      ',
+            '            A     A                     ',
+            '           A       A                    ',
+            '       AAAA         A                   ',
+            '       A            A  AA               ',
+            '       A            AAA A               ',
+            '        A     A         AAA             ',
+            '         A    A           A             ',
+            '          AA              A             ',
+            '            AA            A             ',
+            '           A             A              ',
+            '           AA          AA               ',
+            '            A         A                 ',
+            '            A        A                  ',
+            '            A       A                   ',
+            '   >         A AA AA              E     ',
+            '             AA AA                      ']
     ]],
 
     1: ['To Begin...', 0, True, [
