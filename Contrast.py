@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
+# The number of times python had a siezure: 104
 
 import sys
 import subprocess
@@ -19,6 +21,8 @@ except ModuleNotFoundError:
     import pygame
 
 if __name__ == '__main__':
+    print(game.functions.generate_blank())
+
     pygame.init()
     game.title()
     pygame.quit()

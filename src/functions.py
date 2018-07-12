@@ -447,3 +447,18 @@ def flip_check(obj):
 
         elif not type(obj.image) is list:
             obj.image = pygame.transform.flip(obj.image, 0, 1)
+
+
+def generate_blank():
+    to_return = []
+    print
+
+    for i in range(int((public.SHEIGHT - 3) / 20)):
+        s = ''
+
+        for i in range(int(public.SWIDTH / 20)):
+            s += ' '
+
+        to_return.append(s)
+
+    return to_return

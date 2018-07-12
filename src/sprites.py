@@ -47,6 +47,7 @@ class Ox(pygame.sprite.Sprite):
 
         self.pos.x += self.vel.x
         self.rect.x = self.pos.x
+        self.super_jump = False
 
         self.collided = pygame.sprite.spritecollide(self, public.blocks, False)
         for block in self.collided:
@@ -114,6 +115,7 @@ class Ox(pygame.sprite.Sprite):
 
         self.pos.y += self.vel.y
         self.rect.y = self.pos.y
+        self.super_jump = False
 
         self.collided = pygame.sprite.spritecollide(self, public.blocks, False)
         for block in self.collided:
@@ -353,9 +355,7 @@ class Pit(pygame.sprite.Sprite):
         self.anim_ticks = 0
 
         self.transparent.set_alpha(0)
-
-        if self.direction == 'U':
-            self.rect.y += 10
+        functions.flip_check(self)
 
     def update(self):
         self.anim_ticks += 1
@@ -376,8 +376,8 @@ class Breakable(pygame.sprite.Sprite):
     def __init__(self, pos, color, direction):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = pygame.Surface((20, 10))
-        self.cover = pygame.Surface((20, 10))
+        self.image = pygame.Surface((20, 11))
+        self.cover = pygame.Surface((20, 11))
         self.transparent = self.image.copy()
         self.rect = self.image.get_rect(topleft=pos)
 
@@ -398,10 +398,6 @@ class Breakable(pygame.sprite.Sprite):
         if self.direction == 'D':
             self.pos.y += 10
             self.rect.y += 10
-
-        elif self.direction == 'U':
-            self.pos.y -= 10
-            self.rect.y -= 10
 
     def update(self):
         if self.broken:

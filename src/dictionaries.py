@@ -125,10 +125,10 @@ LEVELS = {
         '                                        ',
         '                                        ',
         '                                        ',
+        '            AAAA                        ',
+        '               4                        ',
         '                                        ',
-        '      G GG GGG J JJ JJJ                 ',
-        '                                        ',
-        '   >  I II III L LL LLL                 '
+        '   >       1                              '
     ]],
 
     0: ['Congrats, You found Egg!', 0, True, [
@@ -347,7 +347,32 @@ LEVELS = {
         'IIIIIIIIIIIIIIIC  M  A     CIIIIIIIIIIII'
     ]],
 
-    8: ['Panic!', 0, True, ['>']]
+    8: ['Panic!', 0, True, [
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        '
+    ]]
 }
 
 # A: White Block
