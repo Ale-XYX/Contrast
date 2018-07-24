@@ -2,7 +2,6 @@ import pygame
 import random
 import public
 import sprites
-import pygame.gfxdraw
 import dictionaries
 
 

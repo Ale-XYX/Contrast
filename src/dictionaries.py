@@ -104,7 +104,7 @@ for key in IMAGES.keys():
             G_IMAGES[key].append(functions.ppc(image.copy(), 192, 192))
 
 LEVELS = {
-    -1: ['Testing', 0, True, [
+    -1: ['Testing', 255, False, [
         '                                        ',
         '                                        ',
         '                                        ',
@@ -125,13 +125,13 @@ LEVELS = {
         '                                        ',
         '                                        ',
         '                                        ',
-        '            AAAA                        ',
-        '               4                        ',
         '                                        ',
-        '   >       1                              '
+        '                                        ',
+        '                                        ',
+        '                                        '
     ]],
 
-    0: ['Congrats, You found Egg!', 0, True, [
+    0: ['Secret Hiding Grounds', 0, True, [
         '                                        ',
         '                                        ',
         '                                        ',
@@ -139,26 +139,27 @@ LEVELS = {
         '                                        ',
         '                                        ',
         '                                        ',
-        '             AAAAA                      ',
-        '            A     A                     ',
-        '           A       A                    ',
-        '       AAAA         A                   ',
-        '       A            A  AA               ',
-        '       A            AAA A               ',
-        '        A     A         AAA             ',
-        '         A    A           A             ',
-        '          AA              A             ',
-        '            AA            A             ',
-        '           A             A              ',
-        '           AA          AA               ',
-        '            A         A                 ',
-        '            A        A                  ',
-        '            A       A                   ',
-        '   >         A AA AA              E     ',
-        '             AA AA                      '
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                      8          D      ',
+        '                   CCCCCC               ',
+        '                AAACCCCC                ',
+        '             CCCAAACCCC                 ',
+        '   >      AAACCCAAACCCIIIIIIIIIIIIIIIIII'
+        # TODO: Add Sprite/Dialog
     ]],
 
-    1: ['To Begin...', 0, True, [
+    1: ['To Begin...', 0, False, [
         '                                        ',
         '                                        ',
         '                                        ',
@@ -185,7 +186,7 @@ LEVELS = {
         '   >        A              B            '
     ]],
 
-    2: ['Further Practice', 0, True, [
+    2: ['Further Practice', 0, False, [
         '                                        ',
         '                                        ',
         '                                        ',
@@ -355,6 +356,26 @@ LEVELS = {
         '                                        ',
         '                                        ',
         '                                        ',
+        'E                                       ',
+        'BTTT       SSS          M               ',
+        '                        A               ',
+        '                I       A     C         ',
+        '                C       A     C         ',
+        '                C >     A     C         ',
+        '               ACCCCIII A     C         ',
+        '                   CCCCCCTTTTTCN        ',
+        '                   LLLLLL     CBTTT     ',
+        'ASSS                                    ',
+        'A                        HHHHHH         ',
+        '           N        SSSSCCCCCCC         ',
+        '          BBB                           ',
+        '          B B                           ',
+        '                                        ',
+        '                                        ',
+        'IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII'
+    ]],
+
+    9: ['Watch Your Step', 255, False, [
         '                                        ',
         '                                        ',
         '                                        ',
@@ -371,8 +392,69 @@ LEVELS = {
         '                                        ',
         '                                        ',
         '                                        ',
-        '                                        '
-    ]]
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                    F   ',
+        ' >                                      '
+    ]],
+
+    20: ['Absolution', 0, True, [
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                    F   ',
+        ' >                                      '
+    ]],
+
+    21: ['The Shrine', 0, True, [
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                                        ',
+        '                            .           ',
+        '                           CCC          ',
+        '                       CCCCC CCCCC      ',
+        '        >         CCCCCC         CCCCCC '
+    ]],
 }
 
 # A: White Block
@@ -413,3 +495,5 @@ LEVELS = {
 # 5: Flipad Down Black
 # 6: Flipad Down Grey
 # .: RGBSphere
+# >: Player Right
+# <: Player Left

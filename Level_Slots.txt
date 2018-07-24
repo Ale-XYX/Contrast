@@ -1,4 +1,4 @@
-0: EggBag!
+0: Secret Hiding Grounds
 1: To Begin
 2: Futher Practice
 3: Risky Manuver
@@ -6,22 +6,20 @@
 
 5: An Unintended solution
 6: Altitude
-7: [Open, Tutorial Level]
-8: Panic! (Redone, w/Wrapping)
-9: Traps (Booby Traps redone)
+7: In Range
+8: Panic!
+9: Watch Your Step
 
-10: U-Turn (Buffed Slightly)
-11: Cliffstrider (Buffed slightly)
-12: Time and space (New Level, introduces GravPad)
-13: Shared path (Time and Space buffed and moved)
-14: Compartments (Updated)
+10: U-Turn
+11: Cliffstrider
+12: Time and space
+13: Shared path
+14: Compartments
 
-15: Inversion (New Level)
-16: Geometry (New Level)
-18: Tunnel travel (Tweaked)
-17: [Open, Challenge level] !
-19: [Open, challenge level] !
+15: Tunnel Travel
+16: Geometry
+17: Inversion
+18: Abstraction
+19: Absolution
 
-20: Absolution (Buffed)
-21: The end (Redone?)
-
+20: The Shrine

@@ -507,7 +507,7 @@ class RGBSphere(pygame.sprite.Sprite):
     def __init__(self, pos, color):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = dictionaries.ANIMS['RGBSphere']
+        self.image = dictionaries.IMAGES['RGBSphere']
         self.rect = self.image[0].get_rect(topleft=pos)
         self.rect.x += 5
         self.rect.y += 5

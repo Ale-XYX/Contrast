@@ -95,8 +95,12 @@ def game():
             cover_surf.set_alpha(cover_alpha)
 
             if cover_alpha == 255:
-                end()
+                end('A GAME BY TEAM-ABSTRACTANDROID')
                 return 0
+
+        if public.level == public.level_max:
+            end('More levels to come soon!')
+            return 0
 
         public.all_sprites.update()
 
@@ -117,10 +121,10 @@ def game():
         public.clock.tick(public.FPS)
 
 
-def end():
+def end(msg):
     text_alpha = 0
     credits_text = public.FONT_LG.render(
-        'A GAME BY TEAM-ABSTRACTANDROID', False, public.WHITE)
+        msg, False, public.WHITE)
     credits_text.set_alpha(text_alpha)
 
     while True:
@@ -138,7 +142,7 @@ def end():
 
         public.screen.fill(public.BLACK)
 
-        public.screen.blit(credits_text, functions.center(info_text))
+        public.screen.blit(credits_text, functions.center(credits_text))
 
         pygame.display.flip()
         public.clock.tick(public.FPS)
