@@ -14,7 +14,7 @@ SHEIGHT = 483
 SWIDTH = 800
 FPS = 60
 
-fargs = ['vgattf.tff', 15, 20]
+fargs = ['vgalinux.ttf', 15, 20]
 
 if OS == 'Windows':
     fargs = ['vgawin.fon', 30, 50]
