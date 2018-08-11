@@ -2,7 +2,7 @@
 
 **A Pyweek 25 Game by TEAM-ABSTRACTANDROID**
 
-In contrast, you play as `0x`, a lone creature in a monochrome, industrial world.
+In Contrast, you play as `0x`, a lone creature in a monochrome, industrial world.
 
 ![0x](https://cdn.discordapp.com/attachments/336104478644240394/437376235472158720/unknown.png)
 
@@ -21,6 +21,12 @@ Work your way through 15 puzzling levels, using the mechanics and obstacles to o
 ![S2](https://cdn.discordapp.com/attachments/336104478644240394/437380683539677184/Screenshot_96.png)
 
 ![S3](https://cdn.discordapp.com/attachments/336104478644240394/437380877836615690/Screenshot_98.png)
+
+**Requirements:**
+
+Python 3 and pygame
+
+**Credits:**
 
 `Main Programmer`: Pygasm
 
