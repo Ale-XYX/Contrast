@@ -14,72 +14,40 @@ def generate_clouds():
 
 
 def generate_level(show_title):
+    objects = {
+        'Player': sprites.Ox,
+        'Block': sprites.Block,
+        'Exit': sprites.Exit,
+        'Pit': sprites.Pit,
+        'Jumpad': sprites.Jumpad,
+        'Flipad': sprites.Flipad,
+        'Breakable': sprites.Breakable,
+        'RGBSphere': sprites.RGBSphere,
+    }
+
     for sprite in public.all_sprites:
         if sprite.type != 'Cloud':
             sprite.kill()
 
-    level_data = dictionaries.LEVELS[public.level]
-    public.bg_type = level_data[1]
-    public.wrapping = level_data[2]
+    level_data = dictionaries.MEDIA['map_' + str(public.level)]
 
+    public.bg_type = level_data.properties['Background']
+    public.wrapping = level_data.properties['Wrapping']
     platform = sprites.Platform()
 
     if show_title:
-        title = sprites.Title(level_data[0])
+        title = sprites.Title(level_data.properties['Title'])
 
-    for i, row in enumerate(level_data[3]):
-        for _i, col in enumerate(row):
-            if col in 'ABC':
-                color = color_return('ABC', col)
-                block = sprites.Block((_i * 20, i * 20), color)
+    for x in range(40):
+        for y in range(24):
+            tile = level_data.get_tile_properties(x, y, 0)
 
-            elif col in 'DEF':
-                color = color_return('DEF', col)
-                exit = sprites.Exit((_i * 20, i * 20), color)
+            if tile is not None:
+                obj = objects[tile['type']](
+                    (x * 20, y * 20), tile['Color'], tile['Flipped'])
 
-            elif col in 'GHI':
-                color = color_return('GHI', col)
-                pit = sprites.Pit((_i * 20, i * 20), color, 'U')
-
-            elif col in 'JKL':
-                color = color_return('JKL', col)
-                pit = sprites.Pit((_i * 20, i * 20), color, 'D')
-
-            elif col in 'MNO':
-                color = color_return('MNO', col)
-                jumpad = sprites.Jumpad((_i * 20, i * 20), color, 'U')
-
-            elif col in 'PQR':
-                color = color_return('PQR', col)
-                jumpad = sprites.Jumpad((_i * 20, i * 20), color, 'D')
-
-            elif col in 'STU':
-                color = color_return('STU', col)
-                breakable = sprites.Breakable((_i * 20, i * 20), color, 'U')
-
-            elif col in 'VWX':
-                color = color_return('VWX', col)
-                breakable = sprites.Breakable((_i * 20, i * 20), color, 'D')
-
-            elif col in '123':
-                color = color_return('123', col)
-                flipad = sprites.Flipad((_i * 20, i * 20), color, 'U')
-
-            elif col in '456':
-                color = color_return('456', col)
-                flipad = sprites.Flipad((_i * 20, i * 20), color, 'D')
-
-            elif col in '><':
-                public.spawn = (_i * 20, i * 20)
-
-                if col == '>':
-                    public.player = sprites.Ox(public.spawn, 'R')
-
-                elif col == '<':
-                    public.player = sprites.Ox(public.spawn, 'L')
-
-            elif col == '.':
-                sphere = sprites.RGBSphere((_i * 20, i * 20), 192)
+                if tile['type'] == 'Player':
+                    public.player = obj
 
     for sprite in public.blocks:
         if sprite.type == 'Block':
@@ -91,7 +59,7 @@ def generate_level(show_title):
         elif sprite.type == 'Breakable':
             sprite.image = breakable_return(sprite, sprite.color)
 
-            if sprite.direction == 'D':
+            if sprite.flipped:
                 sprite.image = pygame.transform.flip(sprite.image, 0, 1)
 
 
@@ -144,14 +112,14 @@ def anim_check(obj):
         prep_anim = 'Walk'
 
     if not obj.on_ground:
-        if obj.flipped:
+        if obj.flipped_vertical:
             if obj.vel.y > 0:
                 prep_anim = 'Jump'
 
             elif obj.vel.y < 0:
                 prep_anim = 'Fall'
 
-        elif not obj.flipped:
+        elif not obj.flipped_vertical:
             if obj.vel.y < 0:
                 prep_anim = 'Jump'
 
@@ -414,7 +382,7 @@ def pit_return(obj, color):
 
     obj.image = image_return(color, 'Pit')[binary]
 
-    if obj.direction == 'D':
+    if obj.flipped:
         if type(obj.image) is list:
             obj.image = \
                 [pygame.transform.flip(image, 0, 1) for image in obj.image]
@@ -436,28 +404,13 @@ def color_return(options, value):
 
 
 def flip_check(obj):
-    if obj.direction == 'U':
+    if not obj.flipped:
         obj.rect.y += 10
 
-    elif obj.direction == 'D':
+    elif obj.flipped:
         if type(obj.image) is list:
             obj.image = \
                 [pygame.transform.flip(image, 0, 1) for image in obj.image]
 
         elif not type(obj.image) is list:
             obj.image = pygame.transform.flip(obj.image, 0, 1)
-
-
-def generate_blank():
-    to_return = []
-    print
-
-    for i in range(int((public.SHEIGHT - 3) / 20)):
-        s = ''
-
-        for i in range(int(public.SWIDTH / 20)):
-            s += ' '
-
-        to_return.append(s)
-
-    return to_return

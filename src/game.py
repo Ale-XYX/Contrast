@@ -46,6 +46,10 @@ def title():
         public.clock.tick(public.FPS)
 
 
+def about():
+    return 0
+
+
 def game():
     dictionaries.MEDIA['greetings'].play(-1)
     functions.generate_level(True)
@@ -77,15 +81,15 @@ def game():
                 public.player.pos.x += 1
 
             public.player.vel.x += 0.1
-            public.player.direction = 'R'
             public.player.accelerating = True
+            public.player.flipped_horizontal = 0
 
         elif keys[pygame.K_a] and not public.player.died and \
                 not public.player.won:
 
             public.player.vel.x -= 0.1
-            public.player.direction = 'L'
             public.player.accelerating = True
+            public.player.flipped_horizontal = 1
 
         else:
             public.player.accelerating = False

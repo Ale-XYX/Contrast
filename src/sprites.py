@@ -6,7 +6,7 @@ import functions
 
 
 class Ox(pygame.sprite.Sprite):
-    def __init__(self, pos, direction):
+    def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites)
 
         self.image = dictionaries.IMAGES['Idle']
@@ -23,11 +23,11 @@ class Ox(pygame.sprite.Sprite):
         self.collided = None
         self.on_ground = True
         self.jumping = False
-        self.flipped = False
         self.flip_cooldown = 0
         self.super_jump = False
         self.accelerating = False
-        self.direction = direction
+        self.flipped_vertical = False
+        self.flipped_horizontal = flipped
 
         self.anim_index = 0
         self.anim_type = 'Idle'
@@ -88,24 +88,24 @@ class Ox(pygame.sprite.Sprite):
 
                 elif block.type == 'Jumpad' and not (
                         self.died and self.super_jump):
-                    if self.flipped and block.direction == 'D':
+                    if self.flipped_vertical and block.flipped:
                         self.vel.y = 4.5
 
-                    elif not self.flipped and block.direction == 'U':
+                    elif not self.flipped_vertical and not block.flipped:
                         self.vel.y = -4.5
 
                     self.on_ground = False
                     self.super_jump = True
 
                 elif block.type == 'Flipad' and not self.died:
-                    if block.direction == 'D' and self.flipped:
+                    if block.flipped and self.flipped_vertical:
                         dictionaries.MEDIA['flipad'].play()
-                        self.flipped = False
+                        self.flipped_vertical = False
                         self.vel.y = 2
 
-                    elif block.direction == 'U' and not self.flipped:
+                    elif not block.flipped and not self.flipped_vertical:
                         dictionaries.MEDIA['flipad'].play()
-                        self.flipped = True
+                        self.flipped_vertical = True
                         self.vel.y = -2
 
                 elif block.type == 'RGBSphere':
@@ -150,11 +150,11 @@ class Ox(pygame.sprite.Sprite):
 
                 elif block.type == 'Jumpad' and not (
                         self.died and self.super_jump):
-                    if self.flipped and block.direction == 'D':
+                    if self.flipped_vertical and block.flipped:
                         self.vel.y = 4.5
                         dictionaries.MEDIA['jumpad'].play()
 
-                    elif not self.flipped and block.direction == 'U':
+                    elif not self.flipped_vertical and not block.flipped:
                         self.vel.y = -4.5
                         dictionaries.MEDIA['jumpad'].play()
 
@@ -162,14 +162,14 @@ class Ox(pygame.sprite.Sprite):
                     self.super_jump = True
 
                 elif block.type == 'Flipad' and not self.died:
-                    if block.direction == 'D' and self.flipped:
+                    if block.flipped and self.flipped_vertical:
                         dictionaries.MEDIA['flipad'].play()
-                        self.flipped = False
+                        self.flipped_vertical = False
                         self.vel.y = 2
 
-                    elif block.direction == 'U' and not self.flipped:
+                    elif not block.flipped and not self.flipped_vertical:
                         dictionaries.MEDIA['flipad'].play()
-                        self.flipped = True
+                        self.flipped_vertical = True
                         self.vel.y = -2
 
                 elif block.type == 'RGBSphere':
@@ -201,10 +201,10 @@ class Ox(pygame.sprite.Sprite):
             self.died = True
             dictionaries.MEDIA['died'].play()
 
-        if self.flipped:
+        if self.flipped_vertical:
             self.vel.y -= public.GRAVITY
 
-        elif not self.flipped:
+        elif not self.flipped_vertical:
             self.vel.y += public.GRAVITY
 
         if self.vel.y < -0.5 or self.vel.y > 0.5 and not self.jumping:
@@ -242,10 +242,10 @@ class Ox(pygame.sprite.Sprite):
         if public.bg_type == 255:
             prep_surf = self.invert[self.anim_index]
 
-        if self.direction == 'L':
+        if self.flipped_horizontal:
             prep_surf = pygame.transform.flip(prep_surf, 1, 0)
 
-        if self.flipped:
+        if self.flipped_vertical:
             prep_surf = pygame.transform.flip(prep_surf, 0, 1)
 
         public.screen.blit(prep_surf, self.rect)
@@ -253,10 +253,10 @@ class Ox(pygame.sprite.Sprite):
     def jump(self):
         if self.on_ground and not self.died and not self.won:
 
-            if self.flipped:
+            if self.flipped_vertical:
                 self.vel.y = 3
 
-            elif not self.flipped:
+            elif not self.flipped_vertical:
                 self.vel.y = -3
 
             self.jumping = True
@@ -283,7 +283,7 @@ class Ox(pygame.sprite.Sprite):
 
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, pos, color):
+    def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = pygame.Surface((20, 20))
@@ -307,7 +307,7 @@ class Block(pygame.sprite.Sprite):
 
 
 class Exit(pygame.sprite.Sprite):
-    def __init__(self, pos, color):
+    def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = functions.image_return(color, 'Exit')
@@ -339,7 +339,7 @@ class Exit(pygame.sprite.Sprite):
 
 
 class Pit(pygame.sprite.Sprite):
-    def __init__(self, pos, color, direction):
+    def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = functions.image_return(color, 'Pit')[0]
@@ -349,7 +349,7 @@ class Pit(pygame.sprite.Sprite):
         self.type = 'Pit'
         self.color = color
         self.layer = 3
-        self.direction = direction
+        self.flipped = flipped
 
         self.anim_index = 0
         self.anim_ticks = 0
@@ -373,7 +373,7 @@ class Pit(pygame.sprite.Sprite):
 
 
 class Breakable(pygame.sprite.Sprite):
-    def __init__(self, pos, color, direction):
+    def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = pygame.Surface((20, 11))
@@ -383,7 +383,7 @@ class Breakable(pygame.sprite.Sprite):
 
         self.pos = pygame.math.Vector2(pos)
         self.vel = pygame.math.Vector2()
-        self.direction = direction
+        self.flipped = flipped
         self.type = 'Breakable'
         self.broken = False
         self.color = color
@@ -395,7 +395,7 @@ class Breakable(pygame.sprite.Sprite):
         self.transparent.set_alpha(0)
         self.cover.set_alpha(0)
 
-        if self.direction == 'D':
+        if self.flipped == 'D':
             self.pos.y += 10
             self.rect.y += 10
 
@@ -404,10 +404,10 @@ class Breakable(pygame.sprite.Sprite):
             if self.alpha != 255:
                 self.alpha += 5
 
-            if self.direction == 'U':
+            if not self.flipped:
                 self.vel.y += public.GRAVITY - 0.01
 
-            elif self.direction == 'D':
+            elif self.flipped:
                 self.vel.y -= public.GRAVITY - 0.01
 
         self.pos += self.vel
@@ -436,14 +436,14 @@ class Breakable(pygame.sprite.Sprite):
 
 
 class Jumpad(pygame.sprite.Sprite):
-    def __init__(self, pos, color, direction):
+    def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = functions.image_return(color, 'Jumpad')
         self.transparent = pygame.Surface((20, 10))
         self.rect = self.image[0].get_rect(topleft=pos)
 
-        self.direction = direction
+        self.flipped = flipped
         self.type = 'Jumpad'
         self.color = color
         self.layer = 3
@@ -470,14 +470,14 @@ class Jumpad(pygame.sprite.Sprite):
 
 
 class Flipad(pygame.sprite.Sprite):
-    def __init__(self, pos, color, direction):
+    def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = functions.image_return(color, 'Flipad')
         self.transparent = pygame.Surface((20, 10))
         self.rect = self.image[0].get_rect(topleft=pos)
 
-        self.direction = direction
+        self.flipped = flipped
         self.type = 'Flipad'
         self.color = color
         self.layer = 3
@@ -504,7 +504,7 @@ class Flipad(pygame.sprite.Sprite):
 
 
 class RGBSphere(pygame.sprite.Sprite):
-    def __init__(self, pos, color):
+    def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites, public.blocks)
 
         self.image = dictionaries.IMAGES['RGBSphere']
@@ -535,7 +535,7 @@ class Cloud(pygame.sprite.Sprite):
         super().__init__(public.all_sprites)
 
         self.image = dictionaries.MEDIA['cloud_' + str(cloud_type)]
-        self.flipped = pygame.transform.flip(self.image, 1, 0)
+        self.flipped_vertical = pygame.transform.flip(self.image, 1, 0)
         self.rect = self.image.get_rect(center=pos)
 
         self.pos = pygame.math.Vector2(pos)
@@ -576,7 +576,7 @@ class Cloud(pygame.sprite.Sprite):
     def draw(self):
         prep_surf = self.image
         if public.bg_type == 255:
-            prep_surf = self.flipped
+            prep_surf = self.flipped_vertical
 
         public.screen.blit(prep_surf, self.rect)
 

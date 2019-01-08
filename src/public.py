@@ -1,4 +1,3 @@
-import platform
 import pygame
 import platform
 from os.path import join, dirname
@@ -36,4 +35,4 @@ bg_type = 0
 wrapping = True
 player = None
 
-#level_max += 1
+# level_max += 1

@@ -1,6 +1,7 @@
 import os
 import sys
 import glob
+import pytmx
 import pygame
 import public
 import functions
@@ -8,6 +9,7 @@ import functions
 MEDIA = {}
 images = glob.glob(os.path.join(os.path.dirname(__file__), 'res', '*.png'))
 audio = glob.glob(os.path.join(os.path.dirname(__file__), 'res', '*.ogg'))
+maps = glob.glob(os.path.join(os.path.dirname(__file__), 'res', '*.tmx'))
 
 for file in images:
     obj = pygame.image.load(file).convert_alpha()
@@ -15,6 +17,10 @@ for file in images:
 
 for file in audio:
     obj = pygame.mixer.Sound(file)
+    MEDIA[os.path.split(file)[-1][:-4]] = obj
+
+for file in maps:
+    obj = pytmx.TiledMap(file)
     MEDIA[os.path.split(file)[-1][:-4]] = obj
 
 
@@ -398,8 +404,8 @@ LEVELS = {
         '                                        ',
         '                                        ',
         '                                        ',
-        '                                    F   ',
-        ' >                                      '
+        ' >                                  F   ',
+        '                                        '
     ]],
 
     20: ['Absolution', 0, True, [
@@ -456,44 +462,3 @@ LEVELS = {
         '        >         CCCCCC         CCCCCC '
     ]],
 }
-
-# A: White Block
-# B: Black Block
-# C: Grey Block
-
-# D: Exit White
-# E: Exit Black
-# F: Exit Grey
-
-# G: White Pit Up
-# H: Black Pit Up
-# I: Grey Pit Up
-# J: White Pit Down
-# K: Black Pit Down
-# L: Grey Pit Down
-
-# M: White Jumpad Up
-# N: Black Jumpad Up
-# O: Grey JumPad Up
-# P: White Jumpad Down
-# Q: Black Jumpad Down
-# R: Grey Jumpad Down
-
-# S: White Breakable Up
-# T: Black Breakable Up
-# U: Grey Breakable Up
-# V: White Breakable Down
-# W: Black Breakable Down
-# X: Grey Breakable Down
-
-# Y: Spawn
-
-# 1: Flipad Up White
-# 2: Flipad Up Black
-# 3: Flipad Up Grey
-# 4: Flipad Down White
-# 5: Flipad Down Black
-# 6: Flipad Down Grey
-# .: RGBSphere
-# >: Player Right
-# <: Player Left
