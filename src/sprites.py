@@ -83,8 +83,9 @@ class Ox(pygame.sprite.Sprite):
                     self.kill()
 
                 elif block.type == 'Breakable':
-                    dictionaries.MEDIA['crumble'].play()
-                    block.broken = True
+                    if not block.dead and not block.recovering:
+                        dictionaries.MEDIA['crumble'].play()
+                        block.broken = True
 
                 elif block.type == 'Jumpad' and not (
                         self.died and self.super_jump):
@@ -145,8 +146,9 @@ class Ox(pygame.sprite.Sprite):
                     dictionaries.MEDIA['died'].play()
 
                 elif block.type == 'Breakable':
-                    dictionaries.MEDIA['crumble'].play()
-                    block.broken = True
+                    if not block.dead and not block.recovering:
+                        dictionaries.MEDIA['crumble'].play()
+                        block.broken = True
 
                 elif block.type == 'Jumpad' and not (
                         self.died and self.super_jump):
@@ -383,10 +385,16 @@ class Breakable(pygame.sprite.Sprite):
 
         self.pos = pygame.math.Vector2(pos)
         self.vel = pygame.math.Vector2()
+        self.init_pos = pygame.math.Vector2(pos)
         self.flipped = flipped
         self.type = 'Breakable'
+        self.recovering = False
+        self.grace_time = 0.1
+        self.dead_timer = 3
+        self.cool_time = 3
         self.broken = False
         self.color = color
+        self.dead = False
         self.layer = 2
         self.alpha = 0
 
@@ -395,20 +403,47 @@ class Breakable(pygame.sprite.Sprite):
         self.transparent.set_alpha(0)
         self.cover.set_alpha(0)
 
-        if self.flipped == 'D':
+        if self.flipped:
             self.pos.y += 10
             self.rect.y += 10
 
     def update(self):
         if self.broken:
-            if self.alpha != 255:
-                self.alpha += 5
+            if self.grace_time > 0:
+                self.grace_time -= public.dt
 
-            if not self.flipped:
-                self.vel.y += public.GRAVITY - 0.01
+            elif self.grace_time < 0:
+                if self.alpha != 255:
+                    self.alpha += 5
 
-            elif self.flipped:
-                self.vel.y -= public.GRAVITY - 0.01
+                if not self.flipped:
+                    self.vel.y += public.GRAVITY - 0.01
+
+                elif self.flipped:
+                    self.vel.y -= public.GRAVITY - 0.01
+
+        if self.alpha == 255:
+            self.vel.y = 0
+            self.dead = True
+
+        if self.dead:
+            if self.dead_timer > 0:
+                self.dead_timer -= public.dt
+
+            elif self.dead_timer < 0:
+                self.dead = False
+                self.broken = False
+                self.recovering = True
+
+                pos_ = (self.init_pos.x, self.init_pos.y)
+                self.pos.x, self.pos.y = pos_
+                self.dead_timer = 3
+
+        if self.recovering:
+            self.alpha -= 15
+
+            if self.alpha == 0:
+                self.recovering = False
 
         self.pos += self.vel
         self.rect.topleft = self.pos
@@ -421,9 +456,6 @@ class Breakable(pygame.sprite.Sprite):
 
         self.cover.fill([color] * 3)
         self.cover.set_alpha(self.alpha)
-
-        if self.alpha == 255:
-            self.kill()
 
     def draw(self):
         prep_surf = self.image

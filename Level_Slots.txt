@@ -1,3 +1,6 @@
+
+Tutorial LVL:
+
 0: Secret Hiding Grounds
 1: To Begin
 2: Futher Practice
@@ -10,16 +13,18 @@
 8: Panic!
 9: Watch Your Step
 
+Challenge LVL:
+
 10: U-Turn
-11: Cliffstrider
-12: Time and space
-13: Shared path
-14: Compartments
+11: Cliffstrider [Use cliffs/tight jumps]
+12: Time and space [Introduce Flipads, and respective objects]
+13: Shared path [Each floor of the level shares a part of a pillar]
+14: Compartments [Jump from mini-challenge to mini-challenge to reach the end which can only be accessed through a specific method]
 
-15: Tunnel Travel
-16: Geometry
-17: Inversion
-18: Abstraction
-19: Absolution
+15: Tunnel Travel [Tunnels, lots of them. Probably very tight]
+16: Geometry [Geometric formations, in/out]
+17: Inversion [Backwards methods, inverted solutions]
+18: Abstraction [Tight jumps/areas, reflexes needed]
+19: Absolution [Both methods from last two levels combined, final level]
 
-20: The Shrine
+20: The Shrine [End level, basically a cut-scene.]

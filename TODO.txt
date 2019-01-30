@@ -1,11 +1,38 @@
 TODO:
 
-- Add player init_flipped states
+- Rework wrapping to look more noticable
+	- Make it color specific? 
+	- Generate Gradient on the fly?
 
-Future TODO:
+- Make the colors coherent
+	- Switch all colors to public.[COLOR] instead of having an odd mix of ints and vars
 
-- Add Delta Time to stabilize Framerate on all Clock Speeds.
+- Add all the levels. ALL. OF. THEM.
 
-- Add all the levels. ALL. OF. THEM. No more trikles of content.
+- Redo README with new screenshots and a more Time-Proof approach to images. 
+	- ?? Possibly make the entire README an image ??
 
-- Redo README with new screenshots and a more Time-Proof approach to images. ?? Possibly make the entire README an image ??
+['                                        ',
+ '                                        ',
+ '                                        ',
+ '                                        ',
+ '                                        ',
+ '                                        ',
+ '                               D        ',
+ '                                        ',
+ '       BBBBB                  AAA       ',
+ '       KKKKK                            ',
+ 'AAAAA                              AAAAA',
+ '                                        ',
+ '                                        ',
+ '         M                              ',
+ 'BBBB    CCC                         CCCC',
+ '                              AA        ',
+ '                              JJ        ',
+ '                           BB           ',
+ '                                AA      ',
+ '  >                                     ',
+ 'CCCC                                BBBB',
+ '                                        ',
+ '                                        ',
+ 'IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII']

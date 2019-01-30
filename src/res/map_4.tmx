@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="20" tileheight="20" infinite="0" backgroundcolor="#a0a0a0" nextlayerid="7" nextobjectid="1">
+<map version="1.2" tiledversion="2018.12.22" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="20" tileheight="20" infinite="0" backgroundcolor="#a0a0a0" nextlayerid="7" nextobjectid="1">
  <properties>
   <property name="Background" type="int" value="0"/>
   <property name="Title" value="&quot;Testing&quot;"/>
-  <property name="Wrapping" type="bool" value="false"/>
+  <property name="Wrapping" type="int" value="0"/>
  </properties>
  <tileset firstgid="1" name="tmx_ss" tilewidth="20" tileheight="20" tilecount="33" columns="3">
   <image source="tmx_ss.png" width="60" height="222"/>

@@ -51,16 +51,10 @@ def generate_level(show_title):
 
     for sprite in public.blocks:
         if sprite.type == 'Block':
-            sprite.image = block_return(sprite, sprite.color)
+            sprite.image = block_return(sprite)
 
-        elif sprite.type == 'Pit':
-            pit_return(sprite, sprite.color)
-
-        elif sprite.type == 'Breakable':
-            sprite.image = breakable_return(sprite, sprite.color)
-
-            if sprite.flipped:
-                sprite.image = pygame.transform.flip(sprite.image, 0, 1)
+        elif sprite.type in ['Breakable', 'Pit']:
+            sprite.image = half_return(sprite)
 
 
 def clamp(x, low, high):
@@ -98,6 +92,13 @@ def ppc(surface, color_black, color_white):
 
 def block_check(block, list_index):
     arr = ['Exit', 'Jumpad', 'Flipad', 'RGBSphere']
+
+    if block.type == 'Breakable':
+        if block.dead or block.recovering:
+            return False
+
+        elif not block.dead or not block.recovering:
+            return True
 
     if block.type not in arr[0:list_index]:
         return True
@@ -148,247 +149,110 @@ def image_return(color, index):
     return dictionaries.G_IMAGES[index]
 
 
-def block_return(obj, color):
+def block_return(obj):
     corners = {
-        'LEFTUP': 1,
-        'RIGHTUP': 1,
-        'RIGHTDOWN': 1,
-        'LEFTDOWN': 1,
+        'LeftUp': [
+            [(-11, -11), (0, -11), (-11, 0)], 
+            ['pos_[1] < 0',
+            'pos_[0] < 0'],
+            1
+            ],
+
+        'RightUp': [
+            [(11, -11), (0, -11), (11, 0)],
+            ['pos_[1] < 0', 
+            'pos_[0] > public.SWIDTH'],
+            1,
+            ],
+
+        'RightDown': [
+            [(11, 11), (0, 11), (11, 0)],
+            ['pos_[1] > public.SHEIGHT',
+            'pos_[0] > public.SWIDTH'],
+            1
+            ],
+
+        'LeftDown': [
+            [(-11, 11), (0, 11), (-11, 0)],
+            ['pos_[1] > public.SHEIGHT',
+            'pos_[0] < 0'],
+            1
+            ],
     }
+
     x = obj.rect.center[0]
     y = obj.rect.center[1]
-
-    LEFT = -11
-    UP = -11
-
-    RIGHT = 11
-    DOWN = 11
-
-    # LEFTUP
-    pos = (x + LEFT, y + UP)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            corners['LEFTUP'] = 0
-            break
-
-    if pos[0] < 0:
-        corners['LEFTUP'] = 0
-        corners['LEFTDOWN'] = 0
-
-    if pos[1] > public.SHEIGHT:
-        corners['LEFTUP'] = 0
-        corners['RIGHTUP'] = 0
-
-    # UP
-    pos = (x, y + UP)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            corners['LEFTUP'] = 0
-            corners['RIGHTUP'] = 0
-            break
-
-    if pos[1] > public.SHEIGHT:
-        corners['LEFTUP'] = 0
-        corners['RIGHTUP'] = 0
-
-    # RIGHTUP
-    pos = (x + RIGHT, y + UP)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            corners['RIGHTUP'] = 0
-            break
-
-    if pos[0] > public.SWIDTH:
-        corners['RIGHTUP'] = 0
-        corners['RIGHTDOWN'] = 0
-
-    if pos[1] > public.SHEIGHT:
-        corners['LEFTUP'] = 0
-        corners['RIGHTUP'] = 0
-
-    # RIGHT
-    pos = (x + RIGHT, y)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            corners['RIGHTUP'] = 0
-            corners['RIGHTDOWN'] = 0
-
-            break
-
-    if pos[0] > public.SWIDTH:
-        corners['RIGHTUP'] = 0
-        corners['RIGHTDOWN'] = 0
-
-    # RIGHTDOWN
-    pos = (x + RIGHT, y + DOWN)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            corners['RIGHTDOWN'] = 0
-            break
-
-    if pos[0] > public.SWIDTH:
-        corners['RIGHTUP'] = 0
-        corners['RIGHTDOWN'] = 0
-
-    if pos[1] < 0:
-        corners['LEFTDOWN'] = 0
-        corners['RIGHTDOWN'] = 0
-
-    # DOWN
-    pos = (x, y + DOWN)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            corners['LEFTDOWN'] = 0
-            corners['RIGHTDOWN'] = 0
-            break
-
-    if pos[1] < 0:
-        corners['LEFTDOWN'] = 0
-        corners['RIGHTDOWN'] = 0
-
-    # LEFTDOWN
-    pos = (x + LEFT, y + DOWN)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            corners['LEFTDOWN'] = 0
-            break
-
-    if pos[0] < 0:
-        corners['LEFTUP'] = 0
-        corners['LEFTDOWN'] = 0
-
-    if pos[1] < 0:
-        corners['LEFTDOWN'] = 0
-        corners['RIGHTDOWN'] = 0
-
-    # LEFT
-    pos = (x + LEFT, y)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            corners['LEFTUP'] = 0
-            corners['LEFTDOWN'] = 0
-            break
-
-    if pos[0] < 0:
-        corners['LEFTUP'] = 0
-        corners['LEFTDOWN'] = 0
-
-    binary = int(''.join(map(str, corners.values())), 2)
-
-    return image_return(color, 'Block')[binary]
+    creqs = [obj.color, 192]
 
 
-def breakable_return(obj, color):
-    sides = {'LEFT': 1, 'RIGHT': 1}
+    for i, corner in enumerate(corners):
+        for pos in corners[corner][0]:
+            pos_ = tuple(map(sum, zip((x,y), pos)))
 
-    LEFT = -11
-    RIGHT = 11
+            for block in public.blocks:
+                if block.rect.collidepoint(pos_):
+                    if obj.color != 192:
+                        if block.type != 'Exit' and block.color in creqs:
+                            corners[corner][2] = 0
+
+                    elif obj.color == 192:
+                        if block.type != 'Exit':
+                            corners[corner][2] = 0
+
+        for exp in corners[corner][1]:
+            if eval(exp):
+                corners[corner][2] = 0
+
+    binary = int(''.join([str(corners[corner][2]) for corner in corners]), 2)
+
+    return image_return(obj.color, 'Block')[binary]
+
+
+def half_return(obj):
+    sides = {
+        'Left': [
+            (-11, 0),
+            'pos[0] < 0',
+            1
+            ],
+
+        'Right': [
+            (11, 0),
+            'pos[0] > public.SWIDTH',
+            1
+            ]
+    }
+
     x = obj.rect.center[0]
     y = obj.rect.center[1]
+    creqs = [obj.color, 192]
 
-    # LEFT
+    for i, side in enumerate(sides):
+        pos = tuple(map(sum, zip((x,y), sides[side][0])))
 
-    pos = (x + LEFT, y)
+        for block in public.blocks:
+            if block.rect.collidepoint(pos):
+                if obj.color != 192:
+                    if block.type != 'Exit' and block.color in creqs:
+                        sides[side][2] = 0
 
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
+                elif obj.color == 192:
+                    if block.type != 'Exit':
+                        sides[side][2] = 0
 
-            sides['LEFT'] = 0
-            break
+    binary = int(''.join([str(sides[side][2]) for side in sides]), 2)
 
-    if pos[0] < 0:
-        sides['LEFT'] = 0
-
-    # RIGHT
-
-    pos = (x + RIGHT, y)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            sides['RIGHT'] = 0
-            break
-
-    if pos[0] > public.SWIDTH:
-        sides['RIGHT'] = 0
-
-    binary = int(''.join(map(str, sides.values())), 2)
-
-    return image_return(color, 'Breakable')[binary]
-
-
-def pit_return(obj, color):
-    sides = {'LEFT': 1, 'RIGHT': 1}
-
-    LEFT = -11
-    RIGHT = 11
-    x = obj.rect.center[0]
-    y = obj.rect.center[1]
-
-    # LEFT
-
-    pos = (x + LEFT, y)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            sides['LEFT'] = 0
-
-    if pos[0] < 0:
-        sides['LEFT'] = 0
-
-    # RIGHT
-
-    pos = (x + RIGHT, y)
-
-    for sprite in public.all_sprites:
-        if sprite.type not in ['Cloud', 'Exit'] and \
-                sprite.rect.collidepoint(pos):
-
-            sides['RIGHT'] = 0
-            break
-
-    if pos[0] > public.SWIDTH:
-        sides['RIGHT'] = 0
-
-    binary = int(''.join(map(str, sides.values())), 2)
-
-    obj.image = image_return(color, 'Pit')[binary]
+    image = image_return(obj.color, obj.type)[binary]
 
     if obj.flipped:
         if type(obj.image) is list:
-            obj.image = \
-                [pygame.transform.flip(image, 0, 1) for image in obj.image]
+            image = \
+                [pygame.transform.flip(image, 0, 1) for image in image]
 
         elif not type(obj.image) is list:
-            obj.image = pygame.transform.flip(obj.image, 0, 1)
+            image = pygame.transform.flip(image, 0, 1)
+
+    return image
 
 
 def color_return(options, value):

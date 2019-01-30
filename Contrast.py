@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import time
 import subprocess
 
 try:
@@ -8,22 +9,15 @@ try:
     import pytmx
 
 except ModuleNotFoundError:
-    if game.public.OS == 'Windows':
-        subprocess.call(['py', '-m', 'pip', 'install', 'pygame'])
-        subprocess.call(['py', '-m', 'pip', 'install', 'pytmx'])
-
-    else:
-        print('Unsupported OS to install pygame/pytmx, please install manually.')
-
-    import pygame
-    import pytmx
+    print('! PyTMX/Pygame not installed !')
+    time.sleep(3)
+    sys.exit()
 
 sys.path.insert(0, 'src')
 import game
 
 if __name__ == '__main__':
-    # print(game.functions.generate_blank())
-    # game.public.level = 0
+    game.public.level = 12
 
     pygame.init()
     game.title()

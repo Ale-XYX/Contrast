@@ -3,6 +3,7 @@ import public
 import sprites
 import functions
 import dictionaries
+import random
 
 
 def title():
