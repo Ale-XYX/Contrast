@@ -73,14 +73,16 @@ class Ox(pygame.sprite.Sprite):
 
                 elif block.type == 'Exit' and not self.died:
                     public.level += 1
-                    functions.generate_level(True)
-                    dictionaries.MEDIA['finish'].play()
 
-                    if public.level == 21:
-                        dictionaries.MEDIA['greetings'].stop()
-                        dictionaries.MEDIA['deathly'].play(-1)
+                    if public.level != public.level_max:
+                        functions.generate_level(True)
+                        dictionaries.MEDIA['finish'].play()
 
-                    self.kill()
+                        if public.level == 21 and public.music:
+                            dictionaries.MEDIA['greetings'].stop()
+                            dictionaries.MEDIA['deathly'].play(-1)
+
+                        self.kill()
 
                 elif block.type == 'Breakable':
                     if not block.dead and not block.recovering:
@@ -666,3 +668,5 @@ class Platform(pygame.sprite.Sprite):
 
     def draw(self):
         public.screen.blit(self.image, self.rect)
+
+# :^)

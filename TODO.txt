@@ -12,27 +12,6 @@ TODO:
 - Redo README with new screenshots and a more Time-Proof approach to images. 
 	- ?? Possibly make the entire README an image ??
 
-['                                        ',
- '                                        ',
- '                                        ',
- '                                        ',
- '                                        ',
- '                                        ',
- '                               D        ',
- '                                        ',
- '       BBBBB                  AAA       ',
- '       KKKKK                            ',
- 'AAAAA                              AAAAA',
- '                                        ',
- '                                        ',
- '         M                              ',
- 'BBBB    CCC                         CCCC',
- '                              AA        ',
- '                              JJ        ',
- '                           BB           ',
- '                                AA      ',
- '  >                                     ',
- 'CCCC                                BBBB',
- '                                        ',
- '                                        ',
- 'IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII']
+- Add error handling once every aspect of the game is totally complete.
+
+- COMPLETE THIS ALL BEFORE PYWEEK 27. [Or not, just trying to encourage myself :^)]

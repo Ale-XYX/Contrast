@@ -16,10 +16,10 @@ Tutorial LVL:
 Challenge LVL:
 
 10: U-Turn
-11: Cliffstrider [Use cliffs/tight jumps]
+11: Cliffstrider
 12: Time and space [Introduce Flipads, and respective objects]
-13: Shared path [Each floor of the level shares a part of a pillar]
-14: Compartments [Jump from mini-challenge to mini-challenge to reach the end which can only be accessed through a specific method]
+13: Floaters [Floaters...they uh...float.]
+14: Gotta Defrag This One [Jump from mini-challenge to mini-challenge to reach the end which can only be accessed through a specific method]
 
 15: Tunnel Travel [Tunnels, lots of them. Probably very tight]
 16: Geometry [Geometric formations, in/out]

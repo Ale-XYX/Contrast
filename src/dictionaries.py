@@ -22,7 +22,7 @@ for file in audio:
 for file in maps:
     obj = pytmx.TiledMap(file)
     MEDIA[os.path.split(file)[-1][:-4]] = obj
-
+    public.level_max += 1
 
 class Spritesheet():
     def __init__(self, surface):
@@ -108,3 +108,5 @@ for key in IMAGES.keys():
         else:
             I_IMAGES[key].append(functions.ppc(image.copy(), 255, 0))
             G_IMAGES[key].append(functions.ppc(image.copy(), 192, 192))
+
+# :^)

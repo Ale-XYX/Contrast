@@ -1,6 +1,8 @@
+import os
 import pygame
 import random
 import public
+import pytmx
 import sprites
 import dictionaries
 
@@ -278,3 +280,5 @@ def flip_check(obj):
 
         elif not type(obj.image) is list:
             obj.image = pygame.transform.flip(obj.image, 0, 1)
+
+# :^)
