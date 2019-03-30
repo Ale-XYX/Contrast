@@ -22,9 +22,9 @@ def generate_level(show_title):
         'Exit': sprites.Exit,
         'Pit': sprites.Pit,
         'Jumpad': sprites.Jumpad,
-        'Flipad': sprites.Flipad,
         'Breakable': sprites.Breakable,
         'RGBSphere': sprites.RGBSphere,
+        'Wrapping': sprites.Wrapping
     }
 
     for sprite in public.all_sprites:
@@ -35,7 +35,7 @@ def generate_level(show_title):
 
     public.bg_type = level_data.properties['Background']
     public.wrapping = level_data.properties['Wrapping']
-    platform = sprites.Platform()
+    [sprites.Block((x * 20, 480), public.GREY, True) for x in range(40)]
 
     if show_title:
         title = sprites.Title(level_data.properties['Title'])
@@ -51,12 +51,20 @@ def generate_level(show_title):
                 if tile['type'] == 'Player':
                     public.player = obj
 
+            if x == 0 or x == 39:
+                if public.wrapping:
+                    obj = objects['Wrapping']((x * 20, y * 20))
+
     for sprite in public.blocks:
         if sprite.type == 'Block':
             sprite.image = block_return(sprite)
 
         elif sprite.type in ['Breakable', 'Pit']:
             sprite.image = half_return(sprite)
+
+    if public.wrapping:
+        obj = objects['Wrapping']((0, 480))
+        obj = objects['Wrapping']((780, 480))
 
 
 def clamp(x, low, high):
@@ -115,19 +123,11 @@ def anim_check(obj):
         prep_anim = 'Walk'
 
     if not obj.on_ground:
-        if obj.flipped_vertical:
-            if obj.vel.y > 0:
-                prep_anim = 'Jump'
+        if obj.vel.y < 0:
+            prep_anim = 'Jump'
 
-            elif obj.vel.y < 0:
-                prep_anim = 'Fall'
-
-        elif not obj.flipped_vertical:
-            if obj.vel.y < 0:
-                prep_anim = 'Jump'
-
-            elif obj.vel.y > 0:
-                prep_anim = 'Fall'
+        elif obj.vel.y > 0:
+            prep_anim = 'Fall'
 
     if obj.vel.y > 1 or obj.super_jump:
         prep_anim = 'Fall'
@@ -142,10 +142,10 @@ def anim_check(obj):
 
 
 def image_return(color, index):
-    if color == 0:
+    if color == public.BLACK:
         return dictionaries.IMAGES[index]
 
-    elif color == 255:
+    elif color == public.WHITE:
         return dictionaries.I_IMAGES[index]
 
     return dictionaries.G_IMAGES[index]
@@ -184,7 +184,7 @@ def block_return(obj):
 
     x = obj.rect.center[0]
     y = obj.rect.center[1]
-    creqs = [obj.color, 192]
+    creqs = [obj.color, public.GREY]
 
 
     for i, corner in enumerate(corners):
@@ -193,13 +193,15 @@ def block_return(obj):
 
             for block in public.blocks:
                 if block.rect.collidepoint(pos_):
-                    if obj.color != 192:
+                    if obj.color != public.GREY:
                         if block.type != 'Exit' and block.color in creqs:
                             corners[corner][2] = 0
 
-                    elif obj.color == 192:
+                    elif obj.color == public.GREY:
                         if block.type != 'Exit':
                             corners[corner][2] = 0
+
+        # Eval is evil my ass
 
         for exp in corners[corner][1]:
             if eval(exp):
@@ -227,7 +229,7 @@ def half_return(obj):
 
     x = obj.rect.center[0]
     y = obj.rect.center[1]
-    creqs = [obj.color, 192]
+    creqs = [obj.color, public.GREY]
 
     for i, side in enumerate(sides):
         pos = tuple(map(sum, zip((x,y), sides[side][0])))
@@ -241,6 +243,10 @@ def half_return(obj):
                 elif obj.color == 192:
                     if block.type != 'Exit':
                         sides[side][2] = 0
+
+        if eval(sides[side][1]):
+            sides[side][2] = 0
+
 
     binary = int(''.join([str(sides[side][2]) for side in sides]), 2)
 
@@ -261,12 +267,12 @@ def color_return(options, value):
     prep_color = list(options)
 
     if prep_color[0] == value:
-        return 255
+        return public.WHITE
 
     elif prep_color[1] == value:
-        return 0
+        return public.BLACK
 
-    return 192
+    return public.GREY
 
 
 def flip_check(obj):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 import tkinter
 import tkinter.messagebox
@@ -17,7 +18,7 @@ except ModuleNotFoundError:
 
     sys.exit()
 
-sys.path.insert(0, 'src')
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 import game
 
 if __name__ == '__main__':

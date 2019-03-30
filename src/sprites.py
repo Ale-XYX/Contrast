@@ -26,7 +26,6 @@ class Ox(pygame.sprite.Sprite):
         self.flip_cooldown = 0
         self.super_jump = False
         self.accelerating = False
-        self.flipped_vertical = False
         self.flipped_horizontal = flipped
 
         self.anim_index = 0
@@ -74,7 +73,10 @@ class Ox(pygame.sprite.Sprite):
                 elif block.type == 'Exit' and not self.died:
                     public.level += 1
 
-                    if public.level != public.level_max:
+                    if public.level == public.level_max:
+                        pass
+
+                    elif public.level != public.level_max:
                         functions.generate_level(True)
                         dictionaries.MEDIA['finish'].play()
 
@@ -91,25 +93,10 @@ class Ox(pygame.sprite.Sprite):
 
                 elif block.type == 'Jumpad' and not (
                         self.died and self.super_jump):
-                    if self.flipped_vertical and block.flipped:
-                        self.vel.y = 4.5
 
-                    elif not self.flipped_vertical and not block.flipped:
-                        self.vel.y = -4.5
-
+                    self.vel.y = -4.5
                     self.on_ground = False
                     self.super_jump = True
-
-                elif block.type == 'Flipad' and not self.died:
-                    if block.flipped and self.flipped_vertical:
-                        dictionaries.MEDIA['flipad'].play()
-                        self.flipped_vertical = False
-                        self.vel.y = 2
-
-                    elif not block.flipped and not self.flipped_vertical:
-                        dictionaries.MEDIA['flipad'].play()
-                        self.flipped_vertical = True
-                        self.vel.y = -2
 
                 elif block.type == 'RGBSphere':
                     dictionaries.MEDIA['collect'].play()
@@ -154,27 +141,11 @@ class Ox(pygame.sprite.Sprite):
 
                 elif block.type == 'Jumpad' and not (
                         self.died and self.super_jump):
-                    if self.flipped_vertical and block.flipped:
-                        self.vel.y = 4.5
-                        dictionaries.MEDIA['jumpad'].play()
 
-                    elif not self.flipped_vertical and not block.flipped:
-                        self.vel.y = -4.5
-                        dictionaries.MEDIA['jumpad'].play()
-
+                    self.vel.y = -4.5
+                    dictionaries.MEDIA['jumpad'].play()
                     self.on_ground = False
                     self.super_jump = True
-
-                elif block.type == 'Flipad' and not self.died:
-                    if block.flipped and self.flipped_vertical:
-                        dictionaries.MEDIA['flipad'].play()
-                        self.flipped_vertical = False
-                        self.vel.y = 2
-
-                    elif not block.flipped and not self.flipped_vertical:
-                        dictionaries.MEDIA['flipad'].play()
-                        self.flipped_vertical = True
-                        self.vel.y = -2
 
                 elif block.type == 'RGBSphere':
                     dictionaries.MEDIA['collect'].play()
@@ -205,11 +176,7 @@ class Ox(pygame.sprite.Sprite):
             self.died = True
             dictionaries.MEDIA['died'].play()
 
-        if self.flipped_vertical:
-            self.vel.y -= public.GRAVITY
-
-        elif not self.flipped_vertical:
-            self.vel.y += public.GRAVITY
+        self.vel.y += public.GRAVITY
 
         if self.vel.y < -0.5 or self.vel.y > 0.5 and not self.jumping:
             self.on_ground = False
@@ -243,26 +210,18 @@ class Ox(pygame.sprite.Sprite):
 
     def draw(self):
         prep_surf = self.image[self.anim_index]
-        if public.bg_type == 255:
+        if public.bg_type == public.WHITE:
             prep_surf = self.invert[self.anim_index]
 
         if self.flipped_horizontal:
             prep_surf = pygame.transform.flip(prep_surf, 1, 0)
-
-        if self.flipped_vertical:
-            prep_surf = pygame.transform.flip(prep_surf, 0, 1)
 
         public.screen.blit(prep_surf, self.rect)
 
     def jump(self):
         if self.on_ground and not self.died and not self.won:
 
-            if self.flipped_vertical:
-                self.vel.y = 3
-
-            elif not self.flipped_vertical:
-                self.vel.y = -3
-
+            self.vel.y = -3
             self.jumping = True
             self.on_ground = False
             self.anim_type = 'Jump'
@@ -278,7 +237,12 @@ class Ox(pygame.sprite.Sprite):
 
             if not inside:
                 dictionaries.MEDIA['flip'].play()
-                public.bg_type = 0 if public.bg_type == 255 else 255
+
+                if public.bg_type == public.WHITE:
+                    public.bg_type = public.BLACK
+
+                elif public.bg_type == public.BLACK:
+                    public.bg_type = public.WHITE
 
             else:
                 dictionaries.MEDIA['denied'].play()
@@ -450,11 +414,11 @@ class Breakable(pygame.sprite.Sprite):
         self.pos += self.vel
         self.rect.topleft = self.pos
 
-        if public.bg_type == 255:
-            color = 255
+        if public.bg_type == public.WHITE:
+            color = public.WHITE
 
         else:
-            color = 0
+            color = public.BLACK
 
         self.cover.fill([color] * 3)
         self.cover.set_alpha(self.alpha)
@@ -479,40 +443,6 @@ class Jumpad(pygame.sprite.Sprite):
 
         self.flipped = flipped
         self.type = 'Jumpad'
-        self.color = color
-        self.layer = 3
-
-        self.anim_index = 0
-        self.anim_ticks = 0
-
-        self.transparent.set_alpha(0)
-        functions.flip_check(self)
-
-    def update(self):
-        self.anim_ticks += 1
-
-        if self.anim_ticks == 10:
-            self.anim_ticks = 0
-            self.anim_index = (self.anim_index + 1) % 4
-
-    def draw(self):
-        prep_surf = self.image[self.anim_index]
-        if public.bg_type == self.color:
-            prep_surf = self.transparent
-
-        public.screen.blit(prep_surf, self.rect)
-
-
-class Flipad(pygame.sprite.Sprite):
-    def __init__(self, pos, color, flipped):
-        super().__init__(public.all_sprites, public.blocks)
-
-        self.image = functions.image_return(color, 'Flipad')
-        self.transparent = pygame.Surface((20, 10))
-        self.rect = self.image[0].get_rect(topleft=pos)
-
-        self.flipped = flipped
-        self.type = 'Flipad'
         self.color = color
         self.layer = 3
 
@@ -568,27 +498,33 @@ class Cloud(pygame.sprite.Sprite):
     def __init__(self, pos, cloud_type):
         super().__init__(public.all_sprites)
 
-        self.image = dictionaries.MEDIA['cloud_' + str(cloud_type)]
-        self.flipped_vertical = pygame.transform.flip(self.image, 1, 0)
+        self.image = dictionaries.IMAGES['Decor'][cloud_type]
+        self.flipped_horizontal = pygame.transform.flip(self.image, 1, 0)
         self.rect = self.image.get_rect(center=pos)
 
         self.pos = pygame.math.Vector2(pos)
-        self.vel = [0.2, 0.5][cloud_type]
-        self.cap = [0.2, 0.5][cloud_type]
+        self.vel = [0.5, 0.2][cloud_type]
+        self.cap = [0.5, 0.2][cloud_type]
         self.layer = cloud_type
         self.type = 'Cloud'
 
-        if public.bg_type == 255:
+        if public.bg_type == public.WHITE:
             self.vel = -self.vel
+
+        if self.layer == 1:
+            self.layer = 0
+
+        elif self.layer == 0:
+            self.layer = 1
 
     def update(self):
         self.pos.x += self.vel
         self.rect.center = self.pos
 
-        if public.bg_type == 255 and self.vel != -self.cap:
+        if public.bg_type == public.WHITE and self.vel != -self.cap:
             self.vel -= 0.1
 
-        elif public.bg_type == 0 and self.vel != self.cap:
+        elif public.bg_type == public.BLACK and self.vel != self.cap:
             self.vel += 0.1
 
         if self.pos.x < -10:
@@ -609,8 +545,8 @@ class Cloud(pygame.sprite.Sprite):
 
     def draw(self):
         prep_surf = self.image
-        if public.bg_type == 255:
-            prep_surf = self.flipped_vertical
+        if public.bg_type == public.WHITE:
+            prep_surf = self.flipped_horizontal
 
         public.screen.blit(prep_surf, self.rect)
 
@@ -624,7 +560,7 @@ class Title(pygame.sprite.Sprite):
 
         self.dt = public.clock.tick(public.FPS) / 1000
         self.timer = 1
-        self.layer = 4
+        self.layer = 6
         self.alpha = 255
         self.text = text
         self.type = 'Title'
@@ -639,11 +575,11 @@ class Title(pygame.sprite.Sprite):
             if self.alpha == 0:
                 self.kill()
 
-        if public.bg_type == 255:
-            color = 0
+        if public.bg_type == public.WHITE:
+            color = public.BLACK
 
         else:
-            color = 255
+            color = public.WHITE
 
         self.image = public.FONT_SM.render(self.text, False, [color] * 3)
 
@@ -653,20 +589,34 @@ class Title(pygame.sprite.Sprite):
         public.screen.blit(self.image, self.rect)
 
 
-class Platform(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__(public.all_sprites, public.blocks)
+class Wrapping(pygame.sprite.Sprite):
+    def __init__(self, pos):
+        super().__init__(public.all_sprites)
 
-        self.image = pygame.Surface((800, 3))
-        self.rect = self.image.get_rect(topleft=(0, 480))
+        self.image = dictionaries.IMAGES['Decor'][2]
+        self.rect = self.image.get_rect(topleft=pos)
 
-        self.layer = 3
-        self.type = 'Platform'
-        self.color = 192
+        self.layer = 5
+        self.type = 'Wrapping'
+        self.color = public.GREY
+        self.pos = pygame.math.Vector2(pos)
 
-        self.image.fill([self.color] * 3)
+        if public.bg_type == public.WHITE:
+            self.image = dictionaries.IMAGES['Decor'][3]
+
+    def update(self):
+        if public.bg_type == public.BLACK:
+            self.image = dictionaries.IMAGES['Decor'][2]
+
+        elif public.bg_type == public.WHITE:
+            self.image = dictionaries.IMAGES['Decor'][3]
 
     def draw(self):
-        public.screen.blit(self.image, self.rect)
+        prep_surf = self.image
+
+        if self.pos.x == 780:
+            prep_surf = pygame.transform.flip(prep_surf, True, False)
+
+        public.screen.blit(prep_surf, self.rect)
 
 # :^)

@@ -1,17 +1,87 @@
 TODO:
 
-- Rework wrapping to look more noticable
-	- Make it color specific? 
-	- Generate Gradient on the fly?
-
-- Make the colors coherent
-	- Switch all colors to public.[COLOR] instead of having an odd mix of ints and vars
-
 - Add all the levels. ALL. OF. THEM.
 
 - Redo README with new screenshots and a more Time-Proof approach to images. 
 	- ?? Possibly make the entire README an image ??
 
+- Move credits to end once all levels are finished.
+
+- Experimental TODO: Make flipped objects operatable 
+    - Flipped flipads launch downwards, flipped breakables can be used as elevators
+    - Would likely require alot of exemptions in physics engine :/
+
 - Add error handling once every aspect of the game is totally complete.
 
 - COMPLETE THIS ALL BEFORE PYWEEK 27. [Or not, just trying to encourage myself :^)]
+
+['                                        ',
+ '                                        ',
+ '                                        ',
+ '                                        ',
+ '                                        ',
+ '                                        ',
+ '                                        ',
+ '                                        ',
+ '                   F                    ',
+ '                 AAAAA                  ',
+ '                 B   B                  ',
+ '                 B   B                  ',
+ '                 B   B                  ',
+ '                 B N B                  ',
+ '                 CCCCC                  ',
+ '   BBBBB   B       A                C   ',
+ '                   A                C   ',
+ '                   A                C   ',
+ '    N              C             >  C   ',
+ '   CCC             C  OO    OO  CCCCC   ',
+ '    C   AA         C            C       ',
+ '    C        BBBB  C            C       ',
+ '    C              C            C       ',
+ '    CIIIIIIIIIIIIIICIIIIIIIIIIIIC       ']
+
+!! This is shared path! Not Time and Space! Still need to come up with a level concept !!
+
+
+Legacy Block Map:
+
+# A: White Block
+# B: Black Block
+# C: Grey Block
+
+# D: Exit White
+# E: Exit Black
+# F: Exit Grey
+
+# G: White Pit Up
+# H: Black Pit Up
+# I: Grey Pit Up
+# J: White Pit Down
+# K: Black Pit Down
+# L: Grey Pit Down
+
+# M: White Jumpad Up
+# N: Black Jumpad Up
+# O: Grey JumPad Up
+# P: White Jumpad Down
+# Q: Black Jumpad Down
+# R: Grey Jumpad Down
+
+# S: White Breakable Up
+# T: Black Breakable Up
+# U: Grey Breakable Up
+# V: White Breakable Down
+# W: Black Breakable Down
+# X: Grey Breakable Down
+
+# Y: Spawn
+
+# 1: Flipad Up White
+# 2: Flipad Up Black
+# 3: Flipad Up Grey
+# 4: Flipad Down White
+# 5: Flipad Down Black
+# 6: Flipad Down Grey
+# .: RGBSphere
+# >: Player Right
+# <: Player Left

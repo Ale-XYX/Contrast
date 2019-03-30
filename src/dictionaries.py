@@ -46,7 +46,8 @@ class Spritesheet():
         return self.images_at(tups)
 
 
-block_ss = Spritesheet(MEDIA['block_ss'])
+ui_ss = Spritesheet(MEDIA['ui_ss'])
+decor_ss = Spritesheet(MEDIA['decor_ss'])
 player_ss = Spritesheet(MEDIA['player_ss'])
 obstacles_ss = Spritesheet(MEDIA['obstacles_ss'])
 rgbsphere_ss = Spritesheet(MEDIA['rgbsphere_ss'])
@@ -77,11 +78,15 @@ IMAGES = {
 
     'Jumpad': obstacles_ss.load_strip([0, 70, 20, 10], 4),
 
-    'Flipad': obstacles_ss.load_strip([0, 80, 20, 10], 4),
-
     'RGBSphere': rgbsphere_ss.load_strip([0, 0, 10, 10], 24),
 
-    'Block': sum([block_ss.load_strip([0, i * 20, 20, 20], 4) for i in range(4)], [])
+    'Decor': decor_ss.load_strip([0, 80, 20, 20], 4),
+
+    'UI': ui_ss.load_strip([0, 0, 100, 100], 4),
+
+    'Logo': ui_ss.image_at([0, 100, 300, 43]),
+
+    'Block': sum([decor_ss.load_strip([0, i * 20, 20, 20], 4) for i in range(4)], []),
 }
 
 index = -1
@@ -92,21 +97,41 @@ for key in IMAGES.keys():
     I_IMAGES.update({key: []})
     G_IMAGES.update({key: []})
 
-    for image in IMAGES[key]:
-        if key == 'Pit':
-            I_IMAGES['Pit'].append([])
-            G_IMAGES['Pit'].append([])
-            index += 1
+    if key != 'Logo':
+        for image in IMAGES[key]:
+            if key == 'Pit':
+                I_IMAGES['Pit'].append([])
+                G_IMAGES['Pit'].append([])
+                index += 1
 
-            for element in image:
-                I_IMAGES['Pit'][index].append(
-                    functions.ppc(element.copy(), 255, 0))
+                for element in image:
+                    I_IMAGES['Pit'][index].append(
+                        functions.ppc(element.copy(), public.WHITE, public.BLACK))
 
-                G_IMAGES['Pit'][index].append(
-                    functions.ppc(element.copy(), 192, 192))
+                    G_IMAGES['Pit'][index].append(
+                        functions.ppc(element.copy(), public.GREY, public.GREY))
 
-        else:
-            I_IMAGES[key].append(functions.ppc(image.copy(), 255, 0))
-            G_IMAGES[key].append(functions.ppc(image.copy(), 192, 192))
+            else:
+                I_IMAGES[key].append(functions.ppc(image.copy(), public.WHITE, public.BLACK))
+                G_IMAGES[key].append(functions.ppc(image.copy(), public.GREY, public.GREY))
+
+icon_data = [
+    b'BZh91AY&SY\xed#\x01l\x00\x05\xb0\xfc\x04\xf8"""""""" ',
+    b'@\x00\x00\x00\xb0\x01XP\x0cJ\x0fH\r=\x1aLP\x01\x88',
+    b'\xd3M\x1a\x08R\xa3@\x002l\x80\x86\x12\x0e\x90+',
+    b'\xc2Ex\xd4\xa6\x82\x88\x12\xa4+\x14\x89* Q\x05',
+    b'\x0bI@\xd3@\xd1@4\xd2\x85R\x04B\xc4\x01E\x03MB',
+    b'\xb3\xa1p.$"\xef%(\xa9\x90\xa8\xaa\x94B\xef',
+    b'\xca\xc5\xe5\xdc&E\x89\t\x00\xbdb\x19\x13\x08',
+    b'\x98\xb6\xdc\xd6bn\xfc\x0c\x97]l\xcb\x9d\xd2^P',
+    b'\x81\xb2\xa8\x0f\x82\x82\xa8H\x84\xa4\xa0ii\xa8',
+    b'\x80\xa0\n\x04\xa1b\x02\x8aD\xa4\x02\xa2T\xa4',
+    b'\x10\xc5DfU\xc1\x10\xc9P1T\x03\x01T\x90\x0cA\xc7Yr',
+    b'\rd6\x87\xf8\xbb\x92)\xc2\x84\x87i\x18\x0b`'
+
+    # I have no idea why I turned this into a string instead of an image file but whatever
+]            
+
+MEDIA['icon'] = b''.join(icon_data)
 
 # :^)

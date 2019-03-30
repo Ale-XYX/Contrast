@@ -1,3 +1,4 @@
+import bz2
 import pygame
 import public
 import sprites
@@ -8,11 +9,11 @@ import random
 
 def title():
     pygame.display.set_caption('Contrast')
-    pygame.display.set_icon(dictionaries.MEDIA['icon'])
+    pygame.display.set_icon(pygame.image.fromstring(bz2.decompress(
+        dictionaries.MEDIA['icon']), (32, 32), 'RGBA'))
 
     info_text = public.FONT_LG.render(
-        'ENTER TO BEGIN; ? FOR CREDITS', False, public.WHITE)
-    in_credits = False
+        'ENTER TO BEGIN', False, [public.WHITE] * 3)
 
     debug_keys = [ # Maybe theres a way to streamline this?
         pygame.K_k, pygame.K_e, pygame.K_i,
@@ -38,12 +39,6 @@ def title():
                 return 0
 
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SLASH:
-                    if in_credits:
-                        in_credits = False
-
-                    elif not in_credits:
-                        in_credits = True
 
                 if event.key in debug_keys and debugging:
                     k = debug_respond[debug_keys.index(event.key)]
@@ -76,17 +71,12 @@ def title():
                     game()
                     return 0
 
-        public.screen.fill(public.BLACK)
+        public.screen.fill([public.BLACK] * 3)
 
-        if not in_credits:
-            public.screen.blit(dictionaries.MEDIA['logo'], functions.center(
-                dictionaries.MEDIA['logo']))
-            public.screen.blit(info_text,
-                               (functions.center(info_text)[0], 290))
-
-        elif in_credits:
-            public.screen.blit(dictionaries.MEDIA['credits'], functions.center(
-                dictionaries.MEDIA['credits']))
+        public.screen.blit(dictionaries.IMAGES['Logo'], functions.center(
+            dictionaries.IMAGES['Logo']))
+        public.screen.blit(info_text,
+                           (functions.center(info_text)[0], 290))
 
         pygame.display.flip()
         public.clock.tick(public.FPS)
@@ -164,9 +154,6 @@ def game():
         for sprite in sorted_sprites:
             sprite.draw()
 
-        if public.wrapping:
-            public.screen.blit(dictionaries.MEDIA['wrap_gradient'], (0, 0))
-
         public.screen.blit(cover_surf, (0, 0))
 
         pygame.display.flip()
@@ -176,7 +163,7 @@ def game():
 def end(msg):
     text_alpha = 0
     credits_text = public.FONT_LG.render(
-        msg, False, public.WHITE)
+        msg, False, [public.WHITE] * 3)
     credits_text.set_alpha(text_alpha)
 
     while True:
@@ -192,7 +179,7 @@ def end(msg):
             text_alpha += 5
             credits_text.set_alpha(text_alpha)
 
-        public.screen.fill(public.BLACK)
+        public.screen.fill([public.BLACK] * 3)
 
         public.screen.blit(credits_text, functions.center(credits_text))
 
