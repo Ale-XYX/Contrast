@@ -23,7 +23,7 @@ import game
 
 if __name__ == '__main__':
     pygame.init()
-    game.title()
+    game.title(sys.argv)
     pygame.quit()
 
 # :^)

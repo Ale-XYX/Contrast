@@ -13,10 +13,8 @@ SHEIGHT = 485
 SWIDTH = 800
 FPS = 60
 
-fargs = ['vgawin.fon', 30, 50]
-
-FONT_SM = pygame.font.Font(join(dirname(__file__), 'res', fargs[0]), fargs[1])
-FONT_LG = pygame.font.Font(join(dirname(__file__), 'res', fargs[0]), fargs[2])
+FONT_SM = pygame.font.Font(join(dirname(__file__), 'res', 'system.fon'), 30)
+FONT_LG = pygame.font.Font(join(dirname(__file__), 'res', 'system.fon'), 50)
 
 all_sprites = pygame.sprite.Group()
 blocks = pygame.sprite.Group()

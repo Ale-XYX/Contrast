@@ -1,3 +1,4 @@
+import re
 import bz2
 import pygame
 import public
@@ -7,7 +8,7 @@ import dictionaries
 import random
 
 
-def title():
+def title(debug):
     pygame.display.set_caption('Contrast')
     pygame.display.set_icon(pygame.image.fromstring(bz2.decompress(
         dictionaries.MEDIA['icon']), (32, 32), 'RGBA'))
@@ -15,23 +16,12 @@ def title():
     info_text = public.FONT_LG.render(
         'ENTER TO BEGIN', False, [public.WHITE] * 3)
 
-    debug_keys = [ # Maybe theres a way to streamline this?
-        pygame.K_k, pygame.K_e, pygame.K_i,
-        pygame.K_n, pygame.K_m, pygame.K_u,
-        pygame.K_s, pygame.K_c, pygame.K_l,
-        pygame.K_v, pygame.K_g, pygame.K_b,
-        pygame.K_d, pygame.K_a, pygame.K_1,
-        pygame.K_2, pygame.K_3, pygame.K_4,
-        pygame.K_5, pygame.K_6, pygame.K_7,
-        pygame.K_8, pygame.K_9, pygame.K_0
-    ]
+    if len(debug) != 1:
+        public.music = False
+        m = re.search('map_(.+?).tmx', debug[1])
 
-    debugging = False
-    debug_count = 0
-    debug_respond = (
-        'K,E,I,N,M,U,S,C,L,V,G,B,D,A,1,2,3,4,5,6,7,8,9,0'.split(',')
-    )
-    debug_code = []
+        if m:
+            public.level = int(m.group(1))
 
     while True:
         for event in pygame.event.get():
@@ -39,35 +29,7 @@ def title():
                 return 0
 
             elif event.type == pygame.KEYDOWN:
-
-                if event.key in debug_keys and debugging:
-                    k = debug_respond[debug_keys.index(event.key)]
-                    debug_code.append(k)
-                    pygame.display.set_caption(''.join(debug_code))
-
-                elif event.key == pygame.K_SPACE:
-                    debug_count += 1
-
-                    if debug_count == 5:
-                        pygame.display.set_caption('Real Debug Hours')
-                        debugging = True
-
-                elif event.key == pygame.K_BACKSPACE:
-                    del debug_code[-1]
-                    pygame.display.set_caption(''.join(debug_code))
-
-                elif event.key == pygame.K_RETURN:
-                    if debugging:
-                        debug_code = ''.join(debug_code)
-
-                        if 'KEINEMUSIK' in debug_code:
-                            public.music = False
-
-                        if 'CLEVEL' in debug_code:
-                            public.level = int(''.join(list(filter(str.isdigit, debug_code))))
-
-                        pygame.display.set_caption('Contrast')
-
+                if event.key == pygame.K_RETURN:
                     game()
                     return 0
 
@@ -80,10 +42,6 @@ def title():
 
         pygame.display.flip()
         public.clock.tick(public.FPS)
-
-
-def about():
-    return 0
 
 
 def game():

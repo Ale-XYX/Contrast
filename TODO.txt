@@ -1,47 +1,25 @@
 TODO:
 
+- Destroy all traces of flipped objects, down to spritesheet level [Keep "Flipped" junkargs]
+
 - Add all the levels. ALL. OF. THEM.
+
+Wrapping Up TODO:
 
 - Redo README with new screenshots and a more Time-Proof approach to images. 
 	- ?? Possibly make the entire README an image ??
 
 - Move credits to end once all levels are finished.
 
-- Experimental TODO: Make flipped objects operatable 
-    - Flipped flipads launch downwards, flipped breakables can be used as elevators
-    - Would likely require alot of exemptions in physics engine :/
-
 - Add error handling once every aspect of the game is totally complete.
 
-- COMPLETE THIS ALL BEFORE PYWEEK 27. [Or not, just trying to encourage myself :^)]
+- Add documentation to more complex pieces of code
 
-['                                        ',
- '                                        ',
- '                                        ',
- '                                        ',
- '                                        ',
- '                                        ',
- '                                        ',
- '                                        ',
- '                   F                    ',
- '                 AAAAA                  ',
- '                 B   B                  ',
- '                 B   B                  ',
- '                 B   B                  ',
- '                 B N B                  ',
- '                 CCCCC                  ',
- '   BBBBB   B       A                C   ',
- '                   A                C   ',
- '                   A                C   ',
- '    N              C             >  C   ',
- '   CCC             C  OO    OO  CCCCC   ',
- '    C   AA         C            C       ',
- '    C        BBBB  C            C       ',
- '    C              C            C       ',
- '    CIIIIIIIIIIIIIICIIIIIIIIIIIIC       ']
+- Try to remove redundancy and increase coherency
 
-!! This is shared path! Not Time and Space! Still need to come up with a level concept !!
+- Lint it when you're done to remove any final improper bits
 
+- Freeze it and add it to a GitHub release.
 
 Legacy Block Map:
 

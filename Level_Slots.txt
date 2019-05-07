@@ -1,7 +1,7 @@
 
 Tutorial LVL:
 
-0: Secretive...
+0: Er...
 1: To Begin
 2: Futher Practice
 3: Risky Manuver
@@ -18,13 +18,13 @@ Challenge LVL:
 10: U-Turn
 11: Cliffstrider
 12: Floaters
-13: Shared Path [Entire level has a pillar and different "Floors"]
-14: Gotta Defrag This One [Jump from mini-challenge to mini-challenge to reach the end which can only be accessed through a specific method]
+13: Shared Path
+14: To Defragement [Jump from mini-challenge to mini-challenge to reach the end which can only be accessed through a specific method]
 
 15: Tunnel Travel [Tunnels, lots of them. Probably very tight]
 16: Geometrias [Geometric formations, in/out]
 17: Inverse, Outverse [Layers of levels really]
 18: Down To The Wire [Tight jumps/areas, reflexes needed]
-19: Abstraction [Both methods from last two levels combined, final level]
+19: Abstraction [Just really hard, a culmination of sorts]
 
 20: The Shrine [End level, basically a cut-scene.]

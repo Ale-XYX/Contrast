@@ -94,9 +94,12 @@ class Ox(pygame.sprite.Sprite):
                 elif block.type == 'Jumpad' and not (
                         self.died and self.super_jump):
 
+                    if not self.super_jump:
+                        dictionaries.MEDIA['jumpad'].play()
+                        self.super_jump = True
+
                     self.vel.y = -4.5
                     self.on_ground = False
-                    self.super_jump = True
 
                 elif block.type == 'RGBSphere':
                     dictionaries.MEDIA['collect'].play()
@@ -138,19 +141,6 @@ class Ox(pygame.sprite.Sprite):
                     if not block.dead and not block.recovering:
                         dictionaries.MEDIA['crumble'].play()
                         block.broken = True
-
-                elif block.type == 'Jumpad' and not (
-                        self.died and self.super_jump):
-
-                    self.vel.y = -4.5
-                    dictionaries.MEDIA['jumpad'].play()
-                    self.on_ground = False
-                    self.super_jump = True
-
-                elif block.type == 'RGBSphere':
-                    dictionaries.MEDIA['collect'].play()
-                    block.rect.y -= 10
-                    self.won = True
 
         if public.wrapping:
             if self.rect.right >= public.SWIDTH + 10:

@@ -24,6 +24,7 @@ for file in maps:
     MEDIA[os.path.split(file)[-1][:-4]] = obj
     public.level_max += 1
 
+
 class Spritesheet():
     def __init__(self, surface):
         self.sheet = surface
