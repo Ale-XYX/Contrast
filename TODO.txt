@@ -1,8 +1,8 @@
 TODO:
 
-- Destroy all traces of flipped objects, down to spritesheet level [Keep "Flipped" junkargs]
-
 - Add all the levels. ALL. OF. THEM.
+
+- Work on the prestige run/easter egg afterwards
 
 Wrapping Up TODO:
 
@@ -20,6 +20,53 @@ Wrapping Up TODO:
 - Lint it when you're done to remove any final improper bits
 
 - Freeze it and add it to a GitHub release.
+
+'                                        ', 
+'                                        ', 
+'                                        ', 
+'                                        ', 
+'                                        ', 
+'                                        ', 
+'                                        ', 
+'                                        ', 
+'                            FFFFFFFFFFFF', 
+'                 AAAAAAAF   BBBBBBBBBBBB', 
+'                 EEEEEEEB          AAAAA', 
+'                        B               ', 
+'   C             S                   L  ', 
+'   C     A   CCCCC      NNNNNNNNNNNAAAAA', 
+'   C     A       C                      ', 
+'   C     A       C                      ', 
+'   C         FFFFC                      ', 
+'   C   R     BBBBC            DDDDFFFFFF', 
+'CCCCAAAAAA       C           BAAAABBBBBB', 
+'BBBB             C J S       B    GGGGGG', 
+'             BBBBCCCCC       B          ', 
+'       AAA                   B          ', 
+'BBB                          BBBBBBBBBBB', 
+'HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH']
+VERY LEGACY Blockmap:
+
+# A: White Block
+# B: Black Block
+# C: Grey Block
+# D: White pit up
+# E: White pit down
+# F: Black pit up
+# G: Black pit down
+# H: Grey pit up
+# I: Grey pit down
+# J: Entrance
+# K: Exit Black
+# L: Exit White
+# M: Exit Grey
+# N: BreakableBlock Black
+# O: BreakableBlock White
+# P: BreakableBlock Grey
+# Q: JumpPad Black
+# R: JumpPad White
+# S: JumpPad Grey
+# .: RGBSphere
 
 Legacy Block Map:
 

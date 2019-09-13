@@ -1,7 +1,7 @@
 
 Tutorial LVL:
 
-0: Er...
+0: @%$*%^&*#@ [Completing a flawless run will do a retcon because screw it]
 1: To Begin
 2: Futher Practice
 3: Risky Manuver
@@ -19,12 +19,13 @@ Challenge LVL:
 11: Cliffstrider
 12: Floaters
 13: Shared Path
-14: To Defragement [Jump from mini-challenge to mini-challenge to reach the end which can only be accessed through a specific method]
+14: Cold Storage
+
+FINALITY LVL:
 
 15: Tunnel Travel [Tunnels, lots of them. Probably very tight]
-16: Geometrias [Geometric formations, in/out]
-17: Inverse, Outverse [Layers of levels really]
+16: ???
+17: Time And Space 
 18: Down To The Wire [Tight jumps/areas, reflexes needed]
 19: Abstraction [Just really hard, a culmination of sorts]
-
 20: The Shrine [End level, basically a cut-scene.]

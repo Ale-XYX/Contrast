@@ -70,22 +70,13 @@ def game():
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_d] and not public.player.died and \
-                not public.player.won:
+        if keys[pygame.K_d] and not (public.player.died or public.player.won):
 
-            if public.player.vel.x < 0.04:
-                public.player.pos.x += 1
+            public.player.move('right')
 
-            public.player.vel.x += 0.1
-            public.player.accelerating = True
-            public.player.flipped_horizontal = 0
+        elif keys[pygame.K_a] and not (public.player.died or public.player.won):
 
-        elif keys[pygame.K_a] and not public.player.died and \
-                not public.player.won:
-
-            public.player.vel.x -= 0.1
-            public.player.accelerating = True
-            public.player.flipped_horizontal = 1
+            public.player.move('left')
 
         else:
             public.player.accelerating = False

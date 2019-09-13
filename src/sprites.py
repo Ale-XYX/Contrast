@@ -53,10 +53,10 @@ class Ox(pygame.sprite.Sprite):
 
             if block.color != public.bg_type:
 
-                if self.vel.x > 0 and functions.block_check(block, 3):
+                if self.vel.x > 0 and functions.block_check(block, 4):
                     self.rect.right = block.rect.left
 
-                elif self.vel.x < 0 and functions.block_check(block, 3):
+                elif self.vel.x < 0 and functions.block_check(block, 4):
                         self.rect.left = block.rect.right
 
                 if functions.block_check(block, 2):
@@ -64,7 +64,7 @@ class Ox(pygame.sprite.Sprite):
 
                 self.pos.x = self.rect.x
 
-                if block.type == 'Pit' and not self.died:
+                if block.type in ['Pit', 'KillBlock'] and not self.died:
                     self.died = True
                     self.anim_ticks = 0
                     self.anim_index = 0
@@ -79,10 +79,6 @@ class Ox(pygame.sprite.Sprite):
                     elif public.level != public.level_max:
                         functions.generate_level(True)
                         dictionaries.MEDIA['finish'].play()
-
-                        if public.level == 21 and public.music:
-                            dictionaries.MEDIA['greetings'].stop()
-                            dictionaries.MEDIA['deathly'].play(-1)
 
                         self.kill()
 
@@ -115,12 +111,12 @@ class Ox(pygame.sprite.Sprite):
 
             if block.color != public.bg_type:
 
-                if self.vel.y > 0 and functions.block_check(block, 3):
+                if self.vel.y > 0 and functions.block_check(block, 4):
                     self.rect.bottom = block.rect.top
                     self.on_ground = True
                     self.vel.y = 0
 
-                elif self.vel.y < 0 and functions.block_check(block, 3):
+                elif self.vel.y < 0 and functions.block_check(block, 4):
                     self.rect.top = block.rect.bottom
                     self.on_ground = True
                     self.vel.y = 0
@@ -131,7 +127,13 @@ class Ox(pygame.sprite.Sprite):
 
                 self.pos.y = self.rect.y
 
-                if block.type == 'Pit' and not self.died:
+                if block.type in ['Pit', 'KillBlock'] and not self.died:
+                    self.died = True
+                    self.anim_ticks = 0
+                    self.anim_index = 0
+                    dictionaries.MEDIA['died'].play()
+
+                elif block.type == 'Pit' and not self.died:
                     self.died = True
                     self.anim_ticks = 0
                     self.anim_index = 0
@@ -222,7 +224,7 @@ class Ox(pygame.sprite.Sprite):
             inside = False
 
             for sprite in public.blocks:
-                if sprite.rect.colliderect(self.rect):
+                if sprite.rect.colliderect(self.rect) and not (sprite.type == 'Breakable' and sprite.dead == True):
                     inside = True
 
             if not inside:
@@ -238,6 +240,16 @@ class Ox(pygame.sprite.Sprite):
                 dictionaries.MEDIA['denied'].play()
 
             self.flip_cooldown = 1
+
+    def move(self, direction):
+        velocity = dict(right=[0.1, 0], left=[-0.1, 1])
+
+        self.accelerating = True
+        self.vel.x += velocity[direction][0]
+        self.flipped_horizontal = velocity[direction][1]
+
+        if public.player.vel.x < 0.04 and direction == 'right':
+            public.player.pos.x += 1
 
 
 class Block(pygame.sprite.Sprite):
@@ -294,6 +306,24 @@ class Exit(pygame.sprite.Sprite):
             prep_surf = self.transparent
 
         public.screen.blit(prep_surf, self.rect)
+
+
+class KillBlock(pygame.sprite.Sprite):
+    def __init__(self, pos, color, flipped):
+        super().__init__(public.all_sprites, public.blocks)
+
+        self.image = pygame.Surface((20, 20))
+        self.transparent = self.image.copy()
+        self.rect = self.image.get_rect(topleft=pos)
+
+        self.type = 'KillBlock'
+        self.color = color
+        self.layer = 3
+
+        self.transparent.set_alpha(0)
+
+    def draw(self):
+        public.screen.blit(self.transparent, self.rect)
 
 
 class Pit(pygame.sprite.Sprite):
@@ -372,14 +402,14 @@ class Breakable(pygame.sprite.Sprite):
                 if self.alpha != 255:
                     self.alpha += 5
 
-                if not self.flipped:
-                    self.vel.y += public.GRAVITY - 0.01
+                if not self.vel.y >= 10:
+                    if not self.flipped:
+                        self.vel.y += public.GRAVITY - 0.01
 
-                elif self.flipped:
-                    self.vel.y -= public.GRAVITY - 0.01
+                    elif self.flipped:
+                        self.vel.y -= public.GRAVITY - 0.01
 
         if self.alpha == 255:
-            self.vel.y = 0
             self.dead = True
 
         if self.dead:
@@ -393,6 +423,7 @@ class Breakable(pygame.sprite.Sprite):
 
                 pos_ = (self.init_pos.x, self.init_pos.y)
                 self.pos.x, self.pos.y = pos_
+                self.vel.y = 0
                 self.dead_timer = 3
 
         if self.recovering:
@@ -542,7 +573,7 @@ class Cloud(pygame.sprite.Sprite):
 
 
 class Title(pygame.sprite.Sprite):
-    def __init__(self, text):
+    def __init__(self, text, is_scrambled):
         super().__init__(public.all_sprites)
 
         self.image = public.FONT_SM.render(text, False, [public.bg_type] * 3)
@@ -554,6 +585,15 @@ class Title(pygame.sprite.Sprite):
         self.alpha = 255
         self.text = text
         self.type = 'Title'
+        self.is_scrambled = is_scrambled
+        self.scramble_time = 0
+        self.scramble_max = 0.25
+
+        if self.is_scrambled:
+            self.text = ''.join(
+                [random.choice([
+                    '!', '@', '#', '$', '%', '^', '&', '*', '(', ')']
+                    ) for i in range(10)])
 
     def update(self):
         if self.timer > 0:
@@ -564,6 +604,17 @@ class Title(pygame.sprite.Sprite):
 
             if self.alpha == 0:
                 self.kill()
+
+        if self.is_scrambled:
+            self.scramble_time += self.dt
+
+            if self.scramble_time >= self.scramble_max:
+                self.text = ''.join(
+                    [random.choice([
+                        '!', '@', '#', '$', '%', '^', '&', '*', '(', ')'
+                        ]) for i in range(10)])
+
+                self.scramble_time = 0
 
         if public.bg_type == public.WHITE:
             color = public.BLACK

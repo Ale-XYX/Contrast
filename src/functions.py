@@ -2,7 +2,6 @@ import os
 import pygame
 import random
 import public
-import pytmx
 import sprites
 import dictionaries
 
@@ -24,21 +23,27 @@ def generate_level(show_title):
         'Jumpad': sprites.Jumpad,
         'Breakable': sprites.Breakable,
         'RGBSphere': sprites.RGBSphere,
-        'Wrapping': sprites.Wrapping
+        'Wrapping': sprites.Wrapping,
+        'KillBlock': sprites.KillBlock
     }
 
     for sprite in public.all_sprites:
         if sprite.type != 'Cloud':
             sprite.kill()
 
+    if public.level == 20 and public.music:
+        dictionaries.MEDIA['greetings'].stop()
+        dictionaries.MEDIA['deathly'].play(-1)
+
     level_data = dictionaries.MEDIA['map_' + str(public.level)]
 
     public.bg_type = level_data.properties['Background']
     public.wrapping = level_data.properties['Wrapping']
     [sprites.Block((x * 20, 480), public.GREY, True) for x in range(40)]
+    [sprites.Block((x * 20, -20), public.GREY, True) for x in range(40)]
 
     if show_title:
-        title = sprites.Title(level_data.properties['Title'])
+        title = sprites.Title(level_data.properties['Title'], False)
 
     for x in range(40):
         for y in range(24):
@@ -101,7 +106,7 @@ def ppc(surface, color_black, color_white):
 
 
 def block_check(block, list_index):
-    arr = ['Exit', 'Jumpad', 'Flipad', 'RGBSphere']
+    arr = ['Exit', 'Jumpad', 'Flipad', 'RGBSphere', 'KillBlock']
 
     if block.type == 'Breakable':
         if block.dead or block.recovering:
@@ -194,11 +199,11 @@ def block_return(obj):
             for block in public.blocks:
                 if block.rect.collidepoint(pos_):
                     if obj.color != public.GREY:
-                        if block.type != 'Exit' and block.color in creqs:
+                        if block.type not in ['Exit', 'KillBlock'] and block.color in creqs:
                             corners[corner][2] = 0
 
                     elif obj.color == public.GREY:
-                        if block.type != 'Exit':
+                        if block.type not in ['Exit', 'KillBlock']:
                             corners[corner][2] = 0
 
         # Eval is evil my ass

@@ -24,7 +24,7 @@ clock = pygame.time.Clock()
 dt = clock.tick(FPS) / 1000
 
 level = 1
-level_max = 0
+level_max = -6
 spawn = (0, 0)
 bg_type = 0
 wrapping = True
