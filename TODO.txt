@@ -1,5 +1,11 @@
 TODO:
 
+- Optimize respawn system by creating level_regen()
+      - Keep public.regenables that player and breakables go into
+      - When level_regen launches, return player to spawn and breakables to full-alive and spawn
+      - Will increase performance as the iterations will be cut dramatically [No killing sprites,
+      no recreating static elements]
+
 - Add all the levels. ALL. OF. THEM.
 
 - Work on the prestige run/easter egg afterwards
@@ -21,30 +27,7 @@ Wrapping Up TODO:
 
 - Freeze it and add it to a GitHub release.
 
-'                                        ', 
-'                                        ', 
-'                                        ', 
-'                                        ', 
-'                                        ', 
-'                                        ', 
-'                                        ', 
-'                                        ', 
-'                            FFFFFFFFFFFF', 
-'                 AAAAAAAF   BBBBBBBBBBBB', 
-'                 EEEEEEEB          AAAAA', 
-'                        B               ', 
-'   C             S                   L  ', 
-'   C     A   CCCCC      NNNNNNNNNNNAAAAA', 
-'   C     A       C                      ', 
-'   C     A       C                      ', 
-'   C         FFFFC                      ', 
-'   C   R     BBBBC            DDDDFFFFFF', 
-'CCCCAAAAAA       C           BAAAABBBBBB', 
-'BBBB             C J S       B    GGGGGG', 
-'             BBBBCCCCC       B          ', 
-'       AAA                   B          ', 
-'BBB                          BBBBBBBBBBB', 
-'HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH']
+
 VERY LEGACY Blockmap:
 
 # A: White Block

@@ -7,7 +7,7 @@ import functions
 
 class Ox(pygame.sprite.Sprite):
     def __init__(self, pos, color, flipped):
-        super().__init__(public.all_sprites)
+        super().__init__(public.all_sprites, public.regenables)
 
         self.image = dictionaries.IMAGES['Idle']
         self.invert = dictionaries.I_IMAGES['Idle']
@@ -20,6 +20,7 @@ class Ox(pygame.sprite.Sprite):
         self.won = False
         self.died = False
         self.type = 'Player'
+        self.init_pos = pos
         self.collided = None
         self.on_ground = True
         self.jumping = False
@@ -27,6 +28,7 @@ class Ox(pygame.sprite.Sprite):
         self.super_jump = False
         self.accelerating = False
         self.flipped_horizontal = flipped
+        self.velocities = dict(right=[0.1, 0], left=[-0.1, 1])
 
         self.anim_index = 0
         self.anim_type = 'Idle'
@@ -57,7 +59,7 @@ class Ox(pygame.sprite.Sprite):
                     self.rect.right = block.rect.left
 
                 elif self.vel.x < 0 and functions.block_check(block, 4):
-                        self.rect.left = block.rect.right
+                    self.rect.left = block.rect.right
 
                 if functions.block_check(block, 2):
                     self.accelerating = False
@@ -164,8 +166,10 @@ class Ox(pygame.sprite.Sprite):
                 self.accelerating = False
                 self.pos.x = self.rect.left
 
-        if self.rect.top <= -10 and not self.died:
+        if self.rect.top >= public.SHEIGHT and not self.died:
             self.died = True
+            self.anim_ticks = 0
+            self.anim_index = 0
             dictionaries.MEDIA['died'].play()
 
         self.vel.y += public.GRAVITY
@@ -173,7 +177,12 @@ class Ox(pygame.sprite.Sprite):
         if self.vel.y < -0.5 or self.vel.y > 0.5 and not self.jumping:
             self.on_ground = False
 
-        public.player.vel.x = functions.clamp(public.player.vel.x, -10.0, 10.0)
+        if public.level == 0:
+            public.player.vel.x = functions.clamp(public.player.vel.x, -5.0, 5.0)
+
+        else:
+            public.player.vel.x = functions.clamp(public.player.vel.x, -10.0, 10.0)
+
         public.player.pos.x += public.player.vel.x
         public.player.vel.x *= 0.925
 
@@ -192,8 +201,10 @@ class Ox(pygame.sprite.Sprite):
         self.anim_type = functions.anim_check(self)
 
         if self.died and self.anim_index == 3:
-            functions.generate_level(False)
+            if public.level == 0:
+                raise Exception('@!^& // Sometimes its better to let secrets be secrets. // %$#&')
 
+            functions.generate_level(False)
         self.image = dictionaries.IMAGES[self.anim_type]
         self.invert = dictionaries.I_IMAGES[self.anim_type]
 
@@ -220,7 +231,7 @@ class Ox(pygame.sprite.Sprite):
             dictionaries.MEDIA['jump'].play()
 
     def flip(self):
-        if self.flip_cooldown <= 0 and not self.died and not self.won:
+        if self.flip_cooldown <= 0 and not self.died and not self.won and not public.level == 0:
             inside = False
 
             for sprite in public.blocks:
@@ -241,14 +252,15 @@ class Ox(pygame.sprite.Sprite):
 
             self.flip_cooldown = 1
 
+        elif public.level == 0:
+            dictionaries.MEDIA['denied'].play()
+
     def move(self, direction):
-        velocity = dict(right=[0.1, 0], left=[-0.1, 1])
-
         self.accelerating = True
-        self.vel.x += velocity[direction][0]
-        self.flipped_horizontal = velocity[direction][1]
+        self.vel.x += self.velocities[direction][0]
+        self.flipped_horizontal = self.velocities[direction][1]
 
-        if public.player.vel.x < 0.04 and direction == 'right':
+        if public.player.vel.x < 0.04 and direction == 'right' and self.velocities['right'][0] == 0.1:
             public.player.pos.x += 1
 
 
@@ -312,9 +324,12 @@ class KillBlock(pygame.sprite.Sprite):
     def __init__(self, pos, color, flipped):
         super().__init__(public.all_sprites, public.blocks)
 
-        self.image = pygame.Surface((20, 20))
+        self.image = pygame.Surface((10, 10))
         self.transparent = self.image.copy()
         self.rect = self.image.get_rect(topleft=pos)
+
+        self.rect.x += 5
+        self.rect.y += 5
 
         self.type = 'KillBlock'
         self.color = color
@@ -362,7 +377,7 @@ class Pit(pygame.sprite.Sprite):
 
 class Breakable(pygame.sprite.Sprite):
     def __init__(self, pos, color, flipped):
-        super().__init__(public.all_sprites, public.blocks)
+        super().__init__(public.all_sprites, public.blocks, public.regenables)
 
         self.image = pygame.Surface((20, 11))
         self.cover = pygame.Surface((20, 11))
@@ -526,7 +541,9 @@ class Cloud(pygame.sprite.Sprite):
         self.pos = pygame.math.Vector2(pos)
         self.vel = [0.5, 0.2][cloud_type]
         self.cap = [0.5, 0.2][cloud_type]
+        self.skip_pos = None
         self.layer = cloud_type
+        self.cloud_type = cloud_type
         self.type = 'Cloud'
 
         if public.bg_type == public.WHITE:
@@ -548,21 +565,33 @@ class Cloud(pygame.sprite.Sprite):
         elif public.bg_type == public.BLACK and self.vel != self.cap:
             self.vel += 0.1
 
+        if self.skip_pos != None:
+            if self.cloud_type == 1:
+                if round(self.pos.x - 5) == self.skip_pos[0]:
+                    self.pos.x = self.skip_pos[0]
+                    self.pos.y = self.skip_pos[1]
+
+            if (self.pos.x - 15) == self.skip_pos[0]:
+                self.pos.x = self.skip_pos[0]
+                self.pos.y = self.skip_pos[1]
+
         if self.pos.x < -10:
             generated_int = random.randint(0, 1)
             generated_height = random.randint(0, public.SHEIGHT)
 
-            cloud = Cloud((810, generated_height), generated_int)
+            if public.level != 0:
+                cloud = Cloud((810, generated_height), generated_int)
 
-            self.kill()
+                self.kill()
 
         elif self.pos.x > public.SWIDTH + 10:
             generated_int = random.randint(0, 1)
             generated_height = random.randint(0, public.SHEIGHT)
 
-            cloud = Cloud((-10, generated_height), generated_int)
+            if public.level != 0:
+                cloud = Cloud((-10, generated_height), generated_int)
 
-            self.kill()
+                self.kill()
 
     def draw(self):
         prep_surf = self.image
@@ -587,7 +616,7 @@ class Title(pygame.sprite.Sprite):
         self.type = 'Title'
         self.is_scrambled = is_scrambled
         self.scramble_time = 0
-        self.scramble_max = 0.25
+        self.scramble_max = 0.20
 
         if self.is_scrambled:
             self.text = ''.join(
@@ -628,6 +657,52 @@ class Title(pygame.sprite.Sprite):
 
     def draw(self):
         public.screen.blit(self.image, self.rect)
+
+
+class Button(pygame.sprite.Sprite):
+    def __init__(self, pos, button_type):
+        super().__init__(public.all_sprites)
+
+        self.image = dictionaries.IMAGES['Buttons'][0]
+        self.rect = self.image.get_rect(topleft=pos)
+        
+        self.type = 'Button'
+        self.button_type = button_type
+        self.button_state = True
+        self.y_pushdown = 0
+        self.is_pressing = False
+
+        if self.button_type == 'Music':
+            self.image = dictionaries.IMAGES['Buttons'][(1 + int(not public.music))]
+
+    def update(self):
+        mouse_pos = pygame.mouse.get_pos()
+        pointer_is_in = self.rect.collidepoint(mouse_pos)
+
+        if pointer_is_in:
+            if self.y_pushdown != 5:
+                self.y_pushdown += 1
+
+            if pygame.mouse.get_pressed()[0]:
+                if self.button_type == 'Music' and not self.is_pressing:
+                    public.music = not public.music
+                    self.image = dictionaries.IMAGES['Buttons'][(1 + int(not public.music))]
+                    self.is_pressing = True
+
+                elif self.button_type == 'Play':
+                    public.end_title = True
+
+            else:
+                self.is_pressing = False
+
+
+        if not pointer_is_in:
+            if self.y_pushdown != 0:
+                self.y_pushdown -= 1
+
+
+    def draw(self):
+        public.screen.blit(self.image, (self.rect.x, self.rect.y + self.y_pushdown))        
 
 
 class Wrapping(pygame.sprite.Sprite):

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="20" tileheight="20" infinite="0" backgroundcolor="#a0a0a0" nextlayerid="7" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.5" orientation="orthogonal" renderorder="right-down" width="40" height="24" tilewidth="20" tileheight="20" infinite="0" backgroundcolor="#a0a0a0" nextlayerid="7" nextobjectid="1">
  <properties>
   <property name="Background" type="int" value="255"/>
   <property name="Title" value="An Unintended Solution"/>
   <property name="Wrapping" type="int" value="1"/>
  </properties>
-
  <tileset firstgid="1" name="tmx_ss" tilewidth="20" tileheight="20" tilecount="30" columns="3">
   <image source="tmx_ss.png" width="60" height="200"/>
   <tile id="0" type="Player">
@@ -17,7 +16,7 @@
   <tile id="1" type="Player">
    <properties>
     <property name="Color" type="int" value="0"/>
-    <property name="Flipped" type="int" value="0"/>
+    <property name="Flipped" type="int" value="1"/>
    </properties>
   </tile>
   <tile id="2" type="RGBSphere">

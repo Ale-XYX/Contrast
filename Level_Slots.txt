@@ -19,13 +19,13 @@ Challenge LVL:
 11: Cliffstrider
 12: Floaters
 13: Shared Path
-14: Cold Storage
+14: Tunnel Travel
 
 FINALITY LVL:
 
-15: Tunnel Travel [Tunnels, lots of them. Probably very tight]
-16: ???
-17: Time And Space 
+15: Cold Storage [Adapt compartments into this, turns out I adapted tunnel travel into 14. Also make full level size]
+16: Time And Space 
+17: Inverse, Outverse [Floaters on steroids, make confusing and possibly open ended]
 18: Down To The Wire [Tight jumps/areas, reflexes needed]
 19: Abstraction [Just really hard, a culmination of sorts]
 20: The Shrine [End level, basically a cut-scene.]

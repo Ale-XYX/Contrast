@@ -16,6 +16,11 @@ def title(debug):
     info_text = public.FONT_LG.render(
         'ENTER TO BEGIN', False, [public.WHITE] * 3)
 
+    play_button = sprites.Button((343, 290), 'Play')
+    music_button = sprites.Button((407, 290), 'Music')
+    button_cover = pygame.Surface((public.SWIDTH, 10))
+    button_cover.fill([public.BLACK] * 3)
+
     if len(debug) != 1:
         public.music = False
         m = re.search('map_(.+?).tmx', debug[1])
@@ -28,17 +33,21 @@ def title(debug):
             if event.type == pygame.QUIT:
                 return 0
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    game()
-                    return 0
+        public.all_sprites.update()
+
+        if public.end_title:
+            game()
+            return 0
 
         public.screen.fill([public.BLACK] * 3)
 
         public.screen.blit(dictionaries.IMAGES['Logo'], functions.center(
             dictionaries.IMAGES['Logo']))
-        public.screen.blit(info_text,
-                           (functions.center(info_text)[0], 290))
+
+        for sprite in public.all_sprites:
+            sprite.draw()
+
+        public.screen.blit(button_cover, (0, 345))
 
         pygame.display.flip()
         public.clock.tick(public.FPS)
@@ -48,8 +57,8 @@ def game():
     if public.music:
         dictionaries.MEDIA['greetings'].play(-1)
 
-    functions.generate_level(True)
     functions.generate_clouds()
+    functions.generate_level(True)
 
     dt = public.clock.tick(public.FPS) / 1000
     cover_alpha = 0
